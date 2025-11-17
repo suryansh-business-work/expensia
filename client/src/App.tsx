@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme, CssBaseline, Box, CircularProgress } from "
 import Header from "./components/Header/Header";
 import Trackers from "./components/Trackers/Trackers";
 import TrackerView from "./components/TrackerView/TrackerView";
+import TrackerCategorySettings from "./components/TrackerCategorySettings/TrackerCategorySettings";
 import Login from "./components/Auth/Login";
 import Signup from "./components/Auth/Signup";
 import Profile from "./components/Profile/Profile";
@@ -67,6 +68,7 @@ const AppContent = () => {
               <Route path="/tracker/:trackerId/chat" element={isAuthenticated ? <Navigate to={`/tracker/${window.location.pathname.split('/')[2]}?tab=chat`} replace /> : <Navigate to="/login" replace />} />
               <Route path="/tracker/:trackerId/dashboard" element={isAuthenticated ? <Navigate to={`/tracker/${window.location.pathname.split('/')[2]}?tab=dashboard`} replace /> : <Navigate to="/login" replace />} />
               <Route path="/tracker/:trackerId/transactions" element={isAuthenticated ? <Navigate to={`/tracker/${window.location.pathname.split('/')[2]}?tab=transactions`} replace /> : <Navigate to="/login" replace />} />
+              <Route path="/tracker/:trackerId/settings" element={isAuthenticated ? <TrackerCategorySettings /> : <Navigate to="/login" replace />} />
               <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/login" replace />} />
             </Routes>
           </Box>

@@ -48,21 +48,28 @@ const Transactions: React.FC<TransactionsProps> = ({ trackerId }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" as "success" | "error" });
-  const [categories, setCategories] = useState<string[]>([]);
-  const [paymentMethods, setPaymentMethods] = useState<string[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [paymentMethods] = useState<string[]>(["Cash", "Credit Card", "Debit Card", "UPI", "Net Banking"]);
 
   useEffect(() => {
     loadExpenses();
-    loadCategories();
+    if (trackerId) {
+      loadCategories();
+    }
 
     // Listen for expense updates from other components
     const handleExpenseUpdate = () => {
       loadExpenses();
+      if (trackerId) {
+        loadCategories();
+      }
     };
 
     window.addEventListener("expenseUpdated", handleExpenseUpdate);
+    window.addEventListener("categoriesUpdated", handleExpenseUpdate);
     return () => {
       window.removeEventListener("expenseUpdated", handleExpenseUpdate);
+      window.removeEventListener("categoriesUpdated", handleExpenseUpdate);
     };
   }, [trackerId]);
 
@@ -84,11 +91,10 @@ const Transactions: React.FC<TransactionsProps> = ({ trackerId }) => {
   };
 
   const loadCategories = async () => {
+    if (!trackerId) return;
     try {
-      const data = await api.getCategories();
-      const categoryNames = data.categories.map((cat: any) => cat.name);
-      setCategories(categoryNames);
-      setPaymentMethods(data.paymentMethods);
+      const data = await api.getTrackerCategories(trackerId);
+      setCategories(data);
     } catch (error) {
       console.error("Error loading categories:", error);
     }

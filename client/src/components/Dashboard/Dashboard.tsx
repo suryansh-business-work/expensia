@@ -258,34 +258,139 @@ const Dashboard: React.FC<DashboardProps> = ({ trackerId }) => {
       ) : (
         <>
           <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" }, gap: 3, mb: 3 }}>
-            <Card elevation={3}>
-              <CardContent>
-                <Typography color="text.secondary" gutterBottom>
+            <Card 
+              elevation={4} 
+              sx={{ 
+                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                color: "white",
+                position: "relative",
+                overflow: "hidden",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  top: -50,
+                  right: -50,
+                  width: 150,
+                  height: 150,
+                  borderRadius: "50%",
+                  background: "rgba(255, 255, 255, 0.1)",
+                }
+              }}
+            >
+              <CardContent sx={{ position: "relative", zIndex: 1 }}>
+                <Typography variant="subtitle2" sx={{ opacity: 0.9, mb: 1, fontSize: "0.85rem", fontWeight: 500 }}>
                   Total Expenses
                 </Typography>
-                <Typography variant="h4" color="primary" fontWeight="bold">
+                <Typography variant="h3" sx={{ fontWeight: 700, mb: 0.5 }}>
                   ₹{summary.total.toLocaleString("en-IN")}
                 </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, opacity: 0.9 }}>
+                  <Typography variant="caption" sx={{ fontSize: "0.75rem" }}>
+                    Overall Score
+                  </Typography>
+                  <Chip 
+                    label="8/10" 
+                    size="small" 
+                    sx={{ 
+                      height: 18, 
+                      fontSize: "0.7rem",
+                      backgroundColor: "rgba(255, 255, 255, 0.2)",
+                      color: "white",
+                      fontWeight: 600
+                    }} 
+                  />
+                </Box>
               </CardContent>
             </Card>
-            <Card elevation={3}>
-              <CardContent>
-                <Typography color="text.secondary" gutterBottom>
+
+            <Card 
+              elevation={4} 
+              sx={{ 
+                background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                color: "white",
+                position: "relative",
+                overflow: "hidden",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  bottom: -30,
+                  right: -30,
+                  width: 120,
+                  height: 120,
+                  borderRadius: "20%",
+                  background: "rgba(255, 255, 255, 0.1)",
+                  transform: "rotate(45deg)"
+                }
+              }}
+            >
+              <CardContent sx={{ position: "relative", zIndex: 1 }}>
+                <Typography variant="subtitle2" sx={{ opacity: 0.9, mb: 1, fontSize: "0.85rem", fontWeight: 500 }}>
                   Average Expense
                 </Typography>
-                <Typography variant="h4" color="primary" fontWeight="bold">
+                <Typography variant="h3" sx={{ fontWeight: 700, mb: 0.5 }}>
                   ₹{Math.round(summary.average).toLocaleString("en-IN")}
                 </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, opacity: 0.9 }}>
+                  <Typography variant="caption" sx={{ fontSize: "0.75rem" }}>
+                    Ranking
+                  </Typography>
+                  <Chip 
+                    label="25" 
+                    size="small" 
+                    sx={{ 
+                      height: 18, 
+                      fontSize: "0.7rem",
+                      backgroundColor: "rgba(255, 255, 255, 0.2)",
+                      color: "white",
+                      fontWeight: 600
+                    }} 
+                  />
+                </Box>
               </CardContent>
             </Card>
-            <Card elevation={3}>
-              <CardContent>
-                <Typography color="text.secondary" gutterBottom>
+
+            <Card 
+              elevation={4} 
+              sx={{ 
+                background: "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)",
+                color: "white",
+                position: "relative",
+                overflow: "hidden",
+                "&::before": {
+                  content: '""',
+                  position: "absolute",
+                  top: -40,
+                  left: -40,
+                  width: 130,
+                  height: 130,
+                  borderRadius: "50%",
+                  background: "rgba(255, 255, 255, 0.1)",
+                }
+              }}
+            >
+              <CardContent sx={{ position: "relative", zIndex: 1 }}>
+                <Typography variant="subtitle2" sx={{ opacity: 0.9, mb: 1, fontSize: "0.85rem", fontWeight: 500 }}>
                   Total Transactions
                 </Typography>
-                <Typography variant="h4" color="primary" fontWeight="bold">
+                <Typography variant="h3" sx={{ fontWeight: 700, mb: 0.5 }}>
                   {summary.count}
                 </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, opacity: 0.9 }}>
+                  <Typography variant="caption" sx={{ fontSize: "0.75rem" }}>
+                    Incentives worth
+                  </Typography>
+                  <Chip 
+                    label="$15" 
+                    size="small" 
+                    sx={{ 
+                      height: 18, 
+                      fontSize: "0.7rem",
+                      backgroundColor: "rgba(255, 255, 255, 0.2)",
+                      color: "white",
+                      fontWeight: 600
+                    }} 
+                  />
+                </Box>
               </CardContent>
             </Card>
           </Box>

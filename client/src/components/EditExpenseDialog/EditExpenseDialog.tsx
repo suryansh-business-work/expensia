@@ -15,12 +15,18 @@ import {
 } from "@mui/material";
 import { Expense } from "../../types";
 
+interface Category {
+  id: string;
+  name: string;
+  subcategories: { id: string; name: string }[];
+}
+
 interface EditExpenseDialogProps {
   open: boolean;
   expense: Expense | null;
   onClose: () => void;
   onSave: (id: string, updatedExpense: Partial<Expense>) => void;
-  categories: string[];
+  categories: Category[];
   paymentMethods: string[];
 }
 
@@ -37,6 +43,7 @@ const EditExpenseDialog: React.FC<EditExpenseDialogProps> = ({
   const [subcategory, setSubcategory] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [description, setDescription] = useState("");
+  const [availableSubcategories, setAvailableSubcategories] = useState<{ id: string; name: string }[]>([]);
 
   useEffect(() => {
     if (expense) {
@@ -45,8 +52,28 @@ const EditExpenseDialog: React.FC<EditExpenseDialogProps> = ({
       setSubcategory(expense.subcategory);
       setPaymentMethod(expense.paymentMethod);
       setDescription(expense.description || "");
+      
+      // Set subcategories for the selected category
+      const selectedCat = categories.find(cat => cat.name === expense.category);
+      if (selectedCat) {
+        setAvailableSubcategories(selectedCat.subcategories);
+      }
     }
-  }, [expense]);
+  }, [expense, categories]);
+
+  useEffect(() => {
+    // Update subcategories when category changes
+    const selectedCat = categories.find(cat => cat.name === category);
+    if (selectedCat) {
+      setAvailableSubcategories(selectedCat.subcategories);
+      // Reset subcategory if it's not in the new category's subcategories
+      if (subcategory && !selectedCat.subcategories.find(sub => sub.name === subcategory)) {
+        setSubcategory("");
+      }
+    } else {
+      setAvailableSubcategories([]);
+    }
+  }, [category, categories]);
 
   const handleSave = () => {
     if (!expense) return;
@@ -83,19 +110,28 @@ const EditExpenseDialog: React.FC<EditExpenseDialogProps> = ({
             <InputLabel>Category</InputLabel>
             <Select value={category} onChange={(e) => setCategory(e.target.value)} label="Category">
               {categories.map((cat) => (
-                <MenuItem key={cat} value={cat}>
-                  {cat}
+                <MenuItem key={cat.id} value={cat.name}>
+                  {cat.name}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
 
-          <TextField
-            fullWidth
-            label="Subcategory"
-            value={subcategory}
-            onChange={(e) => setSubcategory(e.target.value)}
-          />
+          <FormControl fullWidth>
+            <InputLabel>Subcategory</InputLabel>
+            <Select 
+              value={subcategory} 
+              onChange={(e) => setSubcategory(e.target.value)} 
+              label="Subcategory"
+              disabled={!category || availableSubcategories.length === 0}
+            >
+              {availableSubcategories.map((sub) => (
+                <MenuItem key={sub.id} value={sub.name}>
+                  {sub.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
           <FormControl fullWidth>
             <InputLabel>Payment Method</InputLabel>

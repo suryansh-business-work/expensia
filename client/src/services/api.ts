@@ -58,4 +58,24 @@ export const api = {
   deleteTracker: async (id: string): Promise<void> => {
     await axios.delete(`${API_URL}/trackers/${id}`);
   },
+
+  // Category APIs
+  getTrackerCategories: async (trackerId: string): Promise<any[]> => {
+    const response = await axios.get(`${API_URL}/trackers/${trackerId}/categories`);
+    return response.data.categories;
+  },
+
+  createTrackerCategory: async (trackerId: string, category: any): Promise<any> => {
+    const response = await axios.post(`${API_URL}/trackers/${trackerId}/categories`, category);
+    return response.data.category;
+  },
+
+  updateTrackerCategory: async (trackerId: string, categoryId: string, category: any): Promise<any> => {
+    const response = await axios.put(`${API_URL}/trackers/${trackerId}/categories/${categoryId}`, category);
+    return response.data.category;
+  },
+
+  deleteTrackerCategory: async (trackerId: string, categoryId: string): Promise<void> => {
+    await axios.delete(`${API_URL}/trackers/${trackerId}/categories/${categoryId}`);
+  },
 };

@@ -8,11 +8,15 @@ import {
   Card,
   CardContent,
   Skeleton,
+  Alert,
+  AlertTitle,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
+import AddIcon from "@mui/icons-material/Add";
 import { Message } from "../../types";
 import { api } from "../../services/api";
 import { notifyExpenseAdded } from "../../services/notificationService";
+import AddCategoryDrawer from "../AddCategoryDrawer/AddCategoryDrawer";
 import "./ChatInterface.scss";
 
 interface ChatInterfaceProps {
@@ -31,7 +35,62 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExpenseAdded, trackerId
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [suggestedCategory, setSuggestedCategory] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (trackerId) {
+      loadCategories();
+    }
+
+    const handleCategoriesUpdate = () => {
+      if (trackerId) {
+        loadCategories();
+      }
+    };
+
+    window.addEventListener("categoriesUpdated", handleCategoriesUpdate);
+    return () => {
+      window.removeEventListener("categoriesUpdated", handleCategoriesUpdate);
+    };
+  }, [trackerId]);
+
+  const loadCategories = async () => {
+    if (!trackerId) return;
+    try {
+      const data = await api.getTrackerCategories(trackerId);
+      setCategories(data);
+    } catch (error) {
+      console.error("Error loading categories:", error);
+    }
+  };
+
+  const validateCategory = (category: string, subcategory: string): boolean => {
+    if (!trackerId || categories.length === 0) return true; // Skip validation if no tracker or categories loaded
+    
+    const categoryExists = categories.some(cat => 
+      cat.name.toLowerCase() === category.toLowerCase()
+    );
+    
+    if (!categoryExists) {
+      return false;
+    }
+
+    const matchingCategory = categories.find(cat => 
+      cat.name.toLowerCase() === category.toLowerCase()
+    );
+
+    if (matchingCategory) {
+      const subcategoryExists = matchingCategory.subcategories.some((sub: any) => 
+        sub.name.toLowerCase() === subcategory.toLowerCase()
+      );
+      return subcategoryExists;
+    }
+
+    return false;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

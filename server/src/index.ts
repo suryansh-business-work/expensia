@@ -14,6 +14,7 @@ import ExpenseModel from "./models/Expense";
 import TrackerModel from "./models/Tracker";
 import UserModel from "./models/User";
 import OTPModel from "./models/OTP";
+import CategoryModel from "./models/Category";
 import { ExpenseParser } from "./services/expenseParser";
 import { AnalyticsService } from "./services/analyticsService";
 import { Expense } from "./types";
@@ -723,6 +724,57 @@ app.post("/api/trackers", authenticateToken, async (req: any, res) => {
 
     await tracker.save();
 
+    // Create default categories for the new tracker
+    const defaultCategories = [
+      {
+        trackerId: (tracker._id as any).toString(),
+        name: "Food & Dining",
+        subcategories: [
+          { id: `${Date.now()}-1`, name: "Groceries" },
+          { id: `${Date.now()}-2`, name: "Restaurants" },
+          { id: `${Date.now()}-3`, name: "Fast Food" },
+        ],
+      },
+      {
+        trackerId: (tracker._id as any).toString(),
+        name: "Transportation",
+        subcategories: [
+          { id: `${Date.now()}-4`, name: "Fuel" },
+          { id: `${Date.now()}-5`, name: "Public Transport" },
+          { id: `${Date.now()}-6`, name: "Taxi/Uber" },
+        ],
+      },
+      {
+        trackerId: (tracker._id as any).toString(),
+        name: "Shopping",
+        subcategories: [
+          { id: `${Date.now()}-7`, name: "Clothing" },
+          { id: `${Date.now()}-8`, name: "Electronics" },
+          { id: `${Date.now()}-9`, name: "Books" },
+        ],
+      },
+      {
+        trackerId: (tracker._id as any).toString(),
+        name: "Entertainment",
+        subcategories: [
+          { id: `${Date.now()}-10`, name: "Movies" },
+          { id: `${Date.now()}-11`, name: "Games" },
+          { id: `${Date.now()}-12`, name: "Hobbies" },
+        ],
+      },
+      {
+        trackerId: (tracker._id as any).toString(),
+        name: "Bills & Utilities",
+        subcategories: [
+          { id: `${Date.now()}-13`, name: "Electricity" },
+          { id: `${Date.now()}-14`, name: "Water" },
+          { id: `${Date.now()}-15`, name: "Internet" },
+        ],
+      },
+    ];
+
+    await CategoryModel.insertMany(defaultCategories);
+
     res.status(201).json({
       message: "Tracker created successfully",
       tracker: {
@@ -813,6 +865,9 @@ app.delete("/api/trackers/:id", authenticateToken, async (req: any, res) => {
     // Also delete all expenses associated with this tracker
     await ExpenseModel.deleteMany({ trackerId: id });
 
+    // Also delete all categories associated with this tracker
+    await CategoryModel.deleteMany({ trackerId: id });
+
     res.json({
       message: "Tracker and associated expenses deleted successfully",
       id,
@@ -822,3 +877,142 @@ app.delete("/api/trackers/:id", authenticateToken, async (req: any, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+// ============ CATEGORY ROUTES ============
+
+// Get all categories for a tracker
+app.get("/api/trackers/:trackerId/categories", authenticateToken, async (req: any, res) => {
+  try {
+    const { trackerId } = req.params;
+
+    // Verify tracker belongs to user
+    const tracker = await TrackerModel.findOne({ _id: trackerId, userId: req.user.userId });
+    if (!tracker) {
+      return res.status(404).json({ error: "Tracker not found" });
+    }
+
+    const categories = await CategoryModel.find({ trackerId }).sort({ createdAt: 1 });
+
+    const formattedCategories = categories.map(category => ({
+      id: (category._id as any).toString(),
+      trackerId: category.trackerId,
+      name: category.name,
+      subcategories: category.subcategories,
+      createdAt: category.createdAt,
+      updatedAt: category.updatedAt,
+    }));
+
+    res.json({ categories: formattedCategories });
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Create a new category
+app.post("/api/trackers/:trackerId/categories", authenticateToken, async (req: any, res) => {
+  try {
+    const { trackerId } = req.params;
+    const { name, subcategories = [] } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ error: "Category name is required" });
+    }
+
+    // Verify tracker belongs to user
+    const tracker = await TrackerModel.findOne({ _id: trackerId, userId: req.user.userId });
+    if (!tracker) {
+      return res.status(404).json({ error: "Tracker not found" });
+    }
+
+    const category = new CategoryModel({
+      trackerId,
+      name,
+      subcategories,
+    });
+
+    await category.save();
+
+    res.status(201).json({
+      message: "Category created successfully",
+      category: {
+        id: (category._id as any).toString(),
+        trackerId: category.trackerId,
+        name: category.name,
+        subcategories: category.subcategories,
+        createdAt: category.createdAt,
+        updatedAt: category.updatedAt,
+      },
+    });
+  } catch (error) {
+    console.error("Error creating category:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Update a category
+app.put("/api/trackers/:trackerId/categories/:categoryId", authenticateToken, async (req: any, res) => {
+  try {
+    const { trackerId, categoryId } = req.params;
+    const { name, subcategories } = req.body;
+
+    // Verify tracker belongs to user
+    const tracker = await TrackerModel.findOne({ _id: trackerId, userId: req.user.userId });
+    if (!tracker) {
+      return res.status(404).json({ error: "Tracker not found" });
+    }
+
+    const category = await CategoryModel.findOneAndUpdate(
+      { _id: categoryId, trackerId },
+      { name, subcategories },
+      { new: true }
+    );
+
+    if (!category) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+
+    res.json({
+      message: "Category updated successfully",
+      category: {
+        id: (category._id as any).toString(),
+        trackerId: category.trackerId,
+        name: category.name,
+        subcategories: category.subcategories,
+        createdAt: category.createdAt,
+        updatedAt: category.updatedAt,
+      },
+    });
+  } catch (error) {
+    console.error("Error updating category:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Delete a category
+app.delete("/api/trackers/:trackerId/categories/:categoryId", authenticateToken, async (req: any, res) => {
+  try {
+    const { trackerId, categoryId } = req.params;
+
+    // Verify tracker belongs to user
+    const tracker = await TrackerModel.findOne({ _id: trackerId, userId: req.user.userId });
+    if (!tracker) {
+      return res.status(404).json({ error: "Tracker not found" });
+    }
+
+    const category = await CategoryModel.findOneAndDelete({ _id: categoryId, trackerId });
+
+    if (!category) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+
+    res.json({
+      message: "Category deleted successfully",
+      id: categoryId,
+    });
+  } catch (error) {
+    console.error("Error deleting category:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+

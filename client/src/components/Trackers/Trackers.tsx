@@ -27,6 +27,7 @@ import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import SettingsIcon from "@mui/icons-material/Settings";
 import BusinessIcon from "@mui/icons-material/Business";
 import PersonIcon from "@mui/icons-material/Person";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
@@ -265,6 +266,14 @@ const Trackers: React.FC = () => {
                   >
                     View Expenses
                   </Button>
+                  <IconButton
+                    size="small"
+                    sx={{ color: "#10b981" }}
+                    onClick={() => navigate(`/tracker/${tracker.id}/settings`)}
+                    title="Category Settings"
+                  >
+                    <SettingsIcon />
+                  </IconButton>
                   <IconButton size="small" color="primary" onClick={() => handleOpenDialog(tracker)}>
                     <EditIcon />
                   </IconButton>
