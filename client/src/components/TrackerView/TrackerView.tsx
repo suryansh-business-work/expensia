@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   Container,
   Paper,
@@ -45,9 +45,23 @@ function TabPanel(props: TabPanelProps) {
 const TrackerView: React.FC = () => {
   const { trackerId } = useParams<{ trackerId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const [tracker, setTracker] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [tabValue, setTabValue] = useState(0);
+  
+  // Get current tab from URL search params, default to 'chat'
+  const searchParams = new URLSearchParams(location.search);
+  const currentTab = searchParams.get('tab') || 'chat';
+  
+  const getTabValue = (tab: string) => {
+    switch (tab) {
+      case 'dashboard': return 1;
+      case 'transactions': return 2;
+      default: return 0;
+    }
+  };
+  
+  const tabValue = getTabValue(currentTab);
 
   useEffect(() => {
     if (trackerId) {
@@ -68,7 +82,8 @@ const TrackerView: React.FC = () => {
   };
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue);
+    const tabs = ['chat', 'dashboard', 'transactions'];
+    navigate(`/tracker/${trackerId}?tab=${tabs[newValue]}`);
   };
 
   const getCurrencySymbol = (currency: string) => {
@@ -108,20 +123,20 @@ const TrackerView: React.FC = () => {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       {/* Fixed Header */}
       <Box
         sx={{
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
           color: "white",
-          px: 3,
+          px: 2,
           py: 2,
           position: 'sticky',
           top: 0,
           zIndex: 10,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 1 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 0.5 }}>
           <Box
             component="button"
             onClick={() => navigate("/trackers")}
@@ -133,18 +148,18 @@ const TrackerView: React.FC = () => {
               border: "none",
               cursor: "pointer",
               color: "white",
-              fontSize: "0.875rem",
+              fontSize: "0.8rem",
               padding: 0,
               "&:hover": { opacity: 0.8 },
             }}
           >
-            <ArrowBackIcon fontSize="small" />
+            <ArrowBackIcon sx={{ fontSize: 16 }} />
             Back to Trackers
           </Box>
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap" }}>
-          <Typography variant="h5" sx={{ fontWeight: 700, mb: 0 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, flexWrap: "wrap" }}>
+          <Typography variant="h6" sx={{ fontWeight: 600, mb: 0, fontSize: "1.1rem" }}>
             {tracker.name}
           </Typography>
           <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
@@ -177,8 +192,8 @@ const TrackerView: React.FC = () => {
 
       {/* Fixed Tabs */}
       <Box sx={{ borderBottom: 1, borderColor: "divider", backgroundColor: "white", position: 'sticky', top: 'auto', zIndex: 9 }}>
-        <Container maxWidth="xl">
-          <Tabs value={tabValue} onChange={handleTabChange} variant="fullWidth">
+        <Container maxWidth="xl" sx={{ px: { xs: 1, sm: 2 } }}>
+          <Tabs value={tabValue} onChange={handleTabChange} variant="fullWidth" sx={{ minHeight: 48 }}>
             <Tab icon={<ChatIcon />} label="Chat" iconPosition="start" />
             <Tab icon={<DashboardIcon />} label="Dashboard" iconPosition="start" />
             <Tab icon={<ReceiptLongIcon />} label="Transactions" iconPosition="start" />

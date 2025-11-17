@@ -7,11 +7,10 @@ import {
   Typography,
   Card,
   CardContent,
-  Chip,
   Skeleton,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import { Message, Expense } from "../../types";
+import { Message } from "../../types";
 import { api } from "../../services/api";
 import { notifyExpenseAdded } from "../../services/notificationService";
 import "./ChatInterface.scss";
@@ -33,14 +32,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExpenseAdded, trackerId
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,8 +99,17 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExpenseAdded, trackerId
     }
   };
 
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', px: 3, py: 2 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: 'calc(100% - 70px)', px: 2, py: 1.5 }}>
       <Box 
         className="chat-messages" 
         sx={{ 
@@ -126,10 +126,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExpenseAdded, trackerId
             borderRadius: '4px',
           },
           '&::-webkit-scrollbar-thumb': {
-            background: 'rgba(102, 126, 234, 0.3)',
+            background: 'rgba(16, 185, 129, 0.3)',
             borderRadius: '4px',
             '&:hover': {
-              background: 'rgba(102, 126, 234, 0.5)',
+              background: 'rgba(16, 185, 129, 0.5)',
             },
           },
         }}
@@ -147,9 +147,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExpenseAdded, trackerId
               <Paper
                 elevation={2}
                 sx={{
-                  p: 2,
-                  maxWidth: "70%",
-                  backgroundColor: message.role === "user" ? "#667eea" : "#fff",
+                  p: 1.5,
+                  maxWidth: "75%",
+                  backgroundColor: message.role === "user" ? "#10b981" : "#fff",
                   color: message.role === "user" ? "#fff" : "#333",
                 }}
               >
@@ -222,7 +222,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExpenseAdded, trackerId
                 disabled={isLoading || !input.trim()}
                 endIcon={<SendIcon />}
                 sx={{
-                  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
                   minWidth: "120px",
                 }}
               >

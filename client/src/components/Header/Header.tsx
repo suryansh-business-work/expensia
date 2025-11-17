@@ -57,16 +57,16 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <AppBar position="sticky" sx={{ background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}>
-        <Toolbar>
-          <AccountBalanceWalletIcon sx={{ mr: { xs: 1, md: 2 }, fontSize: { xs: 28, md: 32 } }} />
+      <AppBar position="sticky" sx={{ background: "linear-gradient(135deg, #10b981 0%, #059669 100%)" }}>
+        <Toolbar sx={{ minHeight: { xs: 48, sm: 56 }, py: 0.5 }}>
+          <AccountBalanceWalletIcon sx={{ mr: { xs: 0.5, md: 1 }, fontSize: { xs: 22, md: 26 } }} />
           <Typography
             variant="h6"
             component="div"
             sx={{
               flexGrow: 1,
-              fontWeight: 700,
-              fontSize: { xs: "1rem", sm: "1.25rem" },
+              fontWeight: 600,
+              fontSize: { xs: "0.9rem", sm: "1.1rem" },
             }}
           >
             Expense Tracker
@@ -148,14 +148,14 @@ const Header: React.FC = () => {
                   selected={location.pathname === item.path}
                   sx={{
                     "&.Mui-selected": {
-                      backgroundColor: "rgba(102, 126, 234, 0.1)",
+                      backgroundColor: "rgba(16, 185, 129, 0.1)",
                       "&:hover": {
-                        backgroundColor: "rgba(102, 126, 234, 0.2)",
+                        backgroundColor: "rgba(16, 185, 129, 0.2)",
                       },
                     },
                   }}
                 >
-                  <ListItemIcon sx={{ color: location.pathname === item.path ? "#667eea" : "inherit" }}>
+                  <ListItemIcon sx={{ color: location.pathname === item.path ? "#10b981" : "inherit" }}>
                     {item.icon}
                   </ListItemIcon>
                   <ListItemText primary={item.text} />
