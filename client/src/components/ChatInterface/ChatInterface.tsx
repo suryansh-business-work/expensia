@@ -10,13 +10,17 @@ import {
   Skeleton,
   Alert,
   AlertTitle,
+  Avatar,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import AddIcon from "@mui/icons-material/Add";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
+import PersonIcon from "@mui/icons-material/Person";
 import { Message } from "../../types";
 import { api } from "../../services/api";
 import { notifyExpenseAdded } from "../../services/notificationService";
 import AddCategoryDrawer from "../AddCategoryDrawer/AddCategoryDrawer";
+import { useAuth } from "../../contexts/AuthContext";
 import "./ChatInterface.scss";
 
 interface ChatInterfaceProps {
@@ -25,6 +29,7 @@ interface ChatInterfaceProps {
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExpenseAdded, trackerId }) => {
+  const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -39,6 +44,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExpenseAdded, trackerId
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [suggestedCategory, setSuggestedCategory] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const getPhotoUrl = () => {
+    if (user?.profilePhoto) {
+      return user.profilePhoto.startsWith('http') 
+        ? user.profilePhoto 
+        : `http://localhost:5000${user.profilePhoto}`;
+    }
+    return '';
+  };
 
   useEffect(() => {
     if (trackerId) {
@@ -278,8 +292,31 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExpenseAdded, trackerId
                 display: "flex",
                 justifyContent: message.role === "user" ? "flex-end" : "flex-start",
                 mb: 2,
+                gap: 1.5,
+                flexDirection: message.role === "user" ? "row-reverse" : "row",
               }}
             >
+              {/* Avatar */}
+              <Avatar
+                src={message.role === "user" ? getPhotoUrl() : undefined}
+                sx={{
+                  width: 40,
+                  height: 40,
+                  background: message.role === "user" 
+                    ? "linear-gradient(135deg, #10b981 0%, #059669 100%)"
+                    : "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                  flexShrink: 0,
+                }}
+              >
+                {message.role === "user" ? (
+                  user?.name ? user.name.charAt(0).toUpperCase() : <PersonIcon />
+                ) : (
+                  <SmartToyIcon />
+                )}
+              </Avatar>
+
+              {/* Message Content */}
               <Paper
                 elevation={2}
                 sx={{
@@ -287,6 +324,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExpenseAdded, trackerId
                   maxWidth: "75%",
                   backgroundColor: message.role === "user" ? "#10b981" : "#fff",
                   color: message.role === "user" ? "#fff" : "#333",
+                  borderRadius: 2,
                 }}
               >
                 <Typography variant="body1" sx={{ whiteSpace: "pre-line" }}>
@@ -328,8 +366,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExpenseAdded, trackerId
             </Box>
           ))}
           {isLoading && (
-            <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 2 }}>
-              <Paper elevation={2} sx={{ p: 2, minWidth: "200px" }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 2, gap: 1.5 }}>
+              <Avatar
+                sx={{
+                  width: 40,
+                  height: 40,
+                  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                }}
+              >
+                <SmartToyIcon />
+              </Avatar>
+              <Paper elevation={2} sx={{ p: 2, minWidth: "200px", borderRadius: 2 }}>
                 <Skeleton variant="text" width="100%" />
                 <Skeleton variant="text" width="80%" />
                 <Skeleton variant="rectangular" height={60} sx={{ mt: 1 }} />

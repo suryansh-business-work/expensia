@@ -291,7 +291,7 @@ const Transactions: React.FC<TransactionsProps> = ({ trackerId }) => {
                   color="primary"
                   sx={{
                     fontWeight: "bold",
-                    fontSize: "1.1rem",
+                    fontSize: "1.1em",
                     minWidth: "100px",
                     height: "40px",
                   }}

@@ -37,6 +37,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import BusinessIcon from "@mui/icons-material/Business";
 import PersonIcon from "@mui/icons-material/Person";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import AddToHomeScreenIcon from "@mui/icons-material/AddToHomeScreen";
 import { api } from "../../services/api";
 import palette from "../../theme/palette";
 
@@ -177,7 +178,7 @@ const Trackers: React.FC = () => {
     setMenuTracker(null);
   };
 
-  const handleMenuAction = (action: "edit" | "settings" | "delete", tracker: Tracker) => {
+  const handleMenuAction = (action: "edit" | "settings" | "delete" | "addToHome", tracker: Tracker) => {
     handleMenuClose();
     switch (action) {
       case "edit":
@@ -189,6 +190,138 @@ const Trackers: React.FC = () => {
       case "delete":
         handleDelete(tracker);
         break;
+      case "addToHome":
+        handleAddToHomeScreen(tracker);
+        break;
+    }
+  };
+
+  const handleAddToHomeScreen = async (tracker: Tracker) => {
+    try {
+      // Check if the browser supports PWA installation
+      if ('BeforeInstallPromptEvent' in window || 'standalone' in navigator) {
+        // Create a dynamic manifest for this specific tracker
+        const manifestData = {
+          name: tracker.name,
+          short_name: tracker.name,
+          description: tracker.description || `${tracker.name} expense tracker`,
+          start_url: `/tracker/${tracker.id}?standalone=true`,
+          display: 'standalone',
+          background_color: '#ffffff',
+          theme_color: tracker.type === 'business' ? '#667eea' : '#10b981',
+          icons: [
+            {
+              src: '/icon.svg',
+              sizes: 'any',
+              type: 'image/svg+xml',
+              purpose: 'any maskable'
+            }
+          ]
+        };
+
+        // Convert manifest to blob URL
+        const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/json' });
+        const manifestURL = URL.createObjectURL(manifestBlob);
+
+        // Create a temporary HTML page with the manifest
+        const htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${tracker.name}</title>
+  <link rel="manifest" href="${manifestURL}">
+  <meta name="theme-color" content="${tracker.type === 'business' ? '#667eea' : '#10b981'}">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, ${tracker.type === 'business' ? '#667eea 0%, #764ba2' : '#10b981 0%, #059669'} 100%);
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 400px;
+    }
+    h1 { margin: 0 0 10px; font-size: 2em; }
+    p { margin: 10px 0; opacity: 0.9; }
+    .button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      background: white;
+      color: ${tracker.type === 'business' ? '#667eea' : '#10b981'};
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>${tracker.name}</h1>
+    <p>${tracker.description || 'Expense Tracker'}</p>
+    <a href="${window.location.origin}/tracker/${tracker.id}" class="button">
+      Open Tracker
+    </a>
+    <p style="font-size: 14px; margin-top: 30px;">
+      To add to your home screen:<br><br>
+      <strong>Mobile:</strong> Tap the share button and select "Add to Home Screen"<br><br>
+      <strong>Desktop:</strong> Click the install icon in the address bar or use browser menu
+    </p>
+  </div>
+  <script>
+    // Redirect after showing instructions for a moment
+    setTimeout(() => {
+      window.location.href = '${window.location.origin}/tracker/${tracker.id}';
+    }, 5000);
+  </script>
+</body>
+</html>`;
+
+        // Open in new window for installation
+        const newWindow = window.open('', '_blank');
+        if (newWindow) {
+          newWindow.document.write(htmlContent);
+          newWindow.document.close();
+          
+          setSnackbar({ 
+            open: true, 
+            message: `Opening ${tracker.name} for installation. Follow your browser's prompts to add to home screen!`, 
+            severity: "success" 
+          });
+        } else {
+          throw new Error('Popup blocked');
+        }
+
+        // Clean up the blob URL after a delay
+        setTimeout(() => URL.revokeObjectURL(manifestURL), 10000);
+      } else {
+        // Fallback: Just navigate and show instructions
+        window.open(`/tracker/${tracker.id}`, '_blank');
+        setSnackbar({ 
+          open: true, 
+          message: `Opening ${tracker.name}. Use your browser's "Add to Home Screen" option to create an icon!`, 
+          severity: "info" 
+        });
+      }
+    } catch (error) {
+      console.error('Error creating PWA shortcut:', error);
+      setSnackbar({ 
+        open: true, 
+        message: 'Opening tracker in new window. Use browser menu to add to home screen.', 
+        severity: "info" 
+      });
+      window.open(`/tracker/${tracker.id}`, '_blank');
     }
   };
 
@@ -208,10 +341,10 @@ const Trackers: React.FC = () => {
         >
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 2 }}>
             <Box>
-              <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, mb: 0.5, color: palette.text.primary, fontSize: { xs: '1.25rem', sm: '1.5rem' } }}>
+              <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, mb: 0.5, color: palette.text.primary, fontSize: { xs: '1.25em', sm: '1.5em' } }}>
                 Expense Trackers
               </Typography>
-              <Typography variant="body2" sx={{ color: palette.text.secondary, fontSize: { xs: '0.875rem', sm: '0.9375rem' } }}>
+              <Typography variant="body2" sx={{ color: palette.text.secondary, fontSize: { xs: '0.875em', sm: '0.9375em' } }}>
                 Create separate trackers for different purposes
               </Typography>
             </Box>
@@ -228,7 +361,7 @@ const Trackers: React.FC = () => {
                 py: { xs: 1, sm: 1.25 },
                 borderRadius: 2,
                 textTransform: "none",
-                fontSize: { xs: '0.875rem', sm: '0.9375rem' },
+                fontSize: { xs: '0.875em', sm: '0.9375em' },
               }}
             >
               Create Tracker
@@ -357,7 +490,7 @@ const Trackers: React.FC = () => {
                           sx={{
                             textTransform: "capitalize",
                             fontWeight: 600,
-                            fontSize: "0.7rem",
+                            fontSize: "0.7em",
                             height: 20,
                             background: palette.status.success.bg,
                             color: palette.primary.main,
@@ -367,13 +500,13 @@ const Trackers: React.FC = () => {
                       </Box>
                     </Box>
                     <Box sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
-                      <Chip
-                        label={getCurrencySymbol(tracker.currency)}
-                        size="small"
-                        sx={{
-                          fontWeight: "bold",
-                          fontSize: "0.85rem",
-                          background: palette.background.subtle,
+                        <Chip
+                          label={getCurrencySymbol(tracker.currency)}
+                          size="small"
+                          sx={{
+                            fontWeight: "bold",
+                            fontSize: "0.85em",
+                            background: palette.background.subtle,
                           color: palette.text.primary,
                           border: `1px solid ${palette.border.light}`,
                         }}
@@ -400,7 +533,7 @@ const Trackers: React.FC = () => {
                     gutterBottom 
                     sx={{ 
                       mb: 1,
-                      fontSize: { xs: '1rem', sm: '1.05rem' },
+                      fontSize: { xs: '1em', sm: '1.05em' },
                       color: palette.text.primary,
                     }}
                   >
@@ -418,7 +551,7 @@ const Trackers: React.FC = () => {
                         overflow: "hidden",
                         lineHeight: 1.4,
                         color: palette.text.secondary,
-                        fontSize: { xs: '0.8125rem', sm: '0.875rem' },
+                        fontSize: { xs: '0.8125em', sm: '0.875em' },
                       }}
                     >
                       {tracker.description}
@@ -429,7 +562,7 @@ const Trackers: React.FC = () => {
                     variant="caption" 
                     sx={{ 
                       color: "text.secondary",
-                      fontSize: "0.75rem",
+                      fontSize: "0.75em",
                       display: "flex",
                       alignItems: "center",
                       gap: 0.5,
@@ -494,6 +627,23 @@ const Trackers: React.FC = () => {
           },
         }}
       >
+        <MenuItem 
+          onClick={() => menuTracker && handleMenuAction("addToHome", menuTracker)}
+          sx={{ 
+            py: 1.5,
+            borderRadius: 2,
+            mx: 1,
+            my: 0.5,
+            "&:hover": {
+              background: palette.background.subtle,
+            },
+          }}
+        >
+          <ListItemIcon>
+            <AddToHomeScreenIcon fontSize="small" sx={{ color: palette.primary.main }} />
+          </ListItemIcon>
+          <ListItemText sx={{ color: palette.text.primary }}>Add to Desktop</ListItemText>
+        </MenuItem>
         <MenuItem 
           onClick={() => menuTracker && handleMenuAction("settings", menuTracker)}
           sx={{ 

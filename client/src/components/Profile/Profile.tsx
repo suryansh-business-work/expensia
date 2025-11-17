@@ -252,7 +252,7 @@ const Profile: React.FC = () => {
                             height: 140,
                             border: '4px solid #fff',
                             boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-                            fontSize: '3rem',
+                            fontSize: '3em',
                             fontWeight: 700,
                             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                           }}
@@ -604,11 +604,11 @@ const Profile: React.FC = () => {
                               mt: 2,
                               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                               textTransform: 'none',
-                              fontWeight: 600,
-                              py: 1.5,
-                              fontSize: '1rem',
-                              borderRadius: 2,
-                              boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+                            fontWeight: 600,
+                            py: 1.5,
+                            fontSize: '1em',
+                            borderRadius: 2,
+                            boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
                               '&:hover': {
                                 boxShadow: '0 6px 16px rgba(102, 126, 234, 0.4)',
                                 transform: 'translateY(-2px)',
@@ -673,8 +673,8 @@ const Profile: React.FC = () => {
               maxLength: 6,
               style: { 
                 textAlign: 'center', 
-                fontSize: '1.5rem', 
-                letterSpacing: '0.5rem',
+                fontSize: '1.5em', 
+                letterSpacing: '0.5em',
                 fontWeight: 700,
               },
             }}

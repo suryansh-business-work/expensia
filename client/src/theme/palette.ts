@@ -200,7 +200,7 @@ export const themeConfig = {
         },
         small: {
           padding: '6px 16px',
-          fontSize: '0.875rem',
+          fontSize: '0.875em',
         },
       },
     },

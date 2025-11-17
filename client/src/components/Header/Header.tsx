@@ -94,9 +94,9 @@ const Header: React.FC = () => {
         position="sticky" 
         elevation={0}
         sx={{ 
-          background: '#ffffff',
+          background: '#f8f9fa',
           borderBottom: `1px solid ${palette.border.light}`,
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)',
         }}
       >
         <Toolbar sx={{ minHeight: { xs: 56, sm: 60 }, px: { xs: 2, sm: 2.5 } }}>
@@ -158,7 +158,7 @@ const Header: React.FC = () => {
                       : palette.text.primary,
                     textTransform: "none",
                     fontWeight: 600,
-                    fontSize: "0.875rem",
+                    fontSize: "0.875em",
                     px: 2,
                     py: 0.75,
                     borderRadius: 2,
@@ -184,7 +184,7 @@ const Header: React.FC = () => {
                       : palette.text.primary,
                     textTransform: "none",
                     fontWeight: 600,
-                    fontSize: "0.875rem",
+                    fontSize: "0.875em",
                     px: 2,
                     py: 0.75,
                     borderRadius: 2,
@@ -205,7 +205,7 @@ const Header: React.FC = () => {
                   size="small"
                   sx={{
                     fontWeight: 600,
-                    fontSize: "0.75rem",
+                    fontSize: "0.75em",
                     height: 24,
                     background: palette.gradients.primary,
                     color: '#fff',
@@ -230,7 +230,7 @@ const Header: React.FC = () => {
                       width: 32,
                       height: 32,
                       background: palette.gradients.primary,
-                      fontSize: "0.875rem",
+                      fontSize: "0.875em",
                       fontWeight: 700,
                     }}
                   >
@@ -270,7 +270,7 @@ const Header: React.FC = () => {
                 <AccountBalanceWalletIcon />
               </Avatar>
               <Box>
-                <Typography variant="subtitle1" sx={{ fontWeight: 700, fontSize: "1.1rem", color: palette.text.primary }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 700, fontSize: "1.1em", color: palette.text.primary }}>
                   Expense Tracker
                 </Typography>
                 <Chip 
@@ -278,7 +278,7 @@ const Header: React.FC = () => {
                   size="small" 
                   sx={{ 
                     height: 20,
-                    fontSize: "0.7rem",
+                    fontSize: "0.7em",
                     fontWeight: 600,
                     background: palette.status.success.bg,
                     color: palette.primary.main,
@@ -337,7 +337,7 @@ const Header: React.FC = () => {
                     primary={item.text}
                     primaryTypographyProps={{
                       fontWeight: location.pathname === item.path ? 700 : 500,
-                      fontSize: "0.95rem",
+                      fontSize: "0.95em",
                     }}
                   />
                 </ListItemButton>
@@ -373,7 +373,7 @@ const Header: React.FC = () => {
                 primary="Logout"
                 primaryTypographyProps={{
                   fontWeight: 600,
-                  fontSize: "0.95rem",
+                  fontSize: "0.95em",
                   color: palette.text.accent,
                 }}
               />
@@ -407,10 +407,10 @@ const Header: React.FC = () => {
         }}
       >
         <Box sx={{ px: 2, py: 1.25, borderBottom: `1px solid ${palette.border.light}` }}>
-          <Typography variant="body2" sx={{ fontWeight: 700, color: palette.text.primary, fontSize: '0.875rem' }}>
+          <Typography variant="body2" sx={{ fontWeight: 700, color: palette.text.primary, fontSize: '0.875em' }}>
             {user?.name}
           </Typography>
-          <Typography variant="caption" sx={{ color: palette.text.secondary, fontSize: '0.75rem' }}>
+          <Typography variant="caption" sx={{ color: palette.text.secondary, fontSize: '0.75em' }}>
             {user?.phone}
           </Typography>
         </Box>
@@ -430,7 +430,7 @@ const Header: React.FC = () => {
           <ListItemText
             primary="My Profile"
             primaryTypographyProps={{
-              fontSize: '0.875rem',
+              fontSize: '0.875em',
               fontWeight: 600,
               color: palette.text.primary,
             }}
@@ -452,7 +452,7 @@ const Header: React.FC = () => {
           <ListItemText
             primary="Logout"
             primaryTypographyProps={{
-              fontSize: '0.875rem',
+              fontSize: '0.875em',
               fontWeight: 600,
               color: palette.status.error.main,
             }}

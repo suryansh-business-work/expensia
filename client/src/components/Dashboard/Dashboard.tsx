@@ -244,60 +244,104 @@ const Dashboard: React.FC<DashboardProps> = ({ trackerId }) => {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ py: 3 }}>
-      <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, flexWrap: "wrap", gap: 2 }}>
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-            <ButtonGroup variant="outlined" size="small">
-              {["today", "yesterday", "last7days", "lastMonth", "thisMonth", "indiaFY", "thisYear", "custom"].map(
-                (filterOption) => (
-                  <Button
-                    key={filterOption}
-                    variant={filter === filterOption ? "contained" : "outlined"}
-                    onClick={() => handleFilterChange(filterOption)}
-                  >
-                    {filterOption === "last7days"
-                      ? "Last 7 Days"
-                      : filterOption === "lastMonth"
-                      ? "Last Month"
-                      : filterOption === "thisMonth"
-                      ? "This Month"
-                      : filterOption === "indiaFY"
-                      ? "India FY"
-                      : filterOption === "thisYear"
-                      ? "This Year"
-                      : filterOption}
-                  </Button>
-                )
-              )}
-            </ButtonGroup>
+    <Container maxWidth="xl" sx={{ py: { xs: 2, md: 3 }, px: { xs: 2, sm: 3 } }}>
+      <Paper elevation={3} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
+        <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, justifyContent: "space-between", alignItems: { xs: "stretch", md: "center" }, mb: 2, gap: 2 }}>
+          <Box sx={{ 
+            display: "flex", 
+            flexWrap: "nowrap", 
+            gap: 1,
+            width: { xs: "100%", md: "auto" },
+            overflowX: "auto",
+            pb: 0.5,
+            "&::-webkit-scrollbar": {
+              height: "6px"
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "rgba(0,0,0,0.2)",
+              borderRadius: "3px"
+            }
+          }}>
+            {["today", "yesterday", "last7days", "lastMonth", "thisMonth", "indiaFY", "thisYear", "custom"].map(
+              (filterOption) => (
+                <Button
+                  key={filterOption}
+                  variant={filter === filterOption ? "contained" : "outlined"}
+                  onClick={() => handleFilterChange(filterOption)}
+                  size="small"
+                  sx={{ 
+                    textTransform: "none",
+                    fontSize: { xs: "0.75em", sm: "0.875em" },
+                    px: { xs: 1, sm: 1.5 },
+                    minWidth: "auto",
+                    whiteSpace: "nowrap",
+                    flexShrink: 0
+                  }}
+                >
+                  {filterOption === "last7days"
+                    ? "Last 7 Days"
+                    : filterOption === "lastMonth"
+                    ? "Last Month"
+                    : filterOption === "thisMonth"
+                    ? "This Month"
+                    : filterOption === "indiaFY"
+                    ? "India FY"
+                    : filterOption === "thisYear"
+                    ? "This Year"
+                    : filterOption.charAt(0).toUpperCase() + filterOption.slice(1)}
+                </Button>
+              )
+            )}
           </Box>
 
-          <Box sx={{ display: "flex", gap: 1 }}>
+          <Box sx={{ display: "flex", gap: 1, width: { xs: "100%", md: "auto" } }}>
             <Button
               variant="outlined"
-              startIcon={<DownloadIcon />}
+              startIcon={<DownloadIcon sx={{ display: { xs: "none", sm: "block" } }} />}
               onClick={handleDownloadReport}
               size="small"
-              sx={{ textTransform: "none" }}
+              fullWidth
+              sx={{ 
+                textTransform: "none",
+                fontSize: { xs: "0.8em", sm: "0.875em" },
+                flex: 1,
+                whiteSpace: "nowrap"
+              }}
             >
-              Download Report
+              <Box component="span" sx={{ display: { xs: "none", sm: "inline" } }}>Download Report</Box>
+              <Box component="span" sx={{ display: { xs: "inline", sm: "none" } }}>Download</Box>
             </Button>
             <Button
               variant="contained"
-              startIcon={<EmailIcon />}
+              startIcon={<EmailIcon sx={{ display: { xs: "none", sm: "block" } }} />}
               onClick={handleEmailReport}
               disabled={emailLoading}
               size="small"
-              sx={{ textTransform: "none" }}
+              fullWidth
+              sx={{ 
+                textTransform: "none",
+                fontSize: { xs: "0.8em", sm: "0.875em" },
+                flex: 1,
+                whiteSpace: "nowrap"
+              }}
             >
-              {emailLoading ? "Sending..." : "Email Report"}
+              {emailLoading ? "Sending..." : (
+                <>
+                  <Box component="span" sx={{ display: { xs: "none", sm: "inline" } }}>Email Report</Box>
+                  <Box component="span" sx={{ display: { xs: "inline", sm: "none" } }}>Email</Box>
+                </>
+              )}
             </Button>
           </Box>
         </Box>
 
         {filter === "custom" && (
-          <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
+          <Box sx={{ 
+            display: "flex", 
+            flexDirection: { xs: "column", sm: "row" },
+            gap: 2, 
+            mt: 2 
+          }}>
             <TextField
               type="date"
               label="Start Date"
@@ -305,6 +349,7 @@ const Dashboard: React.FC<DashboardProps> = ({ trackerId }) => {
               onChange={(e) => setCustomStartDate(e.target.value)}
               InputLabelProps={{ shrink: true }}
               size="small"
+              fullWidth
             />
             <TextField
               type="date"
@@ -313,6 +358,7 @@ const Dashboard: React.FC<DashboardProps> = ({ trackerId }) => {
               onChange={(e) => setCustomEndDate(e.target.value)}
               InputLabelProps={{ shrink: true }}
               size="small"
+              fullWidth
             />
           </Box>
         )}
@@ -374,15 +420,15 @@ const Dashboard: React.FC<DashboardProps> = ({ trackerId }) => {
                 }
               }}
             >
-              <CardContent sx={{ position: "relative", zIndex: 1 }}>
-                <Typography variant="subtitle2" sx={{ opacity: 0.9, mb: 1, fontSize: "0.85rem", fontWeight: 500 }}>
+              <CardContent sx={{ position: "relative", zIndex: 1, p: { xs: 2, md: 2.5 } }}>
+                <Typography variant="subtitle2" sx={{ opacity: 0.9, mb: 1, fontSize: { xs: "0.75em", md: "0.85em" }, fontWeight: 500 }}>
                   Total Expenses
                 </Typography>
-                <Typography variant="h3" sx={{ fontWeight: 700, mb: 0.5 }}>
+                <Typography variant="h3" sx={{ fontWeight: 700, mb: 0.5, fontSize: { xs: "1.75em", sm: "2.25em", md: "3em" } }}>
                   ₹{summary.total.toLocaleString("en-IN")}
                 </Typography>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, opacity: 0.9 }}>
-                  <Typography variant="caption" sx={{ fontSize: "0.75rem" }}>
+                  <Typography variant="caption" sx={{ fontSize: "0.75em" }}>
                     Overall Score
                   </Typography>
                   <Chip 
@@ -390,7 +436,7 @@ const Dashboard: React.FC<DashboardProps> = ({ trackerId }) => {
                     size="small" 
                     sx={{ 
                       height: 18, 
-                      fontSize: "0.7rem",
+                      fontSize: "0.7em",
                       backgroundColor: "rgba(255, 255, 255, 0.2)",
                       color: "white",
                       fontWeight: 600
@@ -420,15 +466,15 @@ const Dashboard: React.FC<DashboardProps> = ({ trackerId }) => {
                 }
               }}
             >
-              <CardContent sx={{ position: "relative", zIndex: 1 }}>
-                <Typography variant="subtitle2" sx={{ opacity: 0.9, mb: 1, fontSize: "0.85rem", fontWeight: 500 }}>
+              <CardContent sx={{ position: "relative", zIndex: 1, p: { xs: 2, md: 2.5 } }}>
+                <Typography variant="subtitle2" sx={{ opacity: 0.9, mb: 1, fontSize: { xs: "0.75em", md: "0.85em" }, fontWeight: 500 }}>
                   Average Expense
                 </Typography>
-                <Typography variant="h3" sx={{ fontWeight: 700, mb: 0.5 }}>
+                <Typography variant="h3" sx={{ fontWeight: 700, mb: 0.5, fontSize: { xs: "1.75em", sm: "2.25em", md: "3em" } }}>
                   ₹{Math.round(summary.average).toLocaleString("en-IN")}
                 </Typography>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, opacity: 0.9 }}>
-                  <Typography variant="caption" sx={{ fontSize: "0.75rem" }}>
+                  <Typography variant="caption" sx={{ fontSize: "0.75em" }}>
                     Ranking
                   </Typography>
                   <Chip 
@@ -436,7 +482,7 @@ const Dashboard: React.FC<DashboardProps> = ({ trackerId }) => {
                     size="small" 
                     sx={{ 
                       height: 18, 
-                      fontSize: "0.7rem",
+                      fontSize: "0.7em",
                       backgroundColor: "rgba(255, 255, 255, 0.2)",
                       color: "white",
                       fontWeight: 600
@@ -465,15 +511,15 @@ const Dashboard: React.FC<DashboardProps> = ({ trackerId }) => {
                 }
               }}
             >
-              <CardContent sx={{ position: "relative", zIndex: 1 }}>
-                <Typography variant="subtitle2" sx={{ opacity: 0.9, mb: 1, fontSize: "0.85rem", fontWeight: 500 }}>
+              <CardContent sx={{ position: "relative", zIndex: 1, p: { xs: 2, md: 2.5 } }}>
+                <Typography variant="subtitle2" sx={{ opacity: 0.9, mb: 1, fontSize: { xs: "0.75em", md: "0.85em" }, fontWeight: 500 }}>
                   Total Transactions
                 </Typography>
-                <Typography variant="h3" sx={{ fontWeight: 700, mb: 0.5 }}>
+                <Typography variant="h3" sx={{ fontWeight: 700, mb: 0.5, fontSize: { xs: "1.75em", sm: "2.25em", md: "3em" } }}>
                   {summary.count}
                 </Typography>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, opacity: 0.9 }}>
-                  <Typography variant="caption" sx={{ fontSize: "0.75rem" }}>
+                  <Typography variant="caption" sx={{ fontSize: "0.75em" }}>
                     Incentives worth
                   </Typography>
                   <Chip 
@@ -481,7 +527,7 @@ const Dashboard: React.FC<DashboardProps> = ({ trackerId }) => {
                     size="small" 
                     sx={{ 
                       height: 18, 
-                      fontSize: "0.7rem",
+                      fontSize: "0.7em",
                       backgroundColor: "rgba(255, 255, 255, 0.2)",
                       color: "white",
                       fontWeight: 600
@@ -492,28 +538,35 @@ const Dashboard: React.FC<DashboardProps> = ({ trackerId }) => {
             </Card>
           </Box>
 
-          <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "repeat(2, 1fr)" }, gap: 3, mb: 3 }}>
-            <Paper elevation={3} sx={{ p: 3 }}>
-              <Typography variant="h6" gutterBottom>
+          <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "repeat(2, 1fr)" }, gap: { xs: 2, md: 3 }, mb: 3 }}>
+            <Paper elevation={3} sx={{ p: { xs: 2, md: 3 } }}>
+              <Typography variant="h6" gutterBottom sx={{ fontSize: { xs: "1.1em", md: "1.25em" } }}>
                 Expenses by Category
               </Typography>
-              <Box sx={{ height: 300 }}>
+              <Box sx={{ height: { xs: 250, md: 300 }, mt: 2 }}>
                 <Bar data={categoryBarData} options={chartOptions} />
               </Box>
             </Paper>
-            <Paper elevation={3} sx={{ p: 3 }}>
-              <Typography variant="h6" gutterBottom>
+            <Paper elevation={3} sx={{ p: { xs: 2, md: 3 } }}>
+              <Typography variant="h6" gutterBottom sx={{ fontSize: { xs: "1.1em", md: "1.25em" } }}>
                 Category Distribution
               </Typography>
-              <Box sx={{ height: 300, display: "flex", justifyContent: "center", alignItems: "center" }}>
+              <Box sx={{ height: { xs: 250, md: 300 }, mt: 2, display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <Pie data={categoryChartData} options={chartOptions} />
               </Box>
             </Paper>
           </Box>
 
-          <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-              <Typography variant="h6">Monthly Expenses Trend</Typography>
+          <Paper elevation={3} sx={{ p: { xs: 2, md: 3 }, mb: 3 }}>
+            <Box sx={{ 
+              display: "flex", 
+              flexDirection: { xs: "column", sm: "row" },
+              justifyContent: "space-between", 
+              alignItems: { xs: "flex-start", sm: "center" }, 
+              mb: 2,
+              gap: 2
+            }}>
+              <Typography variant="h6" sx={{ fontSize: { xs: "1.1em", md: "1.25em" } }}>Monthly Expenses Trend</Typography>
               <FormControl size="small" sx={{ minWidth: 120 }}>
                 <Select value={selectedYear} onChange={(e) => setSelectedYear(Number(e.target.value))}>
                   {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i).map((year) => (
@@ -524,21 +577,30 @@ const Dashboard: React.FC<DashboardProps> = ({ trackerId }) => {
                 </Select>
               </FormControl>
             </Box>
-            <Box sx={{ height: 300 }}>
+            <Box sx={{ height: { xs: 250, md: 300 }, mt: 2 }}>
               <Line data={monthlyChartData} options={chartOptions} />
             </Box>
           </Paper>
 
-          <Paper elevation={3} sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>
+          <Paper elevation={3} sx={{ p: { xs: 2, md: 3 } }}>
+            <Typography variant="h6" gutterBottom sx={{ fontSize: { xs: "1.1em", md: "1.25em" } }}>
               Category Breakdown
             </Typography>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: { xs: 1.5, md: 2 } }}>
               {categoryData.map((item, index) => (
                 <Card key={index} variant="outlined">
-                  <CardContent sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", py: 1.5, "&:last-child": { pb: 1.5 } }}>
+                  <CardContent sx={{ 
+                    display: "flex", 
+                    flexDirection: { xs: "column", sm: "row" },
+                    justifyContent: "space-between", 
+                    alignItems: { xs: "flex-start", sm: "center" },
+                    gap: { xs: 1, sm: 0 },
+                    py: { xs: 1.5, md: 1.5 }, 
+                    px: { xs: 2, md: 2 },
+                    "&:last-child": { pb: { xs: 1.5, md: 1.5 } } 
+                  }}>
                     <Box>
-                      <Typography variant="body1" fontWeight="600">
+                      <Typography variant="body1" fontWeight="600" sx={{ fontSize: { xs: "0.95em", md: "1em" } }}>
                         {item.category}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
@@ -548,7 +610,11 @@ const Dashboard: React.FC<DashboardProps> = ({ trackerId }) => {
                     <Chip
                       label={`₹${item.total.toLocaleString("en-IN")}`}
                       color="primary"
-                      sx={{ fontWeight: "bold", fontSize: "1rem" }}
+                      sx={{ 
+                        fontWeight: "bold", 
+                        fontSize: { xs: "0.85em", md: "1em" },
+                        alignSelf: { xs: "flex-start", sm: "center" }
+                      }}
                     />
                   </CardContent>
                 </Card>

@@ -273,7 +273,7 @@ const CategorySettings: React.FC<CategorySettingsProps> = ({ trackerId }) => {
                   <FolderIcon sx={{ mr: 2, color: "#10b981" }} />
                   <ListItemText
                     primary={
-                      <Typography variant="h6" sx={{ fontSize: "1rem", fontWeight: 600 }}>
+                      <Typography variant="h6" sx={{ fontSize: "1em", fontWeight: 600 }}>
                         {category.name}
                       </Typography>
                     }

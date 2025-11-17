@@ -9,15 +9,19 @@ import {
   Tab,
   Skeleton,
   Chip,
+  IconButton,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ChatIcon from "@mui/icons-material/Chat";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import BusinessIcon from "@mui/icons-material/Business";
+import PersonIcon from "@mui/icons-material/Person";
 import ChatInterface from "../ChatInterface/ChatInterface";
 import Dashboard from "../Dashboard/Dashboard";
 import Transactions from "../Transactions/Transactions";
 import { api } from "../../services/api";
+import { palette } from "../../theme/palette";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -127,51 +131,98 @@ const TrackerView: React.FC = () => {
       {/* Fixed Header with Tabs */}
       <Box
         sx={{
-          background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
-          color: "white",
+          background: '#f8f9fa',
+          borderBottom: `1px solid ${palette.border.light}`,
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)',
           position: 'sticky',
           top: 0,
           zIndex: 10,
         }}
       >
         {/* Tracker Info Row */}
-        <Box sx={{ px: { xs: 1.5, sm: 2 }, pt: 2, pb: 0.5 }}>
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 0.5 }}>
-            <Box
-              component="button"
+        <Box sx={{ px: { xs: 2, sm: 3 }, pt: { xs: 1.5, sm: 1.75 }, pb: 1 }}>
+          <Box sx={{ display: "flex", alignItems: "center", mb: 0.75 }}>
+            <IconButton
               onClick={() => navigate("/trackers")}
+              size="small"
               sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 0.3,
-                background: "transparent",
-                border: "none",
-                cursor: "pointer",
-                color: "white",
-                fontSize: { xs: "0.7rem", sm: "0.75rem" },
-                padding: 0,
-                "&:hover": { opacity: 0.8 },
+                mr: 1,
+                color: palette.text.secondary,
+                '&:hover': { 
+                  background: palette.background.subtle,
+                  color: palette.text.primary,
+                },
               }}
             >
-              <ArrowBackIcon sx={{ fontSize: { xs: 12, sm: 14 } }} />
-              Back
+              <ArrowBackIcon sx={{ fontSize: { xs: 16, sm: 18 } }} />
+            </IconButton>
+            
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1 }}>
+              <Box
+                sx={{
+                  width: { xs: 32, sm: 36 },
+                  height: { xs: 32, sm: 36 },
+                  borderRadius: 1.5,
+                  background: tracker.type === 'business' 
+                    ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                    : 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  flexShrink: 0,
+                }}
+              >
+                {tracker.type === 'business' ? (
+                  <BusinessIcon sx={{ fontSize: { xs: 16, sm: 18 } }} />
+                ) : (
+                  <PersonIcon sx={{ fontSize: { xs: 16, sm: 18 } }} />
+                )}
+              </Box>
+              
+              <Box sx={{ minWidth: 0 }}>
+                <Typography 
+                  variant="h6" 
+                  sx={{ 
+                    fontWeight: 600, 
+                    fontSize: { xs: "0.95em", sm: "1.05em" },
+                    color: palette.text.primary,
+                    lineHeight: 1.2,
+                    mb: 0.15,
+                  }}
+                >
+                  {tracker.name}
+                </Typography>
+                {tracker.description && (
+                  <Typography 
+                    variant="body2" 
+                    sx={{ 
+                      color: palette.text.secondary,
+                      fontSize: { xs: "0.75em", sm: "0.8em" },
+                      lineHeight: 1.4,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {tracker.description}
+                  </Typography>
+                )}
+              </Box>
             </Box>
-          </Box>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1, sm: 1.5 }, flexWrap: "wrap" }}>
-            <Typography variant="h6" sx={{ fontWeight: 600, mb: 0, fontSize: { xs: "0.95rem", sm: "1.05rem" } }}>
-              {tracker.name}
-            </Typography>
-            <Box sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
+            <Box sx={{ display: "flex", gap: 0.75, ml: 2 }}>
               <Chip 
                 label={tracker.type} 
                 size="small"
                 sx={{ 
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
-                  color: "white",
+                  backgroundColor: tracker.type === 'business' ? 'rgba(102, 126, 234, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+                  color: tracker.type === 'business' ? '#667eea' : '#10b981',
                   fontWeight: 600,
-                  height: { xs: 18, sm: 20 },
-                  fontSize: { xs: "0.65rem", sm: "0.7rem" },
+                  height: { xs: 20, sm: 22 },
+                  fontSize: { xs: "0.65em", sm: "0.7em" },
+                  textTransform: 'capitalize',
+                  border: `1px solid ${tracker.type === 'business' ? 'rgba(102, 126, 234, 0.2)' : 'rgba(16, 185, 129, 0.2)'}`,
                   "& .MuiChip-label": { px: 0.75 }
                 }} 
               />
@@ -179,11 +230,12 @@ const TrackerView: React.FC = () => {
                 label={getCurrencySymbol(tracker.currency)} 
                 size="small"
                 sx={{ 
-                  backgroundColor: "rgba(255, 255, 255, 0.2)",
-                  color: "white",
+                  backgroundColor: palette.background.subtle,
+                  color: palette.text.primary,
                   fontWeight: 600,
-                  height: { xs: 18, sm: 20 },
-                  fontSize: { xs: "0.65rem", sm: "0.7rem" },
+                  height: { xs: 20, sm: 22 },
+                  fontSize: { xs: "0.65em", sm: "0.7em" },
+                  border: `1px solid ${palette.border.default}`,
                   "& .MuiChip-label": { px: 0.75 }
                 }} 
               />
@@ -192,7 +244,7 @@ const TrackerView: React.FC = () => {
         </Box>
 
         {/* Tabs Row */}
-        <Box sx={{ px: { xs: 0, sm: 1 } }}>
+        <Box sx={{ px: { xs: 1, sm: 2 } }}>
           <Tabs 
             value={tabValue} 
             onChange={handleTabChange} 
@@ -201,20 +253,29 @@ const TrackerView: React.FC = () => {
               minHeight: { xs: 40, sm: 44 },
               '& .MuiTab-root': {
                 minHeight: { xs: 40, sm: 44 },
-                py: { xs: 0.5, sm: 1 },
-                px: { xs: 1, sm: 1.5 },
-                fontSize: { xs: "0.7rem", sm: "0.8rem" },
-                color: 'rgba(255, 255, 255, 0.7)',
+                py: { xs: 0.75, sm: 1 },
+                px: { xs: 1, sm: 2 },
+                fontSize: { xs: "0.8em", sm: "0.875em" },
+                fontWeight: 500,
+                color: palette.text.secondary,
+                textTransform: 'none',
+                transition: 'all 0.2s',
                 '&.Mui-selected': {
-                  color: 'white',
+                  color: tracker.type === 'business' ? '#667eea' : '#10b981',
+                  fontWeight: 600,
+                },
+                '&:hover': {
+                  color: palette.text.primary,
+                  background: palette.background.hover,
                 },
               },
               '& .MuiTabs-indicator': {
-                backgroundColor: 'white',
-                height: 2,
+                backgroundColor: tracker.type === 'business' ? '#667eea' : '#10b981',
+                height: 3,
+                borderRadius: '3px 3px 0 0',
               },
               '& .MuiTab-iconWrapper': {
-                fontSize: { xs: "0.95rem", sm: "1.1rem" },
+                fontSize: { xs: "1.1em", sm: "1.2em" },
                 marginRight: { xs: 0.5, sm: 0.75 },
               },
             }}
