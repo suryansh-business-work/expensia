@@ -4,8 +4,8 @@ import { ParsedExpense, Expense } from "../types";
 const API_URL = "/api";
 
 export const api = {
-  parseExpense: async (message: string): Promise<ParsedExpense | { error: string }> => {
-    const response = await axios.post(`${API_URL}/parse-expense`, { message });
+  parseExpense: async (message: string, trackerId?: string): Promise<ParsedExpense | { error: string }> => {
+    const response = await axios.post(`${API_URL}/parse-expense`, { message, trackerId });
     return response.data;
   },
 
@@ -77,5 +77,16 @@ export const api = {
 
   deleteTrackerCategory: async (trackerId: string, categoryId: string): Promise<void> => {
     await axios.delete(`${API_URL}/trackers/${trackerId}/categories/${categoryId}`);
+  },
+
+  // Usage APIs
+  getOverallUsage: async (): Promise<any> => {
+    const response = await axios.get(`${API_URL}/usage/overall`);
+    return response.data;
+  },
+
+  getTrackerUsage: async (trackerId: string): Promise<any> => {
+    const response = await axios.get(`${API_URL}/usage/tracker/${trackerId}`);
+    return response.data;
   },
 };

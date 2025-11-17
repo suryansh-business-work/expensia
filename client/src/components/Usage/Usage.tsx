@@ -7,453 +7,820 @@ import {
   CardContent,
   LinearProgress,
   Chip,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Stack,
   Divider,
   Paper,
   Alert,
   IconButton,
   Tooltip,
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Tabs,
+  Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import {
-  TrendingUp as TrendingUpIcon,
-  Star as StarIcon,
   Refresh as RefreshIcon,
-  CheckCircle as CheckCircleIcon,
-  Info as InfoIcon,
+  MessageOutlined as MessageIcon,
+  TokenOutlined as TokenIcon,
+  PersonOutline as PersonIcon,
+  SmartToy as AIIcon,
+  TrendingUp as TrendingUpIcon,
+  ShowChart as ShowChartIcon,
+  ListAlt as ListAltIcon,
 } from '@mui/icons-material';
 import { api } from '../../services/api';
 
-interface SubscriptionPlan {
-  name: string;
-  messagesPerMonth: number;
-  price: number;
-  features: string[];
-  color: string;
-  popular?: boolean;
-}
-
 interface UsageData {
-  totalMessages: number;
-  trackerUsage: { [trackerId: string]: number };
-  currentMonth: string;
+  overall: {
+    totalMessages: number;
+    totalTokens: number;
+    userMessages: number;
+    aiMessages: number;
+  };
+  byTracker: Array<{
+    trackerId: string;
+    trackerName: string;
+    trackerType: string;
+    messageCount: number;
+    tokenCount: number;
+    userMessages: number;
+    aiMessages: number;
+  }>;
+  recentActivity: Array<{
+    date: string;
+    messageCount: number;
+    tokenCount: number;
+  }>;
 }
 
-const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
-  {
-    name: 'Free',
-    messagesPerMonth: 50,
-    price: 0,
-    color: '#8892a9',
-    features: [
-      '50 AI messages per month',
-      'Unlimited trackers',
-      'Basic analytics',
-      'Email support',
-    ],
-  },
-  {
-    name: 'Pro',
-    messagesPerMonth: 500,
-    price: 9.99,
-    color: '#845c58',
-    popular: true,
-    features: [
-      '500 AI messages per month',
-      'Unlimited trackers',
-      'Advanced analytics',
-      'Priority support',
-      'Export data',
-      'Custom categories',
-    ],
-  },
-  {
-    name: 'Business',
-    messagesPerMonth: 2000,
-    price: 29.99,
-    color: '#b7bac3',
-    features: [
-      '2000 AI messages per month',
-      'Unlimited trackers',
-      'Premium analytics',
-      '24/7 support',
-      'Advanced export options',
-      'Team collaboration',
-      'API access',
-      'Custom branding',
-    ],
-  },
-];
+interface TrackerUsageData {
+  trackerId: string;
+  trackerName: string;
+  trackerType: string;
+  totalMessages: number;
+  totalTokens: number;
+  userMessages: number;
+  aiMessages: number;
+  dailyUsage: Array<{
+    date: string;
+    messageCount: number;
+    tokenCount: number;
+  }>;
+  messages: Array<{
+    _id: string;
+    role: 'user' | 'assistant';
+    content: string;
+    tokenCount: number;
+    timestamp: Date;
+  }>;
+}
+
+interface Tracker {
+  _id: string;
+  name: string;
+  type: string;
+}
 
 const Usage = () => {
-  const [usageData, setUsageData] = useState<UsageData>({
-    totalMessages: 0,
-    trackerUsage: {},
-    currentMonth: new Date().toISOString().slice(0, 7),
-  });
-  const [trackers, setTrackers] = useState<any[]>([]);
+  const [usageData, setUsageData] = useState<UsageData | null>(null);
+  const [trackers, setTrackers] = useState<Tracker[]>([]);
   const [selectedTracker, setSelectedTracker] = useState<string>('all');
-  const [selectedPlan, setSelectedPlan] = useState<string>('Free');
+  const [trackerUsageData, setTrackerUsageData] = useState<TrackerUsageData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentTab, setCurrentTab] = useState(0);
 
   useEffect(() => {
     loadData();
+    loadTrackers();
   }, []);
+
+  useEffect(() => {
+    if (selectedTracker && selectedTracker !== 'all') {
+      loadTrackerUsage(selectedTracker);
+    } else {
+      setTrackerUsageData(null);
+    }
+  }, [selectedTracker]);
 
   const loadData = async () => {
     setLoading(true);
+    setError(null);
     try {
-      // Load trackers
-      const trackersData = await api.getTrackers();
-      setTrackers(trackersData);
-
-      // Load usage data from localStorage
-      const storedUsage = localStorage.getItem('usage_data');
-      if (storedUsage) {
-        setUsageData(JSON.parse(storedUsage));
+      const data = await api.getOverallUsage();
+      console.log('Usage data received:', data);
+      
+      // Ensure data has the proper structure
+      if (!data || !data.overall) {
+        console.warn('Invalid data structure received:', data);
+        setUsageData({
+          overall: {
+            totalMessages: 0,
+            totalTokens: 0,
+            userMessages: 0,
+            aiMessages: 0,
+          },
+          byTracker: [],
+          recentActivity: [],
+        });
+      } else {
+        setUsageData(data);
       }
-
-      // Get selected plan from localStorage
-      const storedPlan = localStorage.getItem('subscription_plan');
-      if (storedPlan) {
-        setSelectedPlan(storedPlan);
-      }
-    } catch (error) {
-      console.error('Error loading usage data:', error);
+    } catch (err: any) {
+      console.error('Error loading usage data:', err);
+      console.error('Error response:', err.response);
+      setError(err.response?.data?.error || err.message || 'Failed to load usage data');
     } finally {
       setLoading(false);
     }
   };
 
+  const loadTrackers = async () => {
+    try {
+      const trackersData = await api.getTrackers();
+      setTrackers(trackersData);
+    } catch (err: any) {
+      console.error('Error loading trackers:', err);
+    }
+  };
+
+  const loadTrackerUsage = async (trackerId: string) => {
+    try {
+      const data = await api.getTrackerUsage(trackerId);
+      setTrackerUsageData(data);
+    } catch (err: any) {
+      console.error('Error loading tracker usage:', err);
+    }
+  };
+
   const handleRefresh = () => {
     loadData();
+    loadTrackers();
+    if (selectedTracker && selectedTracker !== 'all') {
+      loadTrackerUsage(selectedTracker);
+    }
   };
 
-  const handlePlanUpgrade = (planName: string) => {
-    setSelectedPlan(planName);
-    localStorage.setItem('subscription_plan', planName);
-    alert(`Subscription upgraded to ${planName}! (Demo mode - no payment required)`);
+  const handleTrackerChange = (event: any) => {
+    setSelectedTracker(event.target.value);
+    setCurrentTab(0); // Reset to Usage tab when tracker changes
   };
 
-  const currentPlan = SUBSCRIPTION_PLANS.find((plan) => plan.name === selectedPlan) || SUBSCRIPTION_PLANS[0];
-  const usagePercentage = (usageData.totalMessages / currentPlan.messagesPerMonth) * 100;
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+    setCurrentTab(newValue);
+  };
 
-  const filteredMessages =
-    selectedTracker === 'all'
-      ? usageData.totalMessages
-      : usageData.trackerUsage[selectedTracker] || 0;
+  if (loading) {
+    return (
+      <Container maxWidth="xl" sx={{ mt: 3, mb: 4 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+          <CircularProgress />
+        </Box>
+      </Container>
+    );
+  }
 
-  const isOverLimit = usageData.totalMessages >= currentPlan.messagesPerMonth;
+  if (error) {
+    return (
+      <Container maxWidth="xl" sx={{ mt: 3, mb: 4 }}>
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {error}
+        </Alert>
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <IconButton onClick={handleRefresh} color="primary">
+            <RefreshIcon />
+          </IconButton>
+        </Box>
+      </Container>
+    );
+  }
+
+  // If no usage data, show empty state
+  if (!usageData) {
+    return (
+      <Container maxWidth="xl" sx={{ py: 3 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+          <Typography variant="h4" sx={{ fontWeight: 600, color: '#1a202c' }}>
+            Usage Statistics
+          </Typography>
+          <Tooltip title="Refresh data">
+            <IconButton onClick={handleRefresh} color="primary">
+              <RefreshIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
+        
+        <Alert severity="info" sx={{ mb: 3 }}>
+          No usage data available yet. Start using AI chat in your trackers to see statistics here.
+        </Alert>
+
+        {/* Show empty state cards */}
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#1a202c' }}>
+            Overall Usage
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+              <Card sx={{ 
+                borderRadius: 3, 
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                boxShadow: '0 4px 20px rgba(102, 126, 234, 0.3)',
+              }}>
+                <CardContent sx={{ p: 3 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, color: 'white' }}>
+                    <MessageIcon sx={{ mr: 1, fontSize: '1.5em' }} />
+                    <Typography variant="body1" sx={{ opacity: 0.95, fontSize: '0.95em', fontWeight: 500 }}>
+                      Total Messages
+                    </Typography>
+                  </Box>
+                  <Typography variant="h3" sx={{ fontWeight: 700, color: 'white' }}>
+                    0
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+              <Card sx={{ 
+                borderRadius: 3, 
+                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                boxShadow: '0 4px 20px rgba(16, 185, 129, 0.3)',
+              }}>
+                <CardContent sx={{ p: 3 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, color: 'white' }}>
+                    <TokenIcon sx={{ mr: 1, fontSize: '1.5em' }} />
+                    <Typography variant="body1" sx={{ opacity: 0.95, fontSize: '0.95em', fontWeight: 500 }}>
+                      Total Tokens
+                    </Typography>
+                  </Box>
+                  <Typography variant="h3" sx={{ fontWeight: 700, color: 'white' }}>
+                    0
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+              <Card sx={{ 
+                borderRadius: 3, 
+                background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                boxShadow: '0 4px 20px rgba(59, 130, 246, 0.3)',
+              }}>
+                <CardContent sx={{ p: 3 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, color: 'white' }}>
+                    <PersonIcon sx={{ mr: 1, fontSize: '1.5em' }} />
+                    <Typography variant="body1" sx={{ opacity: 0.95, fontSize: '0.95em', fontWeight: 500 }}>
+                      User Messages
+                    </Typography>
+                  </Box>
+                  <Typography variant="h3" sx={{ fontWeight: 700, color: 'white' }}>
+                    0
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+              <Card sx={{ 
+                borderRadius: 3, 
+                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                boxShadow: '0 4px 20px rgba(245, 158, 11, 0.3)',
+              }}>
+                <CardContent sx={{ p: 3 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, color: 'white' }}>
+                    <AIIcon sx={{ mr: 1, fontSize: '1.5em' }} />
+                    <Typography variant="body1" sx={{ opacity: 0.95, fontSize: '0.95em', fontWeight: 500 }}>
+                      AI Messages
+                    </Typography>
+                  </Box>
+                  <Typography variant="h3" sx={{ fontWeight: 700, color: 'white' }}>
+                    0
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
+    );
+  }
 
   return (
-    <Container maxWidth="xl" sx={{ mt: 3, mb: 4 }}>
+    <Container maxWidth="xl" sx={{ py: 3 }}>
       {/* Header */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4" sx={{ fontWeight: 600, color: '#1a202c' }}>
-          Usage & Subscription
+          Usage Statistics
         </Typography>
         <Tooltip title="Refresh data">
-          <IconButton onClick={handleRefresh} disabled={loading}>
+          <IconButton onClick={handleRefresh} color="primary">
             <RefreshIcon />
           </IconButton>
         </Tooltip>
       </Box>
 
-      {/* Usage Overview */}
-      <Grid container spacing={2} sx={{ mb: 3 }}>
-        {/* Current Plan Card */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Card
-            sx={{
-              background: `linear-gradient(135deg, ${currentPlan.color}22 0%, ${currentPlan.color}11 100%)`,
-              border: `2px solid ${currentPlan.color}`,
-              borderRadius: 2,
-            }}
-          >
-            <CardContent>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                  {currentPlan.name} Plan
-                </Typography>
-                {currentPlan.popular && (
-                  <Chip
-                    icon={<StarIcon />}
-                    label="Popular"
-                    size="small"
-                    sx={{ bgcolor: currentPlan.color, color: 'white' }}
-                  />
-                )}
-              </Box>
-              <Typography variant="h3" sx={{ fontWeight: 700, color: currentPlan.color, mb: 1 }}>
-                {currentPlan.price === 0 ? 'Free' : `$${currentPlan.price}`}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                per month
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Messages Used Card */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Card sx={{ borderRadius: 2 }}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <TrendingUpIcon sx={{ mr: 1, color: '#8892a9' }} />
-                <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                  Messages Used
-                </Typography>
-              </Box>
-              <Typography variant="h3" sx={{ fontWeight: 700, color: '#1a202c', mb: 1 }}>
-                {usageData.totalMessages}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                of {currentPlan.messagesPerMonth} messages
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Usage Progress Card */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Card sx={{ borderRadius: 2 }}>
-            <CardContent>
-              <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-                Usage Progress
-              </Typography>
-              <LinearProgress
-                variant="determinate"
-                value={Math.min(usagePercentage, 100)}
-                sx={{
-                  height: 12,
-                  borderRadius: 6,
-                  mb: 1,
-                  bgcolor: '#e8eaec',
-                  '& .MuiLinearProgress-bar': {
-                    bgcolor: isOverLimit ? '#f44336' : '#845c58',
-                    borderRadius: 6,
-                  },
-                }}
-              />
-              <Typography variant="body2" color={isOverLimit ? 'error' : 'text.secondary'}>
-                {usagePercentage.toFixed(1)}% used
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-
-      {/* Alert if over limit */}
-      {isOverLimit && (
-        <Alert severity="warning" sx={{ mb: 3 }}>
-          You've reached your monthly message limit. Upgrade your plan to continue using AI features.
-        </Alert>
-      )}
-
-      {/* Filter by Tracker */}
-      <Paper sx={{ p: 2, mb: 3, borderRadius: 2 }}>
-        <Grid container spacing={2} alignItems="center">
-          <Grid size={{ xs: 12, md: 6 }}>
-            <FormControl fullWidth size="small">
-              <InputLabel>Filter by Tracker</InputLabel>
-              <Select
-                value={selectedTracker}
-                onChange={(e) => setSelectedTracker(e.target.value)}
-                label="Filter by Tracker"
-              >
-                <MenuItem value="all">All Trackers</MenuItem>
-                {trackers.map((tracker) => (
-                  <MenuItem key={tracker.id} value={tracker.id}>
-                    {tracker.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Box sx={{ textAlign: { xs: 'left', md: 'right' } }}>
-              <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                Filtered Messages: <span style={{ color: '#845c58' }}>{filteredMessages}</span>
-              </Typography>
-            </Box>
-          </Grid>
-        </Grid>
-      </Paper>
-
-      {/* Tracker Usage Breakdown */}
-      <Card sx={{ mb: 3, borderRadius: 2 }}>
-        <CardContent>
-          <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-            Usage by Tracker
-          </Typography>
-          <Grid container spacing={2}>
-            {trackers.length === 0 ? (
-              <Grid size={{ xs: 12 }}>
-                <Typography variant="body2" color="text.secondary" align="center">
-                  No trackers found. Create a tracker to start tracking usage.
-                </Typography>
-              </Grid>
-            ) : (
-              trackers.map((tracker) => {
-                const messages = usageData.trackerUsage[tracker.id] || 0;
-                const percentage = (messages / usageData.totalMessages) * 100 || 0;
-                return (
-                  <Grid size={{ xs: 12, sm: 6, md: 4 }} key={tracker.id}>
-                    <Paper
-                      sx={{
-                        p: 2,
-                        borderRadius: 2,
-                        border: '1px solid #e8eaec',
-                        transition: 'all 0.3s',
-                        '&:hover': {
-                          borderColor: '#845c58',
-                          boxShadow: '0 2px 8px rgba(132, 92, 88, 0.1)',
-                        },
-                      }}
-                    >
-                      <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
-                        {tracker.name}
-                      </Typography>
-                      <Typography variant="h4" sx={{ fontWeight: 700, color: '#845c58', mb: 1 }}>
-                        {messages}
-                      </Typography>
-                      <LinearProgress
-                        variant="determinate"
-                        value={percentage}
-                        sx={{
-                          height: 6,
-                          borderRadius: 3,
-                          bgcolor: '#e8eaec',
-                          '& .MuiLinearProgress-bar': {
-                            bgcolor: '#8892a9',
-                            borderRadius: 3,
-                          },
-                        }}
-                      />
-                      <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
-                        {percentage.toFixed(1)}% of total
-                      </Typography>
-                    </Paper>
-                  </Grid>
-                );
-              })
-            )}
-          </Grid>
-        </CardContent>
-      </Card>
-
-      {/* Subscription Plans */}
-      <Typography variant="h5" sx={{ fontWeight: 600, mb: 2, color: '#1a202c' }}>
-        Subscription Plans
-      </Typography>
-      <Grid container spacing={3}>
-        {SUBSCRIPTION_PLANS.map((plan) => (
-          <Grid size={{ xs: 12, md: 4 }} key={plan.name}>
-            <Card
-              sx={{
-                position: 'relative',
-                height: '100%',
-                borderRadius: 2,
-                border: selectedPlan === plan.name ? `2px solid ${plan.color}` : '1px solid #e8eaec',
-                boxShadow: plan.popular ? '0 8px 24px rgba(132, 92, 88, 0.15)' : 'none',
-                transition: 'all 0.3s',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                  boxShadow: '0 12px 32px rgba(132, 92, 88, 0.2)',
-                },
-              }}
-            >
-              {plan.popular && (
-                <Chip
-                  icon={<StarIcon />}
-                  label="Most Popular"
-                  size="small"
-                  sx={{
-                    position: 'absolute',
-                    top: 16,
-                    right: 16,
-                    bgcolor: plan.color,
-                    color: 'white',
-                    fontWeight: 600,
-                  }}
-                />
-              )}
+      {/* Overall Usage Stats - Always Visible */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#1a202c' }}>
+          Overall Usage
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Card sx={{ 
+              borderRadius: 3, 
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              boxShadow: '0 4px 20px rgba(102, 126, 234, 0.3)',
+            }}>
               <CardContent sx={{ p: 3 }}>
-                <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
-                  {plan.name}
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'baseline', mb: 2 }}>
-                  <Typography variant="h3" sx={{ fontWeight: 700, color: plan.color }}>
-                    {plan.price === 0 ? 'Free' : `$${plan.price}`}
-                  </Typography>
-                  <Typography variant="body1" color="text.secondary" sx={{ ml: 1 }}>
-                    /month
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, color: 'white' }}>
+                  <MessageIcon sx={{ mr: 1, fontSize: '1.5em' }} />
+                  <Typography variant="body1" sx={{ opacity: 0.95, fontSize: '0.95em', fontWeight: 500 }}>
+                    Total Messages
                   </Typography>
                 </Box>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                  {plan.messagesPerMonth} AI messages per month
+                <Typography variant="h3" sx={{ fontWeight: 700, color: 'white' }}>
+                  {usageData.overall.totalMessages.toLocaleString()}
                 </Typography>
-                <Divider sx={{ my: 2 }} />
-                <Stack spacing={1.5} sx={{ mb: 3 }}>
-                  {plan.features.map((feature, index) => (
-                    <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-                      <CheckCircleIcon sx={{ fontSize: 18, mr: 1, color: plan.color }} />
-                      <Typography variant="body2">{feature}</Typography>
-                    </Box>
-                  ))}
-                </Stack>
-                <Button
-                  variant={selectedPlan === plan.name ? 'outlined' : 'contained'}
-                  fullWidth
-                  disabled={selectedPlan === plan.name}
-                  onClick={() => handlePlanUpgrade(plan.name)}
-                  sx={{
-                    bgcolor: selectedPlan === plan.name ? 'transparent' : plan.color,
-                    borderColor: plan.color,
-                    color: selectedPlan === plan.name ? plan.color : 'white',
-                    '&:hover': {
-                      bgcolor: selectedPlan === plan.name ? 'transparent' : plan.color,
-                      opacity: 0.9,
-                    },
-                    '&.Mui-disabled': {
-                      bgcolor: 'transparent',
-                      borderColor: plan.color,
-                      color: plan.color,
-                    },
-                  }}
-                >
-                  {selectedPlan === plan.name ? 'Current Plan' : 'Upgrade'}
-                </Button>
               </CardContent>
             </Card>
           </Grid>
-        ))}
-      </Grid>
 
-      {/* Usage Info */}
-      <Paper sx={{ mt: 3, p: 2, borderRadius: 2, bgcolor: '#f8f9fa' }}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
-          <InfoIcon sx={{ mr: 1, color: '#8892a9', mt: 0.5 }} />
-          <Box>
-            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-              How Usage is Tracked
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              • Each AI message in the chat interface counts as 1 message toward your monthly limit.
-              <br />
-              • Usage is tracked per tracker and aggregated for your overall usage.
-              <br />
-              • Usage resets on the 1st of each month.
-              <br />• Unused messages do not roll over to the next month.
-            </Typography>
-          </Box>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Card sx={{ 
+              borderRadius: 3, 
+              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+              boxShadow: '0 4px 20px rgba(16, 185, 129, 0.3)',
+            }}>
+              <CardContent sx={{ p: 3 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, color: 'white' }}>
+                  <TokenIcon sx={{ mr: 1, fontSize: '1.5em' }} />
+                  <Typography variant="body1" sx={{ opacity: 0.95, fontSize: '0.95em', fontWeight: 500 }}>
+                    Total Tokens
+                  </Typography>
+                </Box>
+                <Typography variant="h3" sx={{ fontWeight: 700, color: 'white' }}>
+                  {usageData.overall.totalTokens.toLocaleString()}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Card sx={{ 
+              borderRadius: 3, 
+              background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+              boxShadow: '0 4px 20px rgba(59, 130, 246, 0.3)',
+            }}>
+              <CardContent sx={{ p: 3 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, color: 'white' }}>
+                  <PersonIcon sx={{ mr: 1, fontSize: '1.5em' }} />
+                  <Typography variant="body1" sx={{ opacity: 0.95, fontSize: '0.95em', fontWeight: 500 }}>
+                    User Messages
+                  </Typography>
+                </Box>
+                <Typography variant="h3" sx={{ fontWeight: 700, color: 'white' }}>
+                  {usageData.overall.userMessages.toLocaleString()}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Card sx={{ 
+              borderRadius: 3, 
+              background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+              boxShadow: '0 4px 20px rgba(245, 158, 11, 0.3)',
+            }}>
+              <CardContent sx={{ p: 3 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, color: 'white' }}>
+                  <AIIcon sx={{ mr: 1, fontSize: '1.5em' }} />
+                  <Typography variant="body1" sx={{ opacity: 0.95, fontSize: '0.95em', fontWeight: 500 }}>
+                    AI Messages
+                  </Typography>
+                </Box>
+                <Typography variant="h3" sx={{ fontWeight: 700, color: 'white' }}>
+                  {usageData.overall.aiMessages.toLocaleString()}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      </Box>
+
+      {/* Tracker Dropdown */}
+      <Box sx={{ mb: 3 }}>
+        <FormControl fullWidth sx={{ maxWidth: 400 }}>
+          <InputLabel>Select Tracker</InputLabel>
+          <Select
+            value={selectedTracker}
+            label="Select Tracker"
+            onChange={handleTrackerChange}
+          >
+            <MenuItem value="all">All Trackers</MenuItem>
+            {trackers.map((tracker) => (
+              <MenuItem key={tracker._id} value={tracker._id}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Typography>{tracker.name}</Typography>
+                  <Chip 
+                    label={tracker.type} 
+                    size="small"
+                    sx={{
+                      height: 20,
+                      fontSize: '0.7em',
+                      textTransform: 'capitalize',
+                      bgcolor: tracker.type === 'business' ? 'rgba(102, 126, 234, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+                      color: tracker.type === 'business' ? '#667eea' : '#10b981',
+                    }}
+                  />
+                </Box>
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
+
+      {/* Tabs */}
+      <Card sx={{ borderRadius: 3, boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs 
+            value={currentTab} 
+            onChange={handleTabChange}
+            sx={{
+              '& .MuiTab-root': {
+                fontSize: '0.95em',
+                fontWeight: 500,
+                textTransform: 'none',
+                minHeight: 56,
+              },
+            }}
+          >
+            <Tab 
+              icon={<TrendingUpIcon />} 
+              iconPosition="start" 
+              label="Usage" 
+            />
+            <Tab 
+              icon={<ShowChartIcon />} 
+              iconPosition="start" 
+              label="Graphs" 
+            />
+            <Tab 
+              icon={<ListAltIcon />} 
+              iconPosition="start" 
+              label="Logs" 
+            />
+          </Tabs>
         </Box>
-      </Paper>
+
+        <CardContent sx={{ p: 3 }}>
+          {/* Usage Tab */}
+          {currentTab === 0 && (
+            <Box>
+              {selectedTracker === 'all' ? (
+                // Show all trackers usage
+                <Box>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
+                    Usage by Tracker
+                  </Typography>
+                  {usageData.byTracker.length === 0 ? (
+                    <Alert severity="info">
+                      No usage data available. Start using AI chat in your trackers to see statistics here.
+                    </Alert>
+                  ) : (
+                    <Grid container spacing={3}>
+                      {usageData.byTracker.map((tracker) => {
+                        const totalMessages = usageData.overall.totalMessages;
+                        const percentage = totalMessages > 0 ? (tracker.messageCount / totalMessages) * 100 : 0;
+                        return (
+                          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={tracker.trackerId}>
+                            <Paper
+                              sx={{
+                                p: 3,
+                                borderRadius: 2,
+                                border: '1px solid',
+                                borderColor: '#e8eaec',
+                                transition: 'all 0.3s',
+                                '&:hover': {
+                                  borderColor: tracker.trackerType === 'business' ? '#667eea' : '#10b981',
+                                  boxShadow: `0 4px 16px ${tracker.trackerType === 'business' ? 'rgba(102, 126, 234, 0.2)' : 'rgba(16, 185, 129, 0.2)'}`,
+                                  transform: 'translateY(-2px)',
+                                },
+                              }}
+                            >
+                              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                                <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#1a202c', fontSize: '1.05em' }}>
+                                  {tracker.trackerName}
+                                </Typography>
+                                <Chip
+                                  label={tracker.trackerType}
+                                  size="small"
+                                  sx={{
+                                    fontSize: '0.7em',
+                                    height: 24,
+                                    textTransform: 'capitalize',
+                                    bgcolor: tracker.trackerType === 'business' ? 'rgba(102, 126, 234, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+                                    color: tracker.trackerType === 'business' ? '#667eea' : '#10b981',
+                                    fontWeight: 600,
+                                  }}
+                                />
+                              </Box>
+
+                              <Stack spacing={2}>
+                                <Box>
+                                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                                    <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.9em' }}>
+                                      Messages
+                                    </Typography>
+                                    <Typography variant="body1" sx={{ fontWeight: 600, fontSize: '1em' }}>
+                                      {tracker.messageCount}
+                                    </Typography>
+                                  </Box>
+                                  <LinearProgress
+                                    variant="determinate"
+                                    value={percentage}
+                                    sx={{
+                                      height: 8,
+                                      borderRadius: 4,
+                                      bgcolor: '#e8eaec',
+                                      '& .MuiLinearProgress-bar': {
+                                        bgcolor: tracker.trackerType === 'business' ? '#667eea' : '#10b981',
+                                        borderRadius: 4,
+                                      },
+                                    }}
+                                  />
+                                  <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: 'block' }}>
+                                    {percentage.toFixed(1)}% of total
+                                  </Typography>
+                                </Box>
+
+                                <Divider />
+
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.9em' }}>
+                                    Tokens
+                                  </Typography>
+                                  <Typography variant="body1" sx={{ fontWeight: 600, fontSize: '1em' }}>
+                                    {tracker.tokenCount.toLocaleString()}
+                                  </Typography>
+                                </Box>
+
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.9em' }}>
+                                    User / AI
+                                  </Typography>
+                                  <Typography variant="body1" sx={{ fontWeight: 600, fontSize: '1em' }}>
+                                    {tracker.userMessages} / {tracker.aiMessages}
+                                  </Typography>
+                                </Box>
+                              </Stack>
+                            </Paper>
+                          </Grid>
+                        );
+                      })}
+                    </Grid>
+                  )}
+                </Box>
+              ) : (
+                // Show selected tracker usage
+                <Box>
+                  {trackerUsageData ? (
+                    <Box>
+                      <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
+                        {trackerUsageData.trackerName} - Detailed Usage
+                      </Typography>
+                      
+                      <Grid container spacing={3} sx={{ mb: 4 }}>
+                        <Grid size={{ xs: 6, md: 3 }}>
+                          <Paper sx={{ p: 2.5, borderRadius: 2, bgcolor: '#f8f9fa' }}>
+                            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1, fontSize: '0.85em' }}>
+                              Total Messages
+                            </Typography>
+                            <Typography variant="h4" sx={{ fontWeight: 700, color: '#667eea' }}>
+                              {trackerUsageData.totalMessages}
+                            </Typography>
+                          </Paper>
+                        </Grid>
+                        <Grid size={{ xs: 6, md: 3 }}>
+                          <Paper sx={{ p: 2.5, borderRadius: 2, bgcolor: '#f8f9fa' }}>
+                            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1, fontSize: '0.85em' }}>
+                              Total Tokens
+                            </Typography>
+                            <Typography variant="h4" sx={{ fontWeight: 700, color: '#10b981' }}>
+                              {trackerUsageData.totalTokens.toLocaleString()}
+                            </Typography>
+                          </Paper>
+                        </Grid>
+                        <Grid size={{ xs: 6, md: 3 }}>
+                          <Paper sx={{ p: 2.5, borderRadius: 2, bgcolor: '#f8f9fa' }}>
+                            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1, fontSize: '0.85em' }}>
+                              User Messages
+                            </Typography>
+                            <Typography variant="h4" sx={{ fontWeight: 700, color: '#3b82f6' }}>
+                              {trackerUsageData.userMessages}
+                            </Typography>
+                          </Paper>
+                        </Grid>
+                        <Grid size={{ xs: 6, md: 3 }}>
+                          <Paper sx={{ p: 2.5, borderRadius: 2, bgcolor: '#f8f9fa' }}>
+                            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1, fontSize: '0.85em' }}>
+                              AI Messages
+                            </Typography>
+                            <Typography variant="h4" sx={{ fontWeight: 700, color: '#f59e0b' }}>
+                              {trackerUsageData.aiMessages}
+                            </Typography>
+                          </Paper>
+                        </Grid>
+                      </Grid>
+
+                      {/* Daily Usage */}
+                      {trackerUsageData.dailyUsage && trackerUsageData.dailyUsage.length > 0 && (
+                        <Box>
+                          <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 2 }}>
+                            Daily Activity (Last 30 Days)
+                          </Typography>
+                          <Stack spacing={1}>
+                            {trackerUsageData.dailyUsage.slice(0, 10).map((day, index) => (
+                              <Box
+                                key={index}
+                                sx={{
+                                  display: 'flex',
+                                  justifyContent: 'space-between',
+                                  alignItems: 'center',
+                                  p: 2,
+                                  borderRadius: 2,
+                                  bgcolor: index % 2 === 0 ? '#f8f9fa' : 'transparent',
+                                }}
+                              >
+                                <Typography variant="body2" sx={{ fontWeight: 500, minWidth: 100, fontSize: '0.95em' }}>
+                                  {new Date(day.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                </Typography>
+                                <Box sx={{ display: 'flex', gap: 4 }}>
+                                  <Box sx={{ textAlign: 'right' }}>
+                                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', fontSize: '0.8em' }}>
+                                      Messages
+                                    </Typography>
+                                    <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                                      {day.messageCount}
+                                    </Typography>
+                                  </Box>
+                                  <Box sx={{ textAlign: 'right' }}>
+                                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', fontSize: '0.8em' }}>
+                                      Tokens
+                                    </Typography>
+                                    <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                                      {day.tokenCount.toLocaleString()}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                              </Box>
+                            ))}
+                          </Stack>
+                        </Box>
+                      )}
+                    </Box>
+                  ) : (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                      <CircularProgress />
+                    </Box>
+                  )}
+                </Box>
+              )}
+            </Box>
+          )}
+
+          {/* Graphs Tab */}
+          {currentTab === 1 && (
+            <Box>
+              <Alert severity="info" sx={{ mb: 3 }}>
+                Graph visualizations coming soon! This will show usage trends, comparisons, and analytics.
+              </Alert>
+              {selectedTracker === 'all' ? (
+                <Box>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                    Overall Usage Trends
+                  </Typography>
+                  <Paper sx={{ p: 4, textAlign: 'center', bgcolor: '#f8f9fa', borderRadius: 2 }}>
+                    <ShowChartIcon sx={{ fontSize: 64, color: '#8892a9', mb: 2 }} />
+                    <Typography variant="body1" color="text.secondary">
+                      Interactive charts and graphs will be displayed here
+                    </Typography>
+                  </Paper>
+                </Box>
+              ) : trackerUsageData && (
+                <Box>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                    {trackerUsageData.trackerName} - Usage Trends
+                  </Typography>
+                  <Paper sx={{ p: 4, textAlign: 'center', bgcolor: '#f8f9fa', borderRadius: 2 }}>
+                    <ShowChartIcon sx={{ fontSize: 64, color: '#8892a9', mb: 2 }} />
+                    <Typography variant="body1" color="text.secondary">
+                      Tracker-specific charts and analytics will be displayed here
+                    </Typography>
+                  </Paper>
+                </Box>
+              )}
+            </Box>
+          )}
+
+          {/* Logs Tab */}
+          {currentTab === 2 && (
+            <Box>
+              {selectedTracker === 'all' ? (
+                <Alert severity="warning">
+                  Please select a specific tracker to view message logs
+                </Alert>
+              ) : trackerUsageData && trackerUsageData.messages && trackerUsageData.messages.length > 0 ? (
+                <Box>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 3 }}>
+                    {trackerUsageData.trackerName} - Message Logs
+                  </Typography>
+                  <TableContainer component={Paper} sx={{ boxShadow: 'none', border: '1px solid #e8eaec' }}>
+                    <Table>
+                      <TableHead>
+                        <TableRow sx={{ bgcolor: '#f8f9fa' }}>
+                          <TableCell sx={{ fontWeight: 600, fontSize: '0.9em' }}>Timestamp</TableCell>
+                          <TableCell sx={{ fontWeight: 600, fontSize: '0.9em' }}>Role</TableCell>
+                          <TableCell sx={{ fontWeight: 600, fontSize: '0.9em' }}>Message</TableCell>
+                          <TableCell sx={{ fontWeight: 600, fontSize: '0.9em' }} align="right">Tokens</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {trackerUsageData.messages.slice(0, 50).map((message) => (
+                          <TableRow 
+                            key={message._id}
+                            sx={{ 
+                              '&:hover': { bgcolor: '#f8f9fa' },
+                              '& td': { fontSize: '0.9em' }
+                            }}
+                          >
+                            <TableCell sx={{ minWidth: 150 }}>
+                              {new Date(message.timestamp).toLocaleString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </TableCell>
+                            <TableCell>
+                              <Chip
+                                label={message.role}
+                                size="small"
+                                sx={{
+                                  bgcolor: message.role === 'user' ? 'rgba(59, 130, 246, 0.1)' : 'rgba(245, 158, 11, 0.1)',
+                                  color: message.role === 'user' ? '#3b82f6' : '#f59e0b',
+                                  fontWeight: 600,
+                                  fontSize: '0.75em',
+                                  textTransform: 'capitalize',
+                                }}
+                              />
+                            </TableCell>
+                            <TableCell sx={{ maxWidth: 400 }}>
+                              <Typography 
+                                variant="body2" 
+                                sx={{ 
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  display: '-webkit-box',
+                                  WebkitLineClamp: 2,
+                                  WebkitBoxOrient: 'vertical',
+                                }}
+                              >
+                                {message.content}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="right" sx={{ fontWeight: 600 }}>
+                              {message.tokenCount.toLocaleString()}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                  {trackerUsageData.messages.length > 50 && (
+                    <Typography variant="caption" color="text.secondary" sx={{ mt: 2, display: 'block', textAlign: 'center' }}>
+                      Showing first 50 messages of {trackerUsageData.messages.length} total
+                    </Typography>
+                  )}
+                </Box>
+              ) : (
+                <Alert severity="info">
+                  No message logs available for this tracker
+                </Alert>
+              )}
+            </Box>
+          )}
+        </CardContent>
+      </Card>
     </Container>
   );
 };

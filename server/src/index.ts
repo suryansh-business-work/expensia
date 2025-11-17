@@ -20,6 +20,8 @@ import { AnalyticsService } from "./services/analyticsService";
 import { Expense } from "./types";
 import { EXPENSE_CATEGORIES, PAYMENT_METHODS } from "./config/categories";
 import reportRoutes from "./routes/report";
+import usageRoutes from "./routes/usage";
+import { logMessage } from "./controllers/usageController";
 
 const app = express();
 const PORT = config.PORT;
@@ -34,6 +36,9 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Report routes
 app.use('/api/reports', reportRoutes);
+
+// Usage routes
+app.use('/api/usage', usageRoutes);
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -387,15 +392,53 @@ app.get("/api/categories", (req, res) => {
   });
 });
 
-app.post("/api/parse-expense", async (req, res) => {
+app.post("/api/parse-expense", authenticateToken, async (req: any, res) => {
   try {
-    const { message } = req.body;
+    const { message, trackerId } = req.body;
+
+    console.log('[Parse Expense] Request received:', {
+      hasMessage: !!message,
+      hasTrackerId: !!trackerId,
+      hasUserId: !!req.user?.userId,
+      trackerId,
+      userId: req.user?.userId
+    });
 
     if (!message) {
       return res.status(400).json({ error: "Message is required" });
     }
 
+    // Log user message if userId and trackerId are available
+    if (req.user?.userId && trackerId) {
+      try {
+        console.log('[Parse Expense] Logging user message...');
+        await logMessage(req.user.userId, trackerId, 'user', message);
+        console.log('[Parse Expense] User message logged successfully');
+      } catch (logError) {
+        console.error("[Parse Expense] Error logging user message:", logError);
+        // Continue processing even if logging fails
+      }
+    } else {
+      console.log('[Parse Expense] Skipping user message logging:', {
+        hasUserId: !!req.user?.userId,
+        hasTrackerId: !!trackerId
+      });
+    }
+
     const parsed = await ExpenseParser.parseExpense(message);
+
+    // Log AI response if parsing was successful
+    if (req.user?.userId && trackerId && !("error" in parsed)) {
+      try {
+        const responseText = `Parsed expense: ₹${parsed.amount} for ${parsed.subcategory} via ${parsed.paymentMethod}`;
+        console.log('[Parse Expense] Logging AI response...');
+        await logMessage(req.user.userId, trackerId, 'assistant', responseText);
+        console.log('[Parse Expense] AI response logged successfully');
+      } catch (logError) {
+        console.error("[Parse Expense] Error logging AI response:", logError);
+        // Continue processing even if logging fails
+      }
+    }
 
     if ("error" in parsed) {
       return res.status(400).json(parsed);
@@ -559,15 +602,25 @@ app.delete("/api/expenses/:id", async (req, res) => {
   }
 });
 
-app.post("/api/chat", async (req, res) => {
+app.post("/api/chat", authenticateToken, async (req: any, res) => {
   try {
-    const { message, history = [] } = req.body;
+    const { message, history = [], trackerId } = req.body;
 
     if (!message) {
       return res.status(400).json({ error: "Message is required" });
     }
 
+    // Log user message
+    if (req.user?.userId && trackerId) {
+      await logMessage(req.user.userId, trackerId, 'user', message);
+    }
+
     const response = await ExpenseParser.getChatResponse(message, history);
+
+    // Log AI response
+    if (req.user?.userId && trackerId && response) {
+      await logMessage(req.user.userId, trackerId, 'assistant', response);
+    }
 
     res.json({ response });
   } catch (error) {

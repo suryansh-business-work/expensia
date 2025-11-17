@@ -198,8 +198,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExpenseAdded, trackerId
       // Track message usage
       trackMessageUsage(trackerId);
 
-      // Parse the expense using ChatGPT
-      const parsed = await api.parseExpense(input);
+      // Parse the expense using ChatGPT (now includes message logging)
+      const parsed = await api.parseExpense(input, trackerId);
 
       if ("error" in parsed) {
         const errorMessage: Message = {
