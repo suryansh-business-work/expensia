@@ -1,0 +1,61 @@
+import axios from "axios";
+import { ParsedExpense, Expense } from "../types";
+
+const API_URL = "/api";
+
+export const api = {
+  parseExpense: async (message: string): Promise<ParsedExpense | { error: string }> => {
+    const response = await axios.post(`${API_URL}/parse-expense`, { message });
+    return response.data;
+  },
+
+  createExpense: async (expense: ParsedExpense): Promise<Expense> => {
+    const response = await axios.post(`${API_URL}/expenses`, expense);
+    return response.data.expense;
+  },
+
+  getExpenses: async (trackerId?: string): Promise<Expense[]> => {
+    const url = trackerId ? `${API_URL}/expenses?trackerId=${trackerId}` : `${API_URL}/expenses`;
+    const response = await axios.get(url);
+    return response.data.expenses;
+  },
+
+  getCategories: async () => {
+    const response = await axios.get(`${API_URL}/categories`);
+    return response.data;
+  },
+
+  updateExpense: async (id: string, expense: Partial<ParsedExpense>): Promise<Expense> => {
+    const response = await axios.put(`${API_URL}/expenses/${id}`, expense);
+    return response.data.expense;
+  },
+
+  deleteExpense: async (id: string): Promise<void> => {
+    await axios.delete(`${API_URL}/expenses/${id}`);
+  },
+
+  // Tracker APIs
+  getTrackers: async (): Promise<any[]> => {
+    const response = await axios.get(`${API_URL}/trackers`);
+    return response.data.trackers;
+  },
+
+  getTracker: async (id: string): Promise<any> => {
+    const response = await axios.get(`${API_URL}/trackers/${id}`);
+    return response.data.tracker;
+  },
+
+  createTracker: async (tracker: any): Promise<any> => {
+    const response = await axios.post(`${API_URL}/trackers`, tracker);
+    return response.data.tracker;
+  },
+
+  updateTracker: async (id: string, tracker: any): Promise<any> => {
+    const response = await axios.put(`${API_URL}/trackers/${id}`, tracker);
+    return response.data.tracker;
+  },
+
+  deleteTracker: async (id: string): Promise<void> => {
+    await axios.delete(`${API_URL}/trackers/${id}`);
+  },
+};

@@ -1,0 +1,95 @@
+import { useState, useEffect, useMemo } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { ThemeProvider, createTheme, CssBaseline, Box, CircularProgress } from "@mui/material";
+import Header from "./components/Header/Header";
+import Trackers from "./components/Trackers/Trackers";
+import TrackerView from "./components/TrackerView/TrackerView";
+import Login from "./components/Auth/Login";
+import Signup from "./components/Auth/Signup";
+import Profile from "./components/Profile/Profile";
+import { api } from "./services/api";
+import { ThemeModeProvider, useThemeMode } from "./contexts/ThemeContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { requestNotificationPermission } from "./services/notificationService";
+
+const AppContent = () => {
+  const { isDarkMode } = useThemeMode();
+  const { isAuthenticated, loading: authLoading } = useAuth();
+
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: isDarkMode ? "dark" : "light",
+          primary: {
+            main: "#667eea",
+          },
+          secondary: {
+            main: "#764ba2",
+          },
+          background: {
+            default: isDarkMode ? "#121212" : "#f5f5f5",
+            paper: isDarkMode ? "#1e1e1e" : "#ffffff",
+          },
+        },
+        typography: {
+          fontFamily: [
+            "-apple-system",
+            "BlinkMacSystemFont",
+            '"Segoe UI"',
+            "Roboto",
+            '"Helvetica Neue"',
+            "Arial",
+            "sans-serif",
+          ].join(","),
+        },
+      }),
+    [isDarkMode]
+  );
+
+  useEffect(() => {
+    // Request notification permission
+    requestNotificationPermission();
+  }, []);
+
+  if (authLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+          {isAuthenticated && <Header />}
+          <Box sx={{ flexGrow: 1 }}>
+            <Routes>
+              <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/trackers" replace />} />
+              <Route path="/signup" element={!isAuthenticated ? <Signup /> : <Navigate to="/trackers" replace />} />
+              <Route path="/" element={isAuthenticated ? <Navigate to="/trackers" replace /> : <Navigate to="/login" replace />} />
+              <Route path="/trackers" element={isAuthenticated ? <Trackers /> : <Navigate to="/login" replace />} />
+              <Route path="/tracker/:trackerId" element={isAuthenticated ? <TrackerView /> : <Navigate to="/login" replace />} />
+              <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/login" replace />} />
+            </Routes>
+          </Box>
+        </Box>
+      </Router>
+    </ThemeProvider>
+  );
+};
+
+function App() {
+  return (
+    <AuthProvider>
+      <ThemeModeProvider>
+        <AppContent />
+      </ThemeModeProvider>
+    </AuthProvider>
+  );
+}
+
+export default App;
