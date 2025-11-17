@@ -17,6 +17,8 @@ import {
   Avatar,
   Divider,
   Chip,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
@@ -37,8 +39,9 @@ const Header: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [profileMenuAnchor, setProfileMenuAnchor] = useState<null | HTMLElement>(null);
   const { isDarkMode, toggleTheme } = useThemeMode();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   // Check if user is in a tracker view
   const isInTrackerView = location.pathname.startsWith("/tracker/");
@@ -57,6 +60,29 @@ const Header: React.FC = () => {
     logout();
     navigate('/login');
     setDrawerOpen(false);
+    setProfileMenuAnchor(null);
+  };
+
+  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setProfileMenuAnchor(event.currentTarget);
+  };
+
+  const handleProfileMenuClose = () => {
+    setProfileMenuAnchor(null);
+  };
+
+  const handleProfileClick = () => {
+    navigate('/profile');
+    setProfileMenuAnchor(null);
+  };
+
+  const getPhotoUrl = () => {
+    if (user?.profilePhoto) {
+      return user.profilePhoto.startsWith('http') 
+        ? user.profilePhoto 
+        : `http://localhost:5000${user.profilePhoto}`;
+    }
+    return '';
   };
 
   return (
@@ -65,44 +91,35 @@ const Header: React.FC = () => {
         position="sticky" 
         elevation={0}
         sx={{ 
-          background: palette.background.paper,
-          backdropFilter: "blur(20px)",
+          background: '#ffffff',
           borderBottom: `1px solid ${palette.border.light}`,
-          boxShadow: `0 2px 12px ${palette.shadows.light}`,
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
         }}
       >
-        <Toolbar sx={{ minHeight: { xs: 56, sm: 64 }, px: { xs: 2, sm: 3 } }}>
+        <Toolbar sx={{ minHeight: { xs: 56, sm: 60 }, px: { xs: 2, sm: 2.5 } }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, flexGrow: 1 }}>
             <Box
               sx={{
-                width: { xs: 36, sm: 40 },
-                height: { xs: 36, sm: 40 },
-                borderRadius: 2.5,
+                width: { xs: 32, sm: 36 },
+                height: { xs: 32, sm: 36 },
+                borderRadius: 2,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 background: palette.gradients.primary,
-                boxShadow: `0 4px 12px ${palette.shadows.medium}`,
-                transition: "all 0.3s ease",
-                "&:hover": {
-                  transform: "scale(1.05)",
-                  boxShadow: `0 6px 16px ${palette.shadows.strong}`,
-                },
+                boxShadow: `0 2px 8px ${palette.shadows.medium}`,
               }}
             >
-              <AccountBalanceWalletIcon sx={{ color: '#fff', fontSize: { xs: 20, sm: 24 } }} />
+              <AccountBalanceWalletIcon sx={{ color: '#fff', fontSize: { xs: 18, sm: 20 } }} />
             </Box>
             <Typography
               variant="h6"
               component="div"
               sx={{
                 fontWeight: 700,
-                fontSize: { xs: "1.1rem", sm: "1.3rem" },
-                background: palette.gradients.primary,
-                backgroundClip: "text",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                letterSpacing: "-0.5px",
+                fontSize: { xs: "1rem", sm: "1.15rem" },
+                color: palette.text.primary,
+                letterSpacing: "-0.3px",
               }}
             >
               Expense Tracker
@@ -112,15 +129,14 @@ const Header: React.FC = () => {
           <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 0.5, sm: 1 } }}>
             <IconButton
               onClick={toggleTheme}
+              size="small"
               sx={{ 
                 color: palette.text.secondary,
                 background: palette.background.subtle,
                 "&:hover": {
                   background: palette.border.light,
                   color: palette.text.primary,
-                  transform: "scale(1.05)",
                 },
-                transition: "all 0.2s",
               }}
               aria-label="Toggle dark mode"
             >
@@ -147,6 +163,7 @@ const Header: React.FC = () => {
               <Box sx={{ display: "flex", gap: 1, ml: 1 }}>
                 <Button
                   startIcon={<FolderIcon fontSize="small" />}
+                  size="small"
                   onClick={() => navigate("/trackers")}
                   sx={{
                     color: location.pathname === "/trackers" || isInTrackerView 
@@ -154,83 +171,47 @@ const Header: React.FC = () => {
                       : palette.text.primary,
                     textTransform: "none",
                     fontWeight: 600,
-                    fontSize: "0.9rem",
-                    px: 2.5,
+                    fontSize: "0.875rem",
+                    px: 2,
                     py: 0.75,
-                    borderRadius: 2.5,
+                    borderRadius: 2,
                     background: location.pathname === "/trackers" || isInTrackerView 
                       ? palette.gradients.primary
                       : palette.background.subtle,
-                    boxShadow: location.pathname === "/trackers" || isInTrackerView 
-                      ? `0 4px 12px ${palette.shadows.medium}` 
-                      : "none",
                     "&:hover": {
                       background: location.pathname === "/trackers" || isInTrackerView 
                         ? palette.gradients.primary
                         : palette.border.light,
-                      transform: "translateY(-1px)",
-                      boxShadow: `0 6px 16px ${palette.shadows.medium}`,
                     },
-                    transition: "all 0.2s",
                   }}
                 >
                   Trackers
                 </Button>
-                <Button
-                  startIcon={<AccountCircleIcon fontSize="small" />}
-                  onClick={() => navigate("/profile")}
+                <IconButton
+                  onClick={handleProfileMenuOpen}
+                  size="small"
                   sx={{
-                    color: location.pathname === "/profile" 
-                      ? '#fff' 
-                      : palette.text.primary,
-                    textTransform: "none",
-                    fontWeight: 600,
-                    fontSize: "0.9rem",
-                    px: 2.5,
-                    py: 0.75,
-                    borderRadius: 2.5,
-                    background: location.pathname === "/profile" 
-                      ? palette.gradients.primary
-                      : palette.background.subtle,
-                    boxShadow: location.pathname === "/profile" 
-                      ? `0 4px 12px ${palette.shadows.medium}` 
-                      : "none",
+                    ml: 0.5,
+                    p: 0.25,
+                    border: `2px solid ${location.pathname === "/profile" ? palette.primary.main : palette.border.light}`,
                     "&:hover": {
-                      background: location.pathname === "/profile" 
-                        ? palette.gradients.primary
-                        : palette.border.light,
-                      transform: "translateY(-1px)",
-                      boxShadow: `0 6px 16px ${palette.shadows.medium}`,
+                      borderColor: palette.primary.main,
                     },
-                    transition: "all 0.2s",
                   }}
                 >
-                  Profile
-                </Button>
-                <Button
-                  startIcon={<LogoutIcon fontSize="small" />}
-                  onClick={handleLogout}
-                  sx={{
-                    color: palette.text.accent,
-                    textTransform: "none",
-                    fontWeight: 600,
-                    fontSize: "0.9rem",
-                    px: 2.5,
-                    py: 0.75,
-                    borderRadius: 2.5,
-                    background: palette.background.subtle,
-                    border: `1px solid ${palette.border.default}`,
-                    "&:hover": {
-                      background: `${palette.status.error.bg}`,
-                      borderColor: palette.status.error.main,
-                      color: palette.status.error.main,
-                      transform: "translateY(-1px)",
-                    },
-                    transition: "all 0.2s",
-                  }}
-                >
-                  Logout
-                </Button>
+                  <Avatar
+                    src={getPhotoUrl()}
+                    sx={{
+                      width: 32,
+                      height: 32,
+                      background: palette.gradients.primary,
+                      fontSize: "0.875rem",
+                      fontWeight: 700,
+                    }}
+                  >
+                    {user?.name?.charAt(0).toUpperCase()}
+                  </Avatar>
+                </IconButton>
               </Box>
             )}
           </Box>
@@ -375,6 +356,84 @@ const Header: React.FC = () => {
           </Box>
         </Box>
       </Drawer>
+
+      {/* Profile Menu */}
+      <Menu
+        anchorEl={profileMenuAnchor}
+        open={Boolean(profileMenuAnchor)}
+        onClose={handleProfileMenuClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            minWidth: 180,
+            borderRadius: 2.5,
+            mt: 1,
+            border: `1px solid ${palette.border.light}`,
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+          },
+        }}
+      >
+        <Box sx={{ px: 2, py: 1.25, borderBottom: `1px solid ${palette.border.light}` }}>
+          <Typography variant="body2" sx={{ fontWeight: 700, color: palette.text.primary, fontSize: '0.875rem' }}>
+            {user?.name}
+          </Typography>
+          <Typography variant="caption" sx={{ color: palette.text.secondary, fontSize: '0.75rem' }}>
+            {user?.phone}
+          </Typography>
+        </Box>
+        <MenuItem
+          onClick={handleProfileClick}
+          sx={{
+            py: 1.25,
+            px: 2,
+            '&:hover': {
+              background: palette.background.subtle,
+            },
+          }}
+        >
+          <ListItemIcon sx={{ minWidth: 36 }}>
+            <AccountCircleIcon fontSize="small" sx={{ color: palette.primary.main }} />
+          </ListItemIcon>
+          <ListItemText
+            primary="My Profile"
+            primaryTypographyProps={{
+              fontSize: '0.875rem',
+              fontWeight: 600,
+              color: palette.text.primary,
+            }}
+          />
+        </MenuItem>
+        <MenuItem
+          onClick={handleLogout}
+          sx={{
+            py: 1.25,
+            px: 2,
+            '&:hover': {
+              background: palette.status.error.bg,
+            },
+          }}
+        >
+          <ListItemIcon sx={{ minWidth: 36 }}>
+            <LogoutIcon fontSize="small" sx={{ color: palette.status.error.main }} />
+          </ListItemIcon>
+          <ListItemText
+            primary="Logout"
+            primaryTypographyProps={{
+              fontSize: '0.875rem',
+              fontWeight: 600,
+              color: palette.status.error.main,
+            }}
+          />
+        </MenuItem>
+      </Menu>
     </>
   );
 };

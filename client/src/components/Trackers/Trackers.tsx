@@ -193,46 +193,42 @@ const Trackers: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
+    <Container maxWidth="xl" sx={{ py: { xs: 2, sm: 3 }, px: { xs: 2, sm: 3 } }}>
       <Fade in={true} timeout={500}>
         <Paper 
           elevation={0} 
           sx={{ 
-            p: 4, 
-            mb: 4,
-            borderRadius: 4,
+            p: { xs: 2.5, sm: 3 }, 
+            mb: { xs: 2, sm: 3 },
+            borderRadius: 3,
             background: palette.background.paper,
             border: `1px solid ${palette.border.light}`,
-            boxShadow: `0 4px 20px ${palette.shadows.light}`,
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
           }}
         >
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 2 }}>
             <Box>
-              <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, mb: 1, color: palette.text.primary }}>
+              <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, mb: 0.5, color: palette.text.primary, fontSize: { xs: '1.25rem', sm: '1.5rem' } }}>
                 Expense Trackers
               </Typography>
-              <Typography variant="body2" sx={{ color: palette.text.secondary }}>
-                Create separate trackers for different purposes (Home, Business, Travel, etc.)
+              <Typography variant="body2" sx={{ color: palette.text.secondary, fontSize: { xs: '0.875rem', sm: '0.9375rem' } }}>
+                Create separate trackers for different purposes
               </Typography>
             </Box>
             <Button
               variant="contained"
+              size="small"
               startIcon={<AddIcon />}
               onClick={() => handleOpenDialog()}
               sx={{
                 background: palette.gradients.primary,
                 color: "#fff",
                 fontWeight: 600,
-                px: 3,
-                py: 1.5,
-                borderRadius: 2.5,
+                px: { xs: 2, sm: 2.5 },
+                py: { xs: 1, sm: 1.25 },
+                borderRadius: 2,
                 textTransform: "none",
-                boxShadow: `0 4px 12px ${palette.shadows.medium}`,
-                "&:hover": {
-                  transform: "translateY(-2px)",
-                  boxShadow: `0 6px 20px ${palette.shadows.strong}`,
-                },
-                transition: "all 0.3s ease",
+                fontSize: { xs: '0.875rem', sm: '0.9375rem' },
               }}
             >
               Create Tracker
@@ -308,11 +304,11 @@ const Trackers: React.FC = () => {
                   height: "100%",
                   display: "flex",
                   flexDirection: "column",
-                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  transition: "all 0.2s ease",
                   cursor: "pointer",
                   border: "1px solid",
                   borderColor: palette.border.light,
-                  borderRadius: 4,
+                  borderRadius: 3,
                   background: palette.background.paper,
                   position: "relative",
                   overflow: "hidden",
@@ -322,36 +318,36 @@ const Trackers: React.FC = () => {
                     top: 0,
                     left: 0,
                     right: 0,
-                    height: "4px",
+                    height: "3px",
                     background: palette.gradients.primary,
                   },
                   "&:hover": {
-                    transform: "translateY(-8px)",
-                    boxShadow: `0 12px 28px ${palette.shadows.medium}`,
+                    transform: "translateY(-4px)",
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                     borderColor: palette.primary.main,
                   },
                 }}
                 onClick={() => navigate(`/tracker/${tracker.id}`)}
               >
-                <CardContent sx={{ flexGrow: 1, pt: 3 }}>
-                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 2 }}>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                <CardContent sx={{ flexGrow: 1, p: { xs: 2, sm: 2.5 } }}>
+                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1.5 }}>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1.25 }}>
                       <Box
                         sx={{
-                          width: 48,
-                          height: 48,
-                          borderRadius: 2.5,
+                          width: 40,
+                          height: 40,
+                          borderRadius: 2,
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
                           background: palette.gradients.primary,
-                          boxShadow: `0 4px 12px ${palette.shadows.medium}`,
+                          boxShadow: `0 2px 8px ${palette.shadows.medium}`,
                         }}
                       >
                         {tracker.type === "business" ? (
-                          <BusinessIcon sx={{ color: "#fff", fontSize: 28 }} />
+                          <BusinessIcon sx={{ color: "#fff", fontSize: 22 }} />
                         ) : (
-                          <PersonIcon sx={{ color: "#fff", fontSize: 28 }} />
+                          <PersonIcon sx={{ color: "#fff", fontSize: 22 }} />
                         )}
                       </Box>
                       <Box>
@@ -362,6 +358,7 @@ const Trackers: React.FC = () => {
                             textTransform: "capitalize",
                             fontWeight: 600,
                             fontSize: "0.7rem",
+                            height: 20,
                             background: palette.status.success.bg,
                             color: palette.primary.main,
                             border: `1px solid ${palette.border.light}`,
@@ -402,8 +399,8 @@ const Trackers: React.FC = () => {
                     fontWeight="700" 
                     gutterBottom 
                     sx={{ 
-                      mb: 1.5,
-                      fontSize: "1.1rem",
+                      mb: 1,
+                      fontSize: { xs: '1rem', sm: '1.05rem' },
                       color: palette.text.primary,
                     }}
                   >
@@ -414,13 +411,14 @@ const Trackers: React.FC = () => {
                     <Typography 
                       variant="body2" 
                       sx={{ 
-                        mb: 2,
+                        mb: 1.5,
                         display: "-webkit-box",
                         WebkitLineClamp: 2,
                         WebkitBoxOrient: "vertical",
                         overflow: "hidden",
-                        lineHeight: 1.5,
+                        lineHeight: 1.4,
                         color: palette.text.secondary,
+                        fontSize: { xs: '0.8125rem', sm: '0.875rem' },
                       }}
                     >
                       {tracker.description}

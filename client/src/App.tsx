@@ -24,6 +24,18 @@ const AppContent = () => {
         palette: {
           ...themeConfig.palette,
           mode: isDarkMode ? "dark" : "light",
+          ...(isDarkMode && {
+            background: {
+              default: '#1a1a1a',
+              paper: '#242424',
+            },
+            text: {
+              primary: '#ffffff',
+              secondary: '#b0b0b0',
+              disabled: '#6b6b6b',
+            },
+            divider: '#404040',
+          }),
         },
       }),
     [isDarkMode]

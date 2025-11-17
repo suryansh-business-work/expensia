@@ -22,13 +22,20 @@ export const palette = {
     hover: '#f5f6f7',       // Light hover state
   },
 
-  // Text Colors
+  // Text Colors - Enhanced for better contrast
   text: {
-    primary: '#2c3e50',     // Dark professional text
-    secondary: '#8892a9',   // Sephiroth Grey - Secondary text
-    muted: '#b7bac3',       // Silver Springs - Muted text
-    light: '#d2d6db',       // Angel Hair Silver - Very light text
+    primary: '#1a202c',     // Darker for better contrast (WCAG AA)
+    secondary: '#6b7280',   // Medium gray with good contrast
+    muted: '#9ca3af',       // Light gray for less important text
+    light: '#d1d5db',       // Very light for disabled states
     accent: '#845c58',      // Book Binder - Accent text
+  },
+
+  // Header specific colors
+  header: {
+    background: '#ffffff',  // Solid white background
+    text: '#1a202c',        // Dark text for contrast
+    border: '#e5e7eb',      // Light border
   },
 
   // Border Colors
@@ -167,55 +174,33 @@ export const themeConfig = {
     },
   },
   shape: {
-    borderRadius: 12,
+    borderRadius: 8,
   },
-  shadows: [
-    'none',
-    `0 2px 4px ${palette.shadows.light}`,
-    `0 4px 8px ${palette.shadows.light}`,
-    `0 6px 12px ${palette.shadows.medium}`,
-    `0 8px 16px ${palette.shadows.medium}`,
-    `0 10px 20px ${palette.shadows.medium}`,
-    `0 12px 24px ${palette.shadows.strong}`,
-    `0 14px 28px ${palette.shadows.strong}`,
-    `0 16px 32px ${palette.shadows.strong}`,
-    `0 18px 36px ${palette.shadows.strong}`,
-    `0 20px 40px ${palette.shadows.strong}`,
-    `0 22px 44px ${palette.shadows.strong}`,
-    `0 24px 48px ${palette.shadows.strong}`,
-    `0 26px 52px ${palette.shadows.strong}`,
-    `0 28px 56px ${palette.shadows.strong}`,
-    `0 30px 60px ${palette.shadows.strong}`,
-    `0 32px 64px ${palette.shadows.strong}`,
-    `0 34px 68px ${palette.shadows.strong}`,
-    `0 36px 72px ${palette.shadows.strong}`,
-    `0 38px 76px ${palette.shadows.strong}`,
-    `0 40px 80px ${palette.shadows.strong}`,
-    `0 42px 84px ${palette.shadows.strong}`,
-    `0 44px 88px ${palette.shadows.strong}`,
-    `0 46px 92px ${palette.shadows.strong}`,
-    `0 48px 96px ${palette.shadows.strong}`,
-  ],
+  spacing: 8,
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
           textTransform: 'none' as const,
           fontWeight: 600,
-          borderRadius: 10,
-          padding: '10px 24px',
+          borderRadius: 8,
+          padding: '8px 20px',
           transition: 'all 0.3s ease',
           '&:hover': {
-            transform: 'translateY(-2px)',
-            boxShadow: `0 6px 16px ${palette.shadows.medium}`,
+            transform: 'translateY(-1px)',
+            boxShadow: `0 4px 12px ${palette.shadows.medium}`,
           },
         },
         contained: {
           background: palette.gradients.primary,
-          boxShadow: `0 4px 12px ${palette.shadows.medium}`,
+          boxShadow: `0 2px 8px ${palette.shadows.medium}`,
           '&:hover': {
-            boxShadow: `0 6px 20px ${palette.shadows.strong}`,
+            boxShadow: `0 4px 16px ${palette.shadows.strong}`,
           },
+        },
+        small: {
+          padding: '6px 16px',
+          fontSize: '0.875rem',
         },
       },
     },
