@@ -22,16 +22,23 @@ import {
   Skeleton,
   Snackbar,
   Alert,
+  Menu,
+  ListItemIcon,
+  ListItemText,
+  Fade,
+  Grow,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SettingsIcon from "@mui/icons-material/Settings";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import BusinessIcon from "@mui/icons-material/Business";
 import PersonIcon from "@mui/icons-material/Person";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { api } from "../../services/api";
+import palette from "../../theme/palette";
 
 interface Tracker {
   id: string;
@@ -52,6 +59,8 @@ const Trackers: React.FC = () => {
   const [editMode, setEditMode] = useState(false);
   const [selectedTracker, setSelectedTracker] = useState<Tracker | null>(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" as "success" | "error" });
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [menuTracker, setMenuTracker] = useState<Tracker | null>(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -157,134 +166,388 @@ const Trackers: React.FC = () => {
     }
   };
 
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, tracker: Tracker) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+    setMenuTracker(tracker);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setMenuTracker(null);
+  };
+
+  const handleMenuAction = (action: "edit" | "settings" | "delete", tracker: Tracker) => {
+    handleMenuClose();
+    switch (action) {
+      case "edit":
+        handleOpenDialog(tracker);
+        break;
+      case "settings":
+        navigate(`/tracker/${tracker.id}/settings`);
+        break;
+      case "delete":
+        handleDelete(tracker);
+        break;
+    }
+  };
+
   return (
-    <Container maxWidth="xl" sx={{ py: 3 }}>
-      <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 2 }}>
-          <Box>
-            <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: "#667eea" }}>
-              Expense Trackers
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Create separate trackers for different purposes (Home, Business, Travel, etc.)
-            </Typography>
+    <Container maxWidth="xl" sx={{ py: 4 }}>
+      <Fade in={true} timeout={500}>
+        <Paper 
+          elevation={0} 
+          sx={{ 
+            p: 4, 
+            mb: 4,
+            borderRadius: 4,
+            background: palette.background.paper,
+            border: `1px solid ${palette.border.light}`,
+            boxShadow: `0 4px 20px ${palette.shadows.light}`,
+          }}
+        >
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 2 }}>
+            <Box>
+              <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, mb: 1, color: palette.text.primary }}>
+                Expense Trackers
+              </Typography>
+              <Typography variant="body2" sx={{ color: palette.text.secondary }}>
+                Create separate trackers for different purposes (Home, Business, Travel, etc.)
+              </Typography>
+            </Box>
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => handleOpenDialog()}
+              sx={{
+                background: palette.gradients.primary,
+                color: "#fff",
+                fontWeight: 600,
+                px: 3,
+                py: 1.5,
+                borderRadius: 2.5,
+                textTransform: "none",
+                boxShadow: `0 4px 12px ${palette.shadows.medium}`,
+                "&:hover": {
+                  transform: "translateY(-2px)",
+                  boxShadow: `0 6px 20px ${palette.shadows.strong}`,
+                },
+                transition: "all 0.3s ease",
+              }}
+            >
+              Create Tracker
+            </Button>
           </Box>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => handleOpenDialog()}
-          >
-            Create Tracker
-          </Button>
-        </Box>
-      </Paper>
+        </Paper>
+      </Fade>
 
       {loading ? (
         <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)", lg: "repeat(4, 1fr)" }, gap: 3 }}>
           {[1, 2, 3, 4].map((i) => (
-            <Skeleton key={i} variant="rectangular" height={200} sx={{ borderRadius: 2 }} />
+            <Fade in={true} timeout={300 * i} key={i}>
+              <Box>
+                <Skeleton 
+                  variant="rectangular" 
+                  height={220} 
+                  sx={{ 
+                    borderRadius: 4,
+                    transform: "scale(1)",
+                    animation: "pulse 1.5s ease-in-out infinite",
+                    backgroundColor: palette.background.subtle,
+                    "@keyframes pulse": {
+                      "0%, 100%": { opacity: 1 },
+                      "50%": { opacity: 0.5 },
+                    },
+                  }} 
+                />
+              </Box>
+            </Fade>
           ))}
         </Box>
       ) : trackers.length === 0 ? (
-        <Paper elevation={3} sx={{ p: 6, textAlign: "center" }}>
-          <AccountBalanceWalletIcon sx={{ fontSize: 80, color: "#ccc", mb: 2 }} />
-          <Typography variant="h6" color="text.secondary" gutterBottom>
+        <Paper 
+          elevation={0} 
+          sx={{ 
+            p: 6, 
+            textAlign: "center",
+            borderRadius: 4,
+            border: `1px solid ${palette.border.light}`,
+            background: palette.background.paper,
+          }}
+        >
+          <AccountBalanceWalletIcon sx={{ fontSize: 80, color: palette.text.muted, mb: 2 }} />
+          <Typography variant="h6" sx={{ color: palette.text.secondary, mb: 1 }} gutterBottom>
             No trackers yet
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+          <Typography variant="body2" sx={{ color: palette.text.muted, mb: 3 }}>
             Create your first tracker to start managing expenses
           </Typography>
           <Button
             variant="contained"
             startIcon={<AddIcon />}
             onClick={() => handleOpenDialog()}
+            sx={{
+              background: palette.gradients.primary,
+              boxShadow: `0 4px 12px ${palette.shadows.medium}`,
+            }}
           >
             Create Tracker
           </Button>
         </Paper>
       ) : (
         <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)", lg: "repeat(4, 1fr)" }, gap: 3 }}>
-          {trackers.map((tracker) => (
-            <Card
+          {trackers.map((tracker, index) => (
+            <Grow
+              in={true}
+              timeout={300 + index * 100}
               key={tracker.id}
-              elevation={3}
-              sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                transition: "all 0.3s",
-                "&:hover": {
-                  transform: "translateY(-4px)",
-                  boxShadow: 6,
-                },
-              }}
             >
-                <CardContent sx={{ flexGrow: 1 }}>
+              <Card
+                elevation={0}
+                sx={{
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  cursor: "pointer",
+                  border: "1px solid",
+                  borderColor: palette.border.light,
+                  borderRadius: 4,
+                  background: palette.background.paper,
+                  position: "relative",
+                  overflow: "hidden",
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: "4px",
+                    background: palette.gradients.primary,
+                  },
+                  "&:hover": {
+                    transform: "translateY(-8px)",
+                    boxShadow: `0 12px 28px ${palette.shadows.medium}`,
+                    borderColor: palette.primary.main,
+                  },
+                }}
+                onClick={() => navigate(`/tracker/${tracker.id}`)}
+              >
+                <CardContent sx={{ flexGrow: 1, pt: 3 }}>
                   <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 2 }}>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      {tracker.type === "business" ? (
-                        <BusinessIcon sx={{ color: "#667eea", fontSize: 32 }} />
-                      ) : (
-                        <PersonIcon sx={{ color: "#667eea", fontSize: 32 }} />
-                      )}
-                      <Chip
-                        label={tracker.type}
-                        size="small"
-                        color={tracker.type === "business" ? "primary" : "secondary"}
-                        sx={{ textTransform: "capitalize" }}
-                      />
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                      <Box
+                        sx={{
+                          width: 48,
+                          height: 48,
+                          borderRadius: 2.5,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          background: palette.gradients.primary,
+                          boxShadow: `0 4px 12px ${palette.shadows.medium}`,
+                        }}
+                      >
+                        {tracker.type === "business" ? (
+                          <BusinessIcon sx={{ color: "#fff", fontSize: 28 }} />
+                        ) : (
+                          <PersonIcon sx={{ color: "#fff", fontSize: 28 }} />
+                        )}
+                      </Box>
+                      <Box>
+                        <Chip
+                          label={tracker.type}
+                          size="small"
+                          sx={{
+                            textTransform: "capitalize",
+                            fontWeight: 600,
+                            fontSize: "0.7rem",
+                            background: palette.status.success.bg,
+                            color: palette.primary.main,
+                            border: `1px solid ${palette.border.light}`,
+                          }}
+                        />
+                      </Box>
                     </Box>
-                    <Chip
-                      label={getCurrencySymbol(tracker.currency)}
-                      size="small"
-                      variant="outlined"
-                      sx={{ fontWeight: "bold" }}
-                    />
+                    <Box sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
+                      <Chip
+                        label={getCurrencySymbol(tracker.currency)}
+                        size="small"
+                        sx={{
+                          fontWeight: "bold",
+                          fontSize: "0.85rem",
+                          background: palette.background.subtle,
+                          color: palette.text.primary,
+                          border: `1px solid ${palette.border.light}`,
+                        }}
+                      />
+                      <IconButton
+                        size="small"
+                        onClick={(e) => handleMenuOpen(e, tracker)}
+                        sx={{
+                          color: palette.text.secondary,
+                          "&:hover": {
+                            background: palette.background.subtle,
+                            color: palette.text.primary,
+                          },
+                        }}
+                      >
+                        <MoreVertIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
                   </Box>
 
-                  <Typography variant="h6" fontWeight="600" gutterBottom>
+                  <Typography 
+                    variant="h6" 
+                    fontWeight="700" 
+                    gutterBottom 
+                    sx={{ 
+                      mb: 1.5,
+                      fontSize: "1.1rem",
+                      color: palette.text.primary,
+                    }}
+                  >
                     {tracker.name}
                   </Typography>
 
                   {tracker.description && (
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    <Typography 
+                      variant="body2" 
+                      sx={{ 
+                        mb: 2,
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                        lineHeight: 1.5,
+                        color: palette.text.secondary,
+                      }}
+                    >
                       {tracker.description}
                     </Typography>
                   )}
 
-                  <Typography variant="caption" color="text.secondary">
-                    Created: {new Date(tracker.createdAt).toLocaleDateString("en-IN")}
+                  <Typography 
+                    variant="caption" 
+                    sx={{ 
+                      color: "text.secondary",
+                      fontSize: "0.75rem",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 0.5,
+                    }}
+                  >
+                    📅 {new Date(tracker.createdAt).toLocaleDateString("en-IN", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
                   </Typography>
                 </CardContent>
 
-                <CardActions sx={{ justifyContent: "space-between", px: 2, pb: 2 }}>
+                <CardActions sx={{ px: 2, pb: 2, pt: 0 }}>
                   <Button
                     size="small"
-                    variant="outlined"
-                    onClick={() => navigate(`/tracker/${tracker.id}`)}
-                    sx={{ flexGrow: 1, mr: 1 }}
+                    variant="contained"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/tracker/${tracker.id}`);
+                    }}
+                    sx={{
+                      flexGrow: 1,
+                      background: tracker.type === "business"
+                        ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+                        : "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                      textTransform: "none",
+                      fontWeight: 600,
+                      borderRadius: 2,
+                      py: 1,
+                      boxShadow: "none",
+                      "&:hover": {
+                        boxShadow: tracker.type === "business"
+                          ? "0 4px 12px rgba(102, 126, 234, 0.4)"
+                          : "0 4px 12px rgba(16, 185, 129, 0.4)",
+                      },
+                    }}
                   >
-                    View Expenses
+                    Open Tracker
                   </Button>
-                  <IconButton
-                    size="small"
-                    sx={{ color: "#10b981" }}
-                    onClick={() => navigate(`/tracker/${tracker.id}/settings`)}
-                    title="Category Settings"
-                  >
-                    <SettingsIcon />
-                  </IconButton>
-                  <IconButton size="small" color="primary" onClick={() => handleOpenDialog(tracker)}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton size="small" color="error" onClick={() => handleDelete(tracker)}>
-                    <DeleteIcon />
-                  </IconButton>
                 </CardActions>
               </Card>
+            </Grow>
           ))}
         </Box>
       )}
+
+      {/* Action Menu */}
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+        TransitionComponent={Fade}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            minWidth: 200,
+            borderRadius: 3,
+            mt: 1,
+            border: `1px solid ${palette.border.light}`,
+            boxShadow: `0 8px 24px ${palette.shadows.medium}`,
+          },
+        }}
+      >
+        <MenuItem 
+          onClick={() => menuTracker && handleMenuAction("settings", menuTracker)}
+          sx={{ 
+            py: 1.5,
+            borderRadius: 2,
+            mx: 1,
+            my: 0.5,
+            "&:hover": {
+              background: palette.background.subtle,
+            },
+          }}
+        >
+          <ListItemIcon>
+            <SettingsIcon fontSize="small" sx={{ color: palette.primary.main }} />
+          </ListItemIcon>
+          <ListItemText sx={{ color: palette.text.primary }}>Category Settings</ListItemText>
+        </MenuItem>
+        <MenuItem 
+          onClick={() => menuTracker && handleMenuAction("edit", menuTracker)}
+          sx={{ 
+            py: 1.5,
+            borderRadius: 2,
+            mx: 1,
+            my: 0.5,
+            "&:hover": {
+              background: palette.background.subtle,
+            },
+          }}
+        >
+          <ListItemIcon>
+            <EditIcon fontSize="small" sx={{ color: palette.primary.main }} />
+          </ListItemIcon>
+          <ListItemText sx={{ color: palette.text.primary }}>Edit Tracker</ListItemText>
+        </MenuItem>
+        <MenuItem 
+          onClick={() => menuTracker && handleMenuAction("delete", menuTracker)}
+          sx={{ 
+            py: 1.5,
+            borderRadius: 2,
+            mx: 1,
+            my: 0.5,
+            "&:hover": {
+              background: palette.status.error.bg,
+            },
+          }}
+        >
+          <ListItemIcon>
+            <DeleteIcon fontSize="small" sx={{ color: palette.status.error.main }} />
+          </ListItemIcon>
+          <ListItemText sx={{ color: palette.status.error.main }}>Delete Tracker</ListItemText>
+        </MenuItem>
+      </Menu>
 
       {/* Create/Edit Dialog */}
       <Dialog open={dialogOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>

@@ -173,7 +173,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExpenseAdded, trackerId
         className="chat-messages" 
         sx={{ 
           flexGrow: 1, 
-          minHeight: 'calc(100vh - 300px)',
+          minHeight: 'calc(100vh - 320px)',
           overflowY: "auto",
           overflowX: "hidden",
           mb: 2, 

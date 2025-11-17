@@ -11,6 +11,7 @@ import Profile from "./components/Profile/Profile";
 import { ThemeModeProvider, useThemeMode } from "./contexts/ThemeContext";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { requestNotificationPermission } from "./services/notificationService";
+import { themeConfig } from "./theme/palette";
 
 const AppContent = () => {
   const { isDarkMode } = useThemeMode();
@@ -19,21 +20,10 @@ const AppContent = () => {
   const theme = useMemo(
     () =>
       createTheme({
+        ...themeConfig,
         palette: {
+          ...themeConfig.palette,
           mode: isDarkMode ? "dark" : "light",
-          primary: {
-            main: "#10b981",
-          },
-          secondary: {
-            main: "#059669",
-          },
-          background: {
-            default: isDarkMode ? "#121212" : "#f5f5f5",
-            paper: isDarkMode ? "#1e1e1e" : "#ffffff",
-          },
-        },
-        typography: {
-          fontFamily: '"Poppins", sans-serif',
         },
       }),
     [isDarkMode]
