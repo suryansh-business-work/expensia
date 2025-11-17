@@ -29,6 +29,7 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import CloseIcon from "@mui/icons-material/Close";
+import ShowChartIcon from "@mui/icons-material/ShowChart";
 import { useThemeMode } from "../../contexts/ThemeContext";
 import { useAuth } from "../../contexts/AuthContext";
 import palette from "../../theme/palette";
@@ -48,6 +49,7 @@ const Header: React.FC = () => {
 
   const menuItems = [
     { text: "Trackers", icon: <FolderIcon />, path: "/trackers" },
+    { text: "Usage", icon: <ShowChartIcon />, path: "/usage" },
     { text: "Profile", icon: <AccountCircleIcon />, path: "/profile" },
   ];
 
@@ -160,7 +162,7 @@ const Header: React.FC = () => {
                 <MenuIcon />
               </IconButton>
             ) : (
-              <Box sx={{ display: "flex", gap: 1, ml: 1 }}>
+              <Box sx={{ display: "flex", gap: 1, ml: 1, alignItems: "center" }}>
                 <Button
                   startIcon={<FolderIcon fontSize="small" />}
                   size="small"
@@ -187,6 +189,44 @@ const Header: React.FC = () => {
                 >
                   Trackers
                 </Button>
+                <Button
+                  startIcon={<ShowChartIcon fontSize="small" />}
+                  size="small"
+                  onClick={() => navigate("/usage")}
+                  sx={{
+                    color: location.pathname === "/usage"
+                      ? '#fff' 
+                      : palette.text.primary,
+                    textTransform: "none",
+                    fontWeight: 600,
+                    fontSize: "0.875rem",
+                    px: 2,
+                    py: 0.75,
+                    borderRadius: 2,
+                    background: location.pathname === "/usage"
+                      ? palette.gradients.primary
+                      : palette.background.subtle,
+                    "&:hover": {
+                      background: location.pathname === "/usage"
+                        ? palette.gradients.primary
+                        : palette.border.light,
+                    },
+                  }}
+                >
+                  Usage
+                </Button>
+                <Chip
+                  label={localStorage.getItem('subscription_plan') || 'Free'}
+                  size="small"
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: "0.75rem",
+                    height: 24,
+                    background: palette.gradients.primary,
+                    color: '#fff',
+                    borderRadius: 1.5,
+                  }}
+                />
                 <IconButton
                   onClick={handleProfileMenuOpen}
                   size="small"

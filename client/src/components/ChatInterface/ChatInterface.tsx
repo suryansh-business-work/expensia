@@ -92,9 +92,82 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExpenseAdded, trackerId
     return false;
   };
 
+  const trackMessageUsage = (trackerId?: string) => {
+    // Get current usage data
+    const storedUsage = localStorage.getItem('usage_data');
+    const currentMonth = new Date().toISOString().slice(0, 7);
+    
+    let usageData = storedUsage ? JSON.parse(storedUsage) : {
+      totalMessages: 0,
+      trackerUsage: {},
+      currentMonth,
+    };
+
+    // Reset if new month
+    if (usageData.currentMonth !== currentMonth) {
+      usageData = {
+        totalMessages: 0,
+        trackerUsage: {},
+        currentMonth,
+      };
+    }
+
+    // Increment total messages
+    usageData.totalMessages += 1;
+
+    // Increment tracker-specific usage
+    if (trackerId) {
+      usageData.trackerUsage[trackerId] = (usageData.trackerUsage[trackerId] || 0) + 1;
+    }
+
+    // Save to localStorage
+    localStorage.setItem('usage_data', JSON.stringify(usageData));
+
+    return usageData;
+  };
+
+  const checkUsageLimit = (): boolean => {
+    const storedUsage = localStorage.getItem('usage_data');
+    const storedPlan = localStorage.getItem('subscription_plan') || 'Free';
+    
+    const plans: { [key: string]: number } = {
+      Free: 50,
+      Pro: 500,
+      Business: 2000,
+    };
+
+    const currentLimit = plans[storedPlan] || 50;
+
+    if (storedUsage) {
+      const usageData = JSON.parse(storedUsage);
+      const currentMonth = new Date().toISOString().slice(0, 7);
+
+      // Reset if new month
+      if (usageData.currentMonth !== currentMonth) {
+        return true; // Allow message in new month
+      }
+
+      return usageData.totalMessages < currentLimit;
+    }
+
+    return true; // First message
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
+
+    // Check usage limit before processing
+    if (!checkUsageLimit()) {
+      const limitMessage: Message = {
+        id: Date.now().toString(),
+        role: "assistant",
+        content: "⚠️ You've reached your monthly message limit. Please upgrade your subscription plan to continue using AI features. Visit the Usage page to see available plans.",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, limitMessage]);
+      return;
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -108,6 +181,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExpenseAdded, trackerId
     setIsLoading(true);
 
     try {
+      // Track message usage
+      trackMessageUsage(trackerId);
+
       // Parse the expense using ChatGPT
       const parsed = await api.parseExpense(input);
 

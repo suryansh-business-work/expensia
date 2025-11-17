@@ -8,6 +8,7 @@ import TrackerCategorySettings from "./components/TrackerCategorySettings/Tracke
 import Login from "./components/Auth/Login";
 import Signup from "./components/Auth/Signup";
 import Profile from "./components/Profile/Profile";
+import Usage from "./components/Usage/Usage";
 import { ThemeModeProvider, useThemeMode } from "./contexts/ThemeContext";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { requestNotificationPermission } from "./services/notificationService";
@@ -72,6 +73,7 @@ const AppContent = () => {
               <Route path="/tracker/:trackerId/transactions" element={isAuthenticated ? <Navigate to={`/tracker/${window.location.pathname.split('/')[2]}?tab=transactions`} replace /> : <Navigate to="/login" replace />} />
               <Route path="/tracker/:trackerId/settings" element={isAuthenticated ? <TrackerCategorySettings /> : <Navigate to="/login" replace />} />
               <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/login" replace />} />
+              <Route path="/usage" element={isAuthenticated ? <Usage /> : <Navigate to="/login" replace />} />
             </Routes>
           </Box>
         </Box>
