@@ -83,6 +83,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
+          command_timeout: 30m
           script: |
             echo "Starting deployment..."
             
@@ -92,8 +93,6 @@ jobs:
             
             # Create .env file from secrets
             cat > .env << EOF
-            MONGO_ROOT_USERNAME=${{ secrets.MONGO_ROOT_USERNAME }}
-            MONGO_ROOT_PASSWORD=${{ secrets.MONGO_ROOT_PASSWORD }}
             MONGODB_URL=${{ secrets.MONGODB_URL }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
