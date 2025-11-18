@@ -7,7 +7,7 @@ This project consists of three main components:
 1. **Astro Website** (`/website`) - Static marketing website (Port 8003)
 2. **React Client** (`/client`) - Progressive Web App (PWA) (Port 8001)
 3. **Node.js Backend** (`/server`) - Express API server (Port 8002)
-4. **MongoDB** - Database (Internal only)
+4. **MongoDB Atlas** - Cloud database (managed service)
 
 **Note:** Development and production ports are aligned for consistency.
 
@@ -101,14 +101,6 @@ docker build -t spentiva-website:latest ./website
 ```bash
 # Create network
 docker network create spentiva-network
-
-# MongoDB
-docker run -d --name spentiva-mongodb \
-  --network spentiva-network \
-  -e MONGO_INITDB_ROOT_USERNAME=admin \
-  -e MONGO_INITDB_ROOT_PASSWORD=password \
-  -v mongodb_data:/data/db \
-  mongo:7-jammy
 
 # Backend Server
 docker run -d --name spentiva-server \

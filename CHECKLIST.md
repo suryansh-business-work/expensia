@@ -33,16 +33,14 @@ Go to: `GitHub Repository > Settings > Secrets and variables > Actions`
 - [ ] `SSH_KEY` = Complete SSH private key (including headers)
 - [ ] `SSH_PORT` = SSH port (typically 22)
 
-### Database (3 secrets)
-- [ ] `MONGO_ROOT_USERNAME` = MongoDB admin username
-- [ ] `MONGO_ROOT_PASSWORD` = Strong random password
-- [ ] `MONGODB_URL` = Full connection string with above credentials
+### Database (1 secret)
+- [ ] `MONGODB_URL` = MongoDB Atlas connection string
 
 ### Application (2 secrets)
 - [ ] `JWT_SECRET` = Strong random string (32+ chars)
 - [ ] `OPENAI_API_KEY` = Valid OpenAI API key with credits
 
-**Total: 11 GitHub Secrets Required**
+**Total: 9 GitHub Secrets Required**
 
 ## 🖥️ Production Server Setup
 

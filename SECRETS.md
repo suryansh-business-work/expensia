@@ -43,20 +43,12 @@ Example: 22
 
 ### Database Configuration
 ```
-MONGO_ROOT_USERNAME
-Description: MongoDB root/admin username
-Example: admin
-
-MONGO_ROOT_PASSWORD
-Description: MongoDB root/admin password (use strong password!)
-Example: MyS3cur3P@ssw0rd!2024
-Generate: openssl rand -base64 32
-
 MONGODB_URL
-Description: Full MongoDB connection string for backend
-Format: mongodb://[username]:[password]@mongodb:27017/expenses?authSource=admin
-Example: mongodb://admin:MyS3cur3P@ssw0rd!2024@mongodb:27017/expenses?authSource=admin
-Note: Use 'mongodb' as hostname (Docker internal networking)
+Description: MongoDB Atlas connection string
+Format: mongodb+srv://[username]:[password]@[cluster].mongodb.net/[database]?retryWrites=true&w=majority
+Example: mongodb+srv://admin:MyS3cur3P@ssw0rd@cluster0.mongodb.net/expenses?retryWrites=true&w=majority
+Get from: MongoDB Atlas Dashboard > Connect > Connect your application
+Note: Use MongoDB Atlas cloud database (not local container)
 ```
 
 ### Application Secrets
@@ -100,11 +92,12 @@ cat ~/.ssh/spentiva_deploy
 
 Before pushing to main branch:
 
-- [ ] All 10 secrets configured in GitHub
-- [ ] MongoDB credentials match in both MONGODB_URL and individual secrets
+- [ ] All 8 secrets configured in GitHub
+- [ ] MongoDB Atlas cluster is running and accessible
+- [ ] MONGODB_URL connection string is valid
 - [ ] SSH key has no passphrase (or handled properly)
 - [ ] SSH user has Docker permissions on server
-- [ ] Server firewall allows connections on ports: 22 (SSH), 80 (HTTP), 443 (HTTPS), 3000, 5000, 8080
+- [ ] Server firewall allows connections on ports: 22 (SSH), 80 (HTTP), 443 (HTTPS), 8001, 8002, 8003
 - [ ] Docker and Docker Compose installed on production server
 - [ ] OpenAI API key is valid and has credits
 

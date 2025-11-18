@@ -6,7 +6,7 @@
 ├── 🌐 Website (Astro) - Port 8003 - spentiva.com
 ├── 📱 Client (React + Vite) - Port 8001 - app.spentiva.com
 ├── ⚙️ Server (Node.js + Express) - Port 8002 - backend.spentiva.com
-└── 🗄️ MongoDB - Internal - Database
+└── ☁️ MongoDB Atlas - Cloud Database
 ```
 
 ## 🎯 Quick Start Commands
@@ -154,11 +154,12 @@ docker restart spentiva-server
 
 ### Database Connection Failed
 ```bash
-# Verify MongoDB is running
-docker ps | grep mongodb
+# Check MongoDB Atlas connection string
+# Verify IP whitelist in MongoDB Atlas (Network Access)
+# Ensure database user has correct permissions
 
-# Test MongoDB connection
-docker exec spentiva-mongodb mongosh --eval "db.runCommand('ping')"
+# Test connection from container
+docker exec spentiva-server node -e "console.log(process.env.MONGODB_URL)"
 
 # Check environment variables
 docker inspect spentiva-server | grep -A 20 Env
