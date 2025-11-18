@@ -14,7 +14,7 @@
 cd server
 npm install
 cp .env.example .env
-# Edit .env with your values
+# Edit .env with your all values
 npm run dev
 # Server runs on http://localhost:8002
 ```
