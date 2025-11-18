@@ -1,6 +1,6 @@
 {
-  "name": "Quick Expense Tracker",
-  "short_name": "Expense Tracker",
+  "name": "Spentiva By Exyconn - Expense Tracker",
+  "short_name": "Spentiva",
   "description": "Track your expenses with ease across multiple trackers",
   "start_url": "/",
   "display": "standalone",

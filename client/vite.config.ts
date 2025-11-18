@@ -9,8 +9,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg'],
       manifest: {
-        name: 'Quick Expense Tracker',
-        short_name: 'Expense Tracker',
+        name: 'Spentiva By Exyconn - Expense Tracker',
+        short_name: 'Spentiva',
         description: 'Track your expenses with ease across multiple trackers',
         theme_color: '#667eea',
         background_color: '#ffffff',
@@ -74,6 +74,17 @@ export default defineConfig({
   },
   server: {
     port: 8001,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8002',
+        changeOrigin: true,
+      },
+    },
+  },
+  preview: {
+    port: 8001,
+    host: '0.0.0.0',
+    strictPort: true,
     proxy: {
       '/api': {
         target: 'http://localhost:8002',
