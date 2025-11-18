@@ -1,3 +1,5 @@
+import { Expense } from './index';
+
 export interface Tracker {
   id: string;
   name: string;

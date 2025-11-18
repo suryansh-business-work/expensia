@@ -8,18 +8,14 @@ import {
   Card,
   CardContent,
   Skeleton,
-  Alert,
-  AlertTitle,
   Avatar,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import AddIcon from "@mui/icons-material/Add";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import PersonIcon from "@mui/icons-material/Person";
 import { Message } from "../../types";
 import { api } from "../../services/api";
 import { notifyExpenseAdded } from "../../services/notificationService";
-import AddCategoryDrawer from "../AddCategoryDrawer/AddCategoryDrawer";
 import { useAuth } from "../../contexts/AuthContext";
 import "./ChatInterface.scss";
 
@@ -40,9 +36,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExpenseAdded, trackerId
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [categories, setCategories] = useState<any[]>([]);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [suggestedCategory, setSuggestedCategory] = useState("");
+  const [, setCategories] = useState<any[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const getPhotoUrl = () => {
@@ -81,30 +75,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onExpenseAdded, trackerId
     }
   };
 
-  const validateCategory = (category: string, subcategory: string): boolean => {
-    if (!trackerId || categories.length === 0) return true; // Skip validation if no tracker or categories loaded
-    
-    const categoryExists = categories.some(cat => 
-      cat.name.toLowerCase() === category.toLowerCase()
-    );
-    
-    if (!categoryExists) {
-      return false;
-    }
 
-    const matchingCategory = categories.find(cat => 
-      cat.name.toLowerCase() === category.toLowerCase()
-    );
-
-    if (matchingCategory) {
-      const subcategoryExists = matchingCategory.subcategories.some((sub: any) => 
-        sub.name.toLowerCase() === subcategory.toLowerCase()
-      );
-      return subcategoryExists;
-    }
-
-    return false;
-  };
 
   const trackMessageUsage = (trackerId?: string) => {
     // Get current usage data

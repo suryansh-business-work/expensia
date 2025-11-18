@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   Container,
-  Paper,
   Box,
   Typography,
   TextField,
@@ -31,7 +30,6 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import BusinessIcon from '@mui/icons-material/Business';
 import { useAuth } from '../../contexts/AuthContext';
 import axios from 'axios';
-import palette from '../../theme/palette';
 
 const Profile: React.FC = () => {
   const { user, updateUser, token } = useAuth();

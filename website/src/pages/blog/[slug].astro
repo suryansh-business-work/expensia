@@ -3,6 +3,25 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 
+// Generate static paths for all blog posts
+export async function getStaticPaths() {
+  // Sample blog posts - in production, fetch from CMS/database
+  const posts = [
+    { slug: '10-tips-better-expense-tracking' },
+    { slug: 'ai-powered-expense-categorization-explained' },
+    { slug: 'budget-planning-strategies-2025' },
+    { slug: 'small-business-expense-management-guide' },
+    { slug: 'whatsapp-expense-tracking-guide' },
+    { slug: 'tax-season-preparation-checklist' },
+  ];
+
+  return posts.map(post => ({
+    params: { slug: post.slug }
+  }));
+}
+
+const { slug } = Astro.params;
+
 // This is a sample blog post. In a real application, this would come from a CMS or database
 const post = {
   title: '10 Tips for Better Expense Tracking in 2025',

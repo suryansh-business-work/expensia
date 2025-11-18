@@ -311,7 +311,7 @@ const Trackers: React.FC = () => {
         setSnackbar({ 
           open: true, 
           message: `Opening ${tracker.name}. Use your browser's "Add to Home Screen" option to create an icon!`, 
-          severity: "info" 
+          severity: "success" 
         });
       }
     } catch (error) {
@@ -319,7 +319,7 @@ const Trackers: React.FC = () => {
       setSnackbar({ 
         open: true, 
         message: 'Opening tracker in new window. Use browser menu to add to home screen.', 
-        severity: "info" 
+        severity: "success" 
       });
       window.open(`/tracker/${tracker.id}`, '_blank');
     }
