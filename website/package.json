@@ -1,0 +1,22 @@
+{
+  "name": "spentiva-website",
+  "version": "1.0.0",
+  "description": "Spentiva by Exyconn - AI-Powered Expense Tracking",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.15.8",
+    "@astrojs/tailwind": "^5.1.4",
+    "tailwindcss": "^3.4.1",
+    "sass": "^1.69.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0"
+  }
+}

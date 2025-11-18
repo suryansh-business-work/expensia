@@ -1,0 +1,291 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const contactInfo = [
+  {
+    icon: 'fas fa-envelope',
+    title: 'Email Us',
+    content: 'support@spentiva.com',
+    link: 'mailto:support@spentiva.com'
+  },
+  {
+    icon: 'fas fa-phone',
+    title: 'Call Us',
+    content: '+1 (555) 123-4567',
+    link: 'tel:+15551234567'
+  },
+  {
+    icon: 'fas fa-map-marker-alt',
+    title: 'Visit Us',
+    content: '123 Business Street, Tech City, TC 12345',
+    link: '#'
+  },
+  {
+    icon: 'fas fa-clock',
+    title: 'Business Hours',
+    content: 'Mon-Fri: 9:00 AM - 6:00 PM EST',
+    link: '#'
+  }
+];
+
+const reasons = [
+  {
+    icon: 'fas fa-headset',
+    title: 'Expert Support',
+    description: 'Our dedicated support team is here to help you succeed.'
+  },
+  {
+    icon: 'fas fa-lightbulb',
+    title: 'Product Feedback',
+    description: 'Share your ideas and help shape the future of Spentiva.'
+  },
+  {
+    icon: 'fas fa-handshake',
+    title: 'Partnership Opportunities',
+    description: 'Interested in partnering with us? Let\'s talk!'
+  },
+  {
+    icon: 'fas fa-question-circle',
+    title: 'General Inquiries',
+    description: 'Have questions? We have answers. Reach out anytime.'
+  }
+];
+---
+
+<BaseLayout title="Contact Us - Spentiva by Exyconn" description="Get in touch with Spentiva team. We're here to help with any questions about our expense tracking platform.">
+  <Header />
+  
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 text-white">
+    <div class="container-custom section-padding">
+      <div class="max-w-4xl mx-auto text-center observe-animation">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+          Get in Touch
+        </h1>
+        <p class="text-xl text-blue-100">
+          Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Info Cards -->
+  <section class="section-padding bg-gray-50">
+    <div class="container-custom">
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        {contactInfo.map((info, index) => (
+          <a 
+            href={info.link}
+            class="card text-center hover:scale-105 observe-animation"
+            style={`animation-delay: ${index * 0.1}s`}
+          >
+            <div class="w-14 h-14 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class={`${info.icon} text-white text-2xl`}></i>
+            </div>
+            <h3 class="font-bold text-gray-900 mb-2">{info.title}</h3>
+            <p class="text-gray-600 text-sm">{info.content}</p>
+          </a>
+        ))}
+      </div>
+
+      <!-- Main Contact Section -->
+      <div class="grid lg:grid-cols-2 gap-12">
+        <!-- Contact Form -->
+        <div class="observe-animation">
+          <div class="bg-white rounded-2xl shadow-xl p-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Send Us a Message</h2>
+            <form id="contactForm" class="space-y-6">
+              <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label for="firstName" class="block text-sm font-semibold text-gray-700 mb-2">
+                    First Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                    placeholder="John"
+                  />
+                </div>
+                <div>
+                  <label for="lastName" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Last Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                    placeholder="Doe"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
+                  Email Address *
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                  placeholder="john@example.com"
+                />
+              </div>
+
+              <div>
+                <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                  placeholder="+1 (555) 000-0000"
+                />
+              </div>
+
+              <div>
+                <label for="subject" class="block text-sm font-semibold text-gray-700 mb-2">
+                  Subject *
+                </label>
+                <select
+                  id="subject"
+                  name="subject"
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                >
+                  <option value="">Select a subject</option>
+                  <option value="support">Technical Support</option>
+                  <option value="sales">Sales Inquiry</option>
+                  <option value="feedback">Product Feedback</option>
+                  <option value="partnership">Partnership Opportunity</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="message" class="block text-sm font-semibold text-gray-700 mb-2">
+                  Message *
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  rows="5"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all resize-none"
+                  placeholder="Tell us how we can help you..."
+                ></textarea>
+              </div>
+
+              <button
+                type="submit"
+                class="btn btn-primary w-full"
+              >
+                <i class="fas fa-paper-plane mr-2"></i>
+                Send Message
+              </button>
+
+              <p class="text-sm text-gray-600 text-center">
+                We typically respond within 24 hours
+              </p>
+            </form>
+          </div>
+        </div>
+
+        <!-- Why Contact Us -->
+        <div class="observe-animation">
+          <div class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Why Reach Out?</h2>
+            <div class="space-y-6">
+              {reasons.map((reason) => (
+                <div class="flex items-start space-x-4">
+                  <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <i class={`${reason.icon} text-white text-xl`}></i>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-gray-900 mb-2">{reason.title}</h3>
+                    <p class="text-gray-600">{reason.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- FAQ Quick Links -->
+          <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6">
+            <h3 class="font-bold text-gray-900 mb-4 flex items-center">
+              <i class="fas fa-lightbulb text-blue-600 mr-2"></i>
+              Looking for Quick Answers?
+            </h3>
+            <p class="text-gray-600 mb-4">
+              Check out our FAQ section for instant answers to common questions.
+            </p>
+            <a href="/#faq" class="text-blue-600 font-semibold hover:text-blue-800 flex items-center">
+              Visit FAQ Page
+              <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+          </div>
+
+          <!-- Social Media -->
+          <div class="mt-8">
+            <h3 class="font-bold text-gray-900 mb-4">Connect With Us</h3>
+            <div class="flex space-x-3">
+              <a href="#" class="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white hover:scale-110 transition-transform">
+                <i class="fab fa-facebook text-xl"></i>
+              </a>
+              <a href="#" class="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white hover:scale-110 transition-transform">
+                <i class="fab fa-twitter text-xl"></i>
+              </a>
+              <a href="#" class="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white hover:scale-110 transition-transform">
+                <i class="fab fa-linkedin text-xl"></i>
+              </a>
+              <a href="#" class="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white hover:scale-110 transition-transform">
+                <i class="fab fa-instagram text-xl"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Map Section (Optional - Placeholder) -->
+  <section class="bg-gray-200 h-96">
+    <div class="w-full h-full flex items-center justify-center text-gray-600">
+      <div class="text-center">
+        <i class="fas fa-map-marked-alt text-6xl mb-4"></i>
+        <p class="text-lg">Map Integration Placeholder</p>
+        <p class="text-sm">Replace with actual Google Maps embed</p>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>
+
+<script>
+  // Form submission handler
+  document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    
+    // Here you would typically send the data to your backend
+    console.log('Form submitted:', data);
+    
+    // Show success message
+    alert('Thank you for your message! We will get back to you soon.');
+    form.reset();
+  });
+</script>

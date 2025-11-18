@@ -1,0 +1,257 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+// This would typically come from a CMS or database
+const blogPosts = [
+  {
+    slug: '10-tips-for-better-expense-tracking',
+    title: '10 Tips for Better Expense Tracking in 2025',
+    excerpt: 'Master your personal finances with these proven expense tracking strategies that actually work.',
+    image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800',
+    author: 'Sarah Johnson',
+    authorImage: 'https://i.pravatar.cc/150?img=1',
+    date: '2025-01-15',
+    category: 'Tips & Tricks',
+    readTime: '5 min read'
+  },
+  {
+    slug: 'ai-powered-expense-categorization-explained',
+    title: 'How AI-Powered Expense Categorization Works',
+    excerpt: 'Discover the technology behind Spentiva\'s intelligent expense categorization system.',
+    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800',
+    author: 'Michael Chen',
+    authorImage: 'https://i.pravatar.cc/150?img=2',
+    date: '2025-01-10',
+    category: 'Technology',
+    readTime: '7 min read'
+  },
+  {
+    slug: 'small-business-expense-management-guide',
+    title: 'Complete Guide to Small Business Expense Management',
+    excerpt: 'Everything small business owners need to know about managing expenses effectively.',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800',
+    author: 'Emily Rodriguez',
+    authorImage: 'https://i.pravatar.cc/150?img=3',
+    date: '2025-01-05',
+    category: 'Business',
+    readTime: '10 min read'
+  },
+  {
+    slug: 'whatsapp-expense-tracking-benefits',
+    title: 'Why WhatsApp Integration is a Game-Changer',
+    excerpt: 'Learn how tracking expenses via WhatsApp can simplify your financial management.',
+    image: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800',
+    author: 'David Kim',
+    authorImage: 'https://i.pravatar.cc/150?img=4',
+    date: '2024-12-28',
+    category: 'Features',
+    readTime: '6 min read'
+  },
+  {
+    slug: 'budget-planning-strategies-2025',
+    title: 'Budget Planning Strategies for 2025',
+    excerpt: 'Start the new year right with these effective budget planning strategies.',
+    image: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800',
+    author: 'Lisa Anderson',
+    authorImage: 'https://i.pravatar.cc/150?img=5',
+    date: '2024-12-20',
+    category: 'Finance',
+    readTime: '8 min read'
+  },
+  {
+    slug: 'expense-tracking-for-freelancers',
+    title: 'Expense Tracking Best Practices for Freelancers',
+    excerpt: 'Essential tips for freelancers to manage their business expenses efficiently.',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800',
+    author: 'James Wilson',
+    authorImage: 'https://i.pravatar.cc/150?img=6',
+    date: '2024-12-15',
+    category: 'Freelancing',
+    readTime: '6 min read'
+  }
+];
+
+const categories = ['All', 'Tips & Tricks', 'Technology', 'Business', 'Features', 'Finance', 'Freelancing'];
+
+const featuredPost = blogPosts[0];
+---
+
+<BaseLayout title="Blog - Spentiva by Exyconn" description="Read the latest articles about expense tracking, personal finance, and AI technology from the Spentiva team.">
+  <Header />
+  
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 text-white">
+    <div class="container-custom section-padding">
+      <div class="max-w-4xl mx-auto text-center observe-animation">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+          Spentiva Blog
+        </h1>
+        <p class="text-xl text-blue-100">
+          Tips, insights, and stories about smart expense tracking and personal finance management.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Post -->
+  <section class="section-padding bg-white">
+    <div class="container-custom">
+      <div class="observe-animation mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-2 flex items-center">
+          <i class="fas fa-star text-yellow-500 mr-3"></i>
+          Featured Post
+        </h2>
+      </div>
+      
+      <a href={`/blog/${featuredPost.slug}`} class="card group cursor-pointer observe-animation block">
+        <div class="grid lg:grid-cols-2 gap-8">
+          <div class="relative overflow-hidden rounded-xl">
+            <img 
+              src={featuredPost.image} 
+              alt={featuredPost.title}
+              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            />
+            <div class="absolute top-4 left-4">
+              <span class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold">
+                {featuredPost.category}
+              </span>
+            </div>
+          </div>
+          
+          <div class="flex flex-col justify-center">
+            <h3 class="text-3xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors">
+              {featuredPost.title}
+            </h3>
+            <p class="text-gray-600 mb-6 text-lg">
+              {featuredPost.excerpt}
+            </p>
+            
+            <div class="flex items-center space-x-4 mb-6">
+              <img src={featuredPost.authorImage} alt={featuredPost.author} class="w-12 h-12 rounded-full" />
+              <div>
+                <p class="font-semibold text-gray-900">{featuredPost.author}</p>
+                <div class="flex items-center text-sm text-gray-600 space-x-3">
+                  <span><i class="far fa-calendar mr-1"></i>{new Date(featuredPost.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                  <span>•</span>
+                  <span><i class="far fa-clock mr-1"></i>{featuredPost.readTime}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="text-blue-600 font-semibold group-hover:text-blue-800 flex items-center">
+              Read Full Article
+              <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Category Filter -->
+  <section class="bg-gray-50 py-8">
+    <div class="container-custom">
+      <div class="flex flex-wrap gap-3 justify-center">
+        {categories.map((category) => (
+          <button class="px-6 py-2 rounded-full font-semibold transition-all hover:scale-105 bg-white text-gray-700 hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 hover:text-white shadow-md">
+            {category}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- All Posts Grid -->
+  <section class="section-padding bg-gray-50">
+    <div class="container-custom">
+      <div class="observe-animation mb-12">
+        <h2 class="text-3xl font-bold text-gray-900">Latest Articles</h2>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {blogPosts.slice(1).map((post, index) => (
+          <a href={`/blog/${post.slug}`} class="card group cursor-pointer observe-animation" style={`animation-delay: ${index * 0.1}s`}>
+            <div class="relative overflow-hidden rounded-xl mb-4">
+              <img 
+                src={post.image} 
+                alt={post.title}
+                class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div class="absolute top-4 left-4">
+                <span class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  {post.category}
+                </span>
+              </div>
+            </div>
+            
+            <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+              {post.title}
+            </h3>
+            
+            <p class="text-gray-600 mb-4 line-clamp-2">
+              {post.excerpt}
+            </p>
+            
+            <div class="flex items-center space-x-3 mb-4 text-sm text-gray-600">
+              <img src={post.authorImage} alt={post.author} class="w-8 h-8 rounded-full" />
+              <span>{post.author}</span>
+            </div>
+            
+            <div class="flex items-center justify-between text-sm text-gray-600">
+              <span><i class="far fa-calendar mr-1"></i>{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+              <span><i class="far fa-clock mr-1"></i>{post.readTime}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <!-- Pagination (Static for now) -->
+      <div class="flex justify-center mt-12 space-x-2">
+        <button class="w-10 h-10 rounded-lg bg-white shadow-md flex items-center justify-center text-gray-400">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md flex items-center justify-center font-semibold">
+          1
+        </button>
+        <button class="w-10 h-10 rounded-lg bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-50">
+          2
+        </button>
+        <button class="w-10 h-10 rounded-lg bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-50">
+          3
+        </button>
+        <button class="w-10 h-10 rounded-lg bg-white shadow-md flex items-center justify-center text-gray-700">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter CTA -->
+  <section class="section-padding bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+    <div class="container-custom text-center observe-animation">
+      <h2 class="text-4xl font-bold mb-6">
+        <i class="fas fa-envelope-open-text mr-3"></i>
+        Subscribe to Our Newsletter
+      </h2>
+      <p class="text-xl mb-8 text-blue-100 max-w-2xl mx-auto">
+        Get the latest articles, tips, and product updates delivered to your inbox weekly.
+      </p>
+      <form class="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
+        <input
+          type="email"
+          placeholder="Enter your email"
+          class="flex-1 px-6 py-4 rounded-lg text-gray-900 focus:ring-4 focus:ring-white/50 outline-none"
+          required
+        />
+        <button type="submit" class="btn btn-secondary whitespace-nowrap">
+          <i class="fas fa-paper-plane mr-2"></i>
+          Subscribe
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>

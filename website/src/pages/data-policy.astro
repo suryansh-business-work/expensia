@@ -1,0 +1,374 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const lastUpdated = 'January 15, 2025';
+---
+
+<BaseLayout title="Data Policy - Spentiva by Exyconn" description="Learn how Spentiva collects, stores, and protects your financial data.">
+  <Header />
+  
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 text-white">
+    <div class="container-custom py-16">
+      <div class="max-w-4xl mx-auto text-center observe-animation">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          <i class="fas fa-database mr-3"></i>
+          Data Policy
+        </h1>
+        <p class="text-xl text-blue-100">
+          Last Updated: {lastUpdated}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section class="section-padding bg-white">
+    <div class="container-custom">
+      <div class="max-w-4xl mx-auto prose observe-animation">
+        <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-r-lg mb-8">
+          <p class="text-gray-800 font-semibold mb-2">
+            <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+            Our Commitment to Data Protection
+          </p>
+          <p class="text-gray-700 text-sm">
+            This Data Policy explains how Spentiva by Exyconn collects, processes, stores, and protects your financial data. We are committed to maintaining the highest standards of data security and privacy.
+          </p>
+        </div>
+
+        <h2><i class="fas fa-database text-blue-600 mr-2"></i>1. Data Collection</h2>
+        
+        <h3>1.1 What Data We Collect</h3>
+        <p>We collect the following types of data:</p>
+        
+        <h4>Personal Information</h4>
+        <ul>
+          <li><strong>Identity Data:</strong> Name, phone number, email address</li>
+          <li><strong>Account Data:</strong> Username, password (encrypted), account preferences</li>
+          <li><strong>Profile Data:</strong> Account type, profile picture, notification settings</li>
+        </ul>
+
+        <h4>Financial Data</h4>
+        <ul>
+          <li><strong>Transaction Data:</strong> Expense amounts, descriptions, dates, merchants</li>
+          <li><strong>Category Data:</strong> Expense categories, custom tags, classifications</li>
+          <li><strong>Tracker Data:</strong> Tracker names, types, budget limits, currencies</li>
+          <li><strong>Summary Data:</strong> Total expenses, monthly summaries, spending patterns</li>
+        </ul>
+
+        <h4>Technical Data</h4>
+        <ul>
+          <li><strong>Usage Data:</strong> Features used, API calls, token consumption</li>
+          <li><strong>Device Data:</strong> IP address, device type, browser information</li>
+          <li><strong>Log Data:</strong> Access timestamps, error logs, performance metrics</li>
+          <li><strong>Communication Data:</strong> WhatsApp messages, support tickets, email correspondence</li>
+        </ul>
+
+        <h3>1.2 How We Collect Data</h3>
+        <ul>
+          <li><strong>Direct Input:</strong> Information you provide through forms, messages, or uploads</li>
+          <li><strong>Automated Collection:</strong> Technical data collected through cookies and analytics</li>
+          <li><strong>Third-party Services:</strong> Data from WhatsApp, payment processors, authentication services</li>
+        </ul>
+
+        <h2><i class="fas fa-cogs text-blue-600 mr-2"></i>2. Data Processing</h2>
+        
+        <h3>2.1 Processing Activities</h3>
+        
+        <h4>AI-Powered Analysis</h4>
+        <p>We process your expense data using artificial intelligence to:</p>
+        <ul>
+          <li>Automatically categorize expenses</li>
+          <li>Extract information from natural language descriptions</li>
+          <li>Identify spending patterns and trends</li>
+          <li>Generate personalized insights and recommendations</li>
+          <li>Predict future expenses based on historical data</li>
+        </ul>
+
+        <h4>Aggregation and Analytics</h4>
+        <ul>
+          <li>Calculate daily, weekly, and monthly summaries</li>
+          <li>Generate reports and visualizations</li>
+          <li>Track budget adherence and goals</li>
+          <li>Compare spending across categories and time periods</li>
+        </ul>
+
+        <h4>Communication Processing</h4>
+        <ul>
+          <li>Parse WhatsApp messages for expense information</li>
+          <li>Send transaction confirmations and alerts</li>
+          <li>Deliver reports and insights</li>
+          <li>Provide customer support responses</li>
+        </ul>
+
+        <h3>2.2 Legal Basis for Processing</h3>
+        <p>We process your data based on:</p>
+        <ul>
+          <li><strong>Contract Performance:</strong> To provide services you've signed up for</li>
+          <li><strong>Legitimate Interest:</strong> To improve services and prevent fraud</li>
+          <li><strong>Legal Obligation:</strong> To comply with laws and regulations</li>
+          <li><strong>Consent:</strong> Where you've explicitly agreed to processing</li>
+        </ul>
+
+        <h2><i class="fas fa-hdd text-blue-600 mr-2"></i>3. Data Storage</h2>
+        
+        <h3>3.1 Storage Infrastructure</h3>
+        <p>Your data is stored using:</p>
+        <ul>
+          <li><strong>Cloud Providers:</strong> AWS, Google Cloud Platform (tier-1 data centers)</li>
+          <li><strong>Database Systems:</strong> MongoDB Atlas with automated backups</li>
+          <li><strong>Geographic Distribution:</strong> Data stored in [Primary Region] with backups in [Secondary Region]</li>
+          <li><strong>Redundancy:</strong> Multiple copies maintained for reliability</li>
+        </ul>
+
+        <h3>3.2 Storage Security</h3>
+        <ul>
+          <li><strong>Encryption at Rest:</strong> AES-256 encryption for all stored data</li>
+          <li><strong>Access Controls:</strong> Role-based permissions, least privilege principle</li>
+          <li><strong>Network Security:</strong> Firewalls, VPCs, private subnets</li>
+          <li><strong>Monitoring:</strong> 24/7 security monitoring and alerts</li>
+        </ul>
+
+        <h3>3.3 Data Retention</h3>
+        
+        <table class="w-full border-collapse border border-gray-300 my-6">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 p-3 text-left">Data Type</th>
+              <th class="border border-gray-300 p-3 text-left">Retention Period</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-gray-300 p-3">Active Account Data</td>
+              <td class="border border-gray-300 p-3">Duration of account + 30 days</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 p-3">Transaction Records</td>
+              <td class="border border-gray-300 p-3">7 years (regulatory requirement)</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 p-3">Support Tickets</td>
+              <td class="border border-gray-300 p-3">3 years after resolution</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 p-3">Analytics Data</td>
+              <td class="border border-gray-300 p-3">26 months (anonymized)</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 p-3">Deleted Account Data</td>
+              <td class="border border-gray-300 p-3">30 days (backup retention)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2><i class="fas fa-lock text-blue-600 mr-2"></i>4. Data Security</h2>
+        
+        <h3>4.1 Technical Safeguards</h3>
+        
+        <h4>Encryption</h4>
+        <ul>
+          <li><strong>Data at Rest:</strong> AES-256 encryption for databases and file storage</li>
+          <li><strong>Data in Transit:</strong> TLS 1.3 for all network communications</li>
+          <li><strong>Password Storage:</strong> Bcrypt hashing with salt (never plain text)</li>
+          <li><strong>API Keys:</strong> Encrypted and rotated regularly</li>
+        </ul>
+
+        <h4>Access Management</h4>
+        <ul>
+          <li><strong>Multi-Factor Authentication:</strong> Required for employee access</li>
+          <li><strong>Role-Based Access:</strong> Minimal necessary permissions</li>
+          <li><strong>Access Logging:</strong> All data access is logged and monitored</li>
+          <li><strong>Regular Audits:</strong> Quarterly access reviews</li>
+        </ul>
+
+        <h4>Network Security</h4>
+        <ul>
+          <li><strong>Firewalls:</strong> Multi-layer firewall protection</li>
+          <li><strong>DDoS Protection:</strong> CloudFlare and AWS Shield</li>
+          <li><strong>Intrusion Detection:</strong> Real-time threat monitoring</li>
+          <li><strong>Vulnerability Scanning:</strong> Regular security assessments</li>
+        </ul>
+
+        <h3>4.2 Organizational Safeguards</h3>
+        <ul>
+          <li><strong>Security Training:</strong> Regular employee security awareness programs</li>
+          <li><strong>Background Checks:</strong> All employees undergo security screening</li>
+          <li><strong>Incident Response:</strong> Documented breach response procedures</li>
+          <li><strong>Third-party Audits:</strong> Annual security audits by independent firms</li>
+        </ul>
+
+        <h3>4.3 Compliance Certifications</h3>
+        <ul>
+          <li><strong>SOC 2 Type II:</strong> Security, availability, and confidentiality</li>
+          <li><strong>GDPR Compliant:</strong> European data protection standards</li>
+          <li><strong>CCPA Compliant:</strong> California privacy requirements</li>
+          <li><strong>PCI DSS:</strong> Payment card industry standards</li>
+        </ul>
+
+        <h2><i class="fas fa-share-alt text-blue-600 mr-2"></i>5. Data Sharing</h2>
+        
+        <h3>5.1 Third-party Service Providers</h3>
+        <p>We share data with trusted partners who help us operate:</p>
+        
+        <table class="w-full border-collapse border border-gray-300 my-6">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 p-3 text-left">Service</th>
+              <th class="border border-gray-300 p-3 text-left">Provider</th>
+              <th class="border border-gray-300 p-3 text-left">Data Shared</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-gray-300 p-3">Cloud Hosting</td>
+              <td class="border border-gray-300 p-3">AWS, Google Cloud</td>
+              <td class="border border-gray-300 p-3">All application data (encrypted)</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 p-3">AI Processing</td>
+              <td class="border border-gray-300 p-3">OpenAI</td>
+              <td class="border border-gray-300 p-3">Expense descriptions (anonymized)</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 p-3">Messaging</td>
+              <td class="border border-gray-300 p-3">Twilio, WhatsApp</td>
+              <td class="border border-gray-300 p-3">Phone number, message content</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 p-3">Analytics</td>
+              <td class="border border-gray-300 p-3">Google Analytics</td>
+              <td class="border border-gray-300 p-3">Usage patterns (anonymized)</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 p-3">Payments</td>
+              <td class="border border-gray-300 p-3">Stripe</td>
+              <td class="border border-gray-300 p-3">Payment information</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>5.2 Data Processing Agreements</h3>
+        <p>All third-party processors are bound by:</p>
+        <ul>
+          <li>Contractual data protection obligations</li>
+          <li>GDPR-compliant data processing agreements</li>
+          <li>Security and confidentiality requirements</li>
+          <li>Limited data use restrictions</li>
+        </ul>
+
+        <h3>5.3 No Data Selling</h3>
+        <p class="font-bold text-lg text-gray-900">
+          We do NOT sell, rent, or trade your personal or financial data to third parties for marketing purposes.
+        </p>
+
+        <h2><i class="fas fa-user-check text-blue-600 mr-2"></i>6. Your Data Rights</h2>
+        
+        <h3>6.1 Access and Portability</h3>
+        <ul>
+          <li><strong>View Your Data:</strong> Access all personal and financial data through your account</li>
+          <li><strong>Export Data:</strong> Download data in CSV, Excel, or JSON formats</li>
+          <li><strong>Data Copy:</strong> Request a complete copy of all stored data</li>
+        </ul>
+
+        <h3>6.2 Correction and Deletion</h3>
+        <ul>
+          <li><strong>Update Information:</strong> Edit personal details and expense records anytime</li>
+          <li><strong>Correct Errors:</strong> Request correction of inaccurate data</li>
+          <li><strong>Delete Account:</strong> Permanently delete your account and associated data</li>
+          <li><strong>Selective Deletion:</strong> Remove specific transactions or trackers</li>
+        </ul>
+
+        <h3>6.3 Control and Consent</h3>
+        <ul>
+          <li><strong>Marketing Opt-out:</strong> Unsubscribe from promotional emails</li>
+          <li><strong>Data Processing:</strong> Object to certain data processing activities</li>
+          <li><strong>Consent Withdrawal:</strong> Revoke previously granted permissions</li>
+          <li><strong>Restrict Processing:</strong> Limit how we use your data</li>
+        </ul>
+
+        <h2><i class="fas fa-bell text-blue-600 mr-2"></i>7. Data Breach Notification</h2>
+        
+        <h3>7.1 Our Commitment</h3>
+        <p>In the event of a data breach, we will:</p>
+        <ul>
+          <li>Notify affected users within 72 hours of discovery</li>
+          <li>Report to relevant regulatory authorities as required</li>
+          <li>Provide clear information about the breach and impact</li>
+          <li>Offer guidance on protective measures</li>
+          <li>Investigate root cause and implement preventive measures</li>
+        </ul>
+
+        <h3>7.2 Notification Methods</h3>
+        <ul>
+          <li>Email to registered address</li>
+          <li>In-app notification</li>
+          <li>Website banner</li>
+          <li>Phone call for high-risk situations</li>
+        </ul>
+
+        <h2><i class="fas fa-globe text-blue-600 mr-2"></i>8. International Data Transfers</h2>
+        
+        <p>Your data may be transferred to and processed in countries outside your residence. We ensure protection through:</p>
+        <ul>
+          <li><strong>Standard Contractual Clauses:</strong> EU-approved data transfer agreements</li>
+          <li><strong>Adequacy Decisions:</strong> Transfers to countries with adequate protection</li>
+          <li><strong>Privacy Shield:</strong> Compliance with applicable frameworks</li>
+          <li><strong>Encryption:</strong> Data encrypted during international transfers</li>
+        </ul>
+
+        <h2><i class="fas fa-child text-blue-600 mr-2"></i>9. Children's Data</h2>
+        
+        <p>
+          Spentiva is not intended for users under 18. We do not knowingly collect data from children. If we discover we have collected a child's data, we will delete it immediately. Parents who believe their child has provided us with information should contact us at <a href="mailto:privacy@spentiva.com">privacy@spentiva.com</a>.
+        </p>
+
+        <h2><i class="fas fa-sync-alt text-blue-600 mr-2"></i>10. Policy Updates</h2>
+        
+        <p>We may update this Data Policy to reflect:</p>
+        <ul>
+          <li>Changes in data processing practices</li>
+          <li>New features or services</li>
+          <li>Regulatory requirements</li>
+          <li>Security improvements</li>
+        </ul>
+        
+        <p>Material changes will be communicated via:</p>
+        <ul>
+          <li>Email notification (30 days advance notice)</li>
+          <li>In-app notification</li>
+          <li>Website announcement</li>
+        </ul>
+
+        <h2><i class="fas fa-envelope text-blue-600 mr-2"></i>11. Contact Us</h2>
+        
+        <p>For questions about our data practices or to exercise your rights:</p>
+        <div class="bg-gray-50 p-6 rounded-lg">
+          <p><strong>Data Protection Officer</strong></p>
+          <p><strong>Spentiva by Exyconn</strong></p>
+          <p><i class="fas fa-envelope mr-2"></i>Email: <a href="mailto:dpo@spentiva.com">dpo@spentiva.com</a></p>
+          <p><i class="fas fa-shield-alt mr-2"></i>Privacy: <a href="mailto:privacy@spentiva.com">privacy@spentiva.com</a></p>
+          <p><i class="fas fa-map-marker-alt mr-2"></i>Address: 123 Business Street, Tech City, TC 12345</p>
+          <p><i class="fas fa-phone mr-2"></i>Phone: +1 (555) 123-4567</p>
+        </div>
+
+        <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-8 rounded-2xl mt-12">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">
+            <i class="fas fa-shield-alt text-blue-600 mr-2"></i>
+            Your Data, Your Control
+          </h3>
+          <p class="text-gray-700 mb-4">
+            At Spentiva, data protection is not just a policy—it's our core principle. We use bank-level encryption, undergo regular security audits, and maintain strict access controls to ensure your financial data remains safe and private.
+          </p>
+          <p class="text-gray-700">
+            You have complete control over your data. Access, export, or delete it anytime. We're transparent about how we use your information and never sell it to third parties. Your trust is our most valuable asset.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>

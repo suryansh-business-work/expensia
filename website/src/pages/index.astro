@@ -1,0 +1,322 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const features = [
+  {
+    icon: 'fas fa-brain',
+    title: 'AI-Powered Insights',
+    description: 'Get intelligent analysis of your spending patterns with advanced AI technology.'
+  },
+  {
+    icon: 'fas fa-mobile-alt',
+    title: 'WhatsApp Integration',
+    description: 'Track expenses effortlessly via WhatsApp messages. No app installation needed.'
+  },
+  {
+    icon: 'fas fa-chart-line',
+    title: 'Real-time Analytics',
+    description: 'View comprehensive dashboards and reports to understand your financial health.'
+  },
+  {
+    icon: 'fas fa-tags',
+    title: 'Smart Categories',
+    description: 'Automatically categorize expenses with machine learning algorithms.'
+  },
+  {
+    icon: 'fas fa-shield-alt',
+    title: 'Bank-level Security',
+    description: 'Your data is encrypted and secure with enterprise-grade protection.'
+  },
+  {
+    icon: 'fas fa-users',
+    title: 'Multi-tracker Support',
+    description: 'Create multiple trackers for personal, business, or family expenses.'
+  }
+];
+
+const howItWorks = [
+  {
+    step: '1',
+    title: 'Sign Up',
+    description: 'Create your free account in seconds with phone verification.',
+    icon: 'fas fa-user-plus'
+  },
+  {
+    step: '2',
+    title: 'Create Tracker',
+    description: 'Set up expense trackers for different purposes or accounts.',
+    icon: 'fas fa-folder-plus'
+  },
+  {
+    step: '3',
+    title: 'Add Expenses',
+    description: 'Send expenses via WhatsApp or use our intuitive web interface.',
+    icon: 'fas fa-paper-plane'
+  },
+  {
+    step: '4',
+    title: 'Track & Optimize',
+    description: 'View insights, analyze patterns, and optimize your spending.',
+    icon: 'fas fa-chart-pie'
+  }
+];
+
+const testimonials = [
+  {
+    name: 'Sarah Johnson',
+    role: 'Small Business Owner',
+    image: 'https://i.pravatar.cc/150?img=1',
+    content: 'Spentiva has transformed how I manage my business expenses. The AI insights help me make better financial decisions.'
+  },
+  {
+    name: 'Michael Chen',
+    role: 'Freelancer',
+    image: 'https://i.pravatar.cc/150?img=2',
+    content: 'The WhatsApp integration is a game-changer! I can track expenses on the go without switching apps.'
+  },
+  {
+    name: 'Emily Rodriguez',
+    role: 'Personal Finance Enthusiast',
+    image: 'https://i.pravatar.cc/150?img=3',
+    content: 'Finally, an expense tracker that actually understands my spending habits. Love the detailed analytics!'
+  }
+];
+
+const faqs = [
+  {
+    question: 'How does the AI expense tracking work?',
+    answer: 'Our AI analyzes your expense descriptions and automatically categorizes them, identifies patterns, and provides personalized insights to help you manage your finances better.'
+  },
+  {
+    question: 'Is my financial data secure?',
+    answer: 'Absolutely! We use bank-level encryption (AES-256) for all data storage and transmission. Your data is never shared with third parties without your explicit consent.'
+  },
+  {
+    question: 'Can I use Spentiva for business expenses?',
+    answer: 'Yes! Spentiva supports multiple trackers, making it perfect for separating personal and business expenses. Our Business plan includes additional features for teams.'
+  },
+  {
+    question: 'Do I need to install an app to use WhatsApp integration?',
+    answer: 'No! You can track expenses by simply sending messages to our WhatsApp number. It works with your existing WhatsApp app.'
+  },
+  {
+    question: 'Can I export my expense data?',
+    answer: 'Yes, you can export your data in various formats including CSV, Excel, and PDF for easy sharing with accountants or tax professionals.'
+  },
+  {
+    question: 'What payment methods do you accept?',
+    answer: 'We accept all major credit cards, debit cards, and digital wallets. All transactions are processed securely through industry-standard payment gateways.'
+  }
+];
+---
+
+<BaseLayout title="Spentiva - AI-Powered Expense Tracking by Exyconn">
+  <Header />
+  
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 text-white overflow-hidden">
+    <div class="absolute inset-0 bg-black opacity-10"></div>
+    <div class="container-custom section-padding relative z-10">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="observe-animation">
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+            Smart Expense Tracking Powered by AI
+          </h1>
+          <p class="text-xl mb-8 text-blue-100">
+            Track, analyze, and optimize your spending with intelligent insights. Connect via WhatsApp and never miss an expense.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="https://app.spentiva.com/signup" class="btn btn-secondary text-center">
+              <i class="fas fa-rocket mr-2"></i>
+              Get Started Free
+            </a>
+            <a href="#features" class="btn btn-outline text-center">
+              <i class="fas fa-play-circle mr-2"></i>
+              Learn More
+            </a>
+          </div>
+          <div class="mt-8 flex items-center space-x-6 text-sm">
+            <div class="flex items-center">
+              <i class="fas fa-check-circle mr-2 text-green-300"></i>
+              <span>No credit card required</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fas fa-check-circle mr-2 text-green-300"></i>
+              <span>Free forever plan</span>
+            </div>
+          </div>
+        </div>
+        <div class="observe-animation hidden lg:block">
+          <div class="relative animate-float">
+            <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-2xl blur-3xl opacity-50"></div>
+            <div class="relative bg-white rounded-2xl shadow-2xl p-8">
+              <div class="space-y-4">
+                <div class="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-lg">
+                  <div class="flex items-center space-x-3">
+                    <i class="fas fa-shopping-cart text-green-600 text-xl"></i>
+                    <div>
+                      <p class="font-semibold text-gray-900">Groceries</p>
+                      <p class="text-sm text-gray-600">Walmart</p>
+                    </div>
+                  </div>
+                  <span class="font-bold text-green-600">-$85.50</span>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg">
+                  <div class="flex items-center space-x-3">
+                    <i class="fas fa-coffee text-blue-600 text-xl"></i>
+                    <div>
+                      <p class="font-semibold text-gray-900">Coffee</p>
+                      <p class="text-sm text-gray-600">Starbucks</p>
+                    </div>
+                  </div>
+                  <span class="font-bold text-blue-600">-$5.75</span>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg">
+                  <div class="flex items-center space-x-3">
+                    <i class="fas fa-car text-purple-600 text-xl"></i>
+                    <div>
+                      <p class="font-semibold text-gray-900">Fuel</p>
+                      <p class="text-sm text-gray-600">Shell Gas Station</p>
+                    </div>
+                  </div>
+                  <span class="font-bold text-purple-600">-$45.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="section-padding bg-white">
+    <div class="container-custom">
+      <div class="text-center mb-16 observe-animation">
+        <h2 class="section-title">Powerful Features</h2>
+        <p class="section-subtitle">
+          Everything you need to take control of your finances
+        </p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {features.map((feature, index) => (
+          <div class="card observe-animation" style={`animation-delay: ${index * 0.1}s`}>
+            <div class="w-14 h-14 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mb-4">
+              <i class={`${feature.icon} text-white text-2xl`}></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
+            <p class="text-gray-600">{feature.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="section-padding bg-gray-50">
+    <div class="container-custom">
+      <div class="text-center mb-16 observe-animation">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">
+          Get started in minutes with our simple 4-step process
+        </p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {howItWorks.map((step, index) => (
+          <div class="text-center observe-animation" style={`animation-delay: ${index * 0.1}s`}>
+            <div class="relative mb-6">
+              <div class="w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto shadow-xl">
+                <i class={`${step.icon} text-white text-3xl`}></i>
+              </div>
+              <div class="absolute -top-2 -right-2 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold">
+                {step.step}
+              </div>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
+            <p class="text-gray-600">{step.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="section-padding bg-white">
+    <div class="container-custom">
+      <div class="text-center mb-16 observe-animation">
+        <h2 class="section-title">What Our Users Say</h2>
+        <p class="section-subtitle">
+          Join thousands of satisfied users managing their finances smarter
+        </p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        {testimonials.map((testimonial, index) => (
+          <div class="card observe-animation" style={`animation-delay: ${index * 0.1}s`}>
+            <div class="flex items-center mb-4">
+              <img src={testimonial.image} alt={testimonial.name} class="w-12 h-12 rounded-full mr-4" />
+              <div>
+                <h4 class="font-semibold text-gray-900">{testimonial.name}</h4>
+                <p class="text-sm text-gray-600">{testimonial.role}</p>
+              </div>
+            </div>
+            <div class="flex mb-4">
+              {[...Array(5)].map(() => (
+                <i class="fas fa-star text-yellow-400"></i>
+              ))}
+            </div>
+            <p class="text-gray-700">{testimonial.content}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="section-padding bg-gray-50">
+    <div class="container-custom">
+      <div class="text-center mb-16 observe-animation">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">
+          Everything you need to know about Spentiva
+        </p>
+      </div>
+      <div class="max-w-3xl mx-auto space-y-4">
+        {faqs.map((faq, index) => (
+          <div class="bg-white rounded-xl shadow-md p-6 observe-animation" style={`animation-delay: ${index * 0.05}s`}>
+            <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-start">
+              <i class="fas fa-question-circle text-blue-600 mr-3 mt-1"></i>
+              {faq.question}
+            </h3>
+            <p class="text-gray-600 ml-8">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section-padding bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+    <div class="container-custom text-center observe-animation">
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">
+        Ready to Take Control of Your Finances?
+      </h2>
+      <p class="text-xl mb-8 text-blue-100 max-w-2xl mx-auto">
+        Join thousands of users who are already saving money and making smarter financial decisions with Spentiva.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="https://app.spentiva.com/signup" class="btn btn-secondary text-center">
+          <i class="fas fa-rocket mr-2"></i>
+          Start Free Trial
+        </a>
+        <a href="/pricing" class="btn btn-outline text-center">
+          <i class="fas fa-tag mr-2"></i>
+          View Pricing
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>

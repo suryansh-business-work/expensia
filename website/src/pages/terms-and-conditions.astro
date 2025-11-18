@@ -1,0 +1,281 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const lastUpdated = 'January 15, 2025';
+---
+
+<BaseLayout title="Terms and Conditions - Spentiva by Exyconn" description="Read the terms and conditions for using Spentiva's expense tracking services.">
+  <Header />
+  
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 text-white">
+    <div class="container-custom py-16">
+      <div class="max-w-4xl mx-auto text-center observe-animation">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          <i class="fas fa-file-contract mr-3"></i>
+          Terms and Conditions
+        </h1>
+        <p class="text-xl text-blue-100">
+          Last Updated: {lastUpdated}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section class="section-padding bg-white">
+    <div class="container-custom">
+      <div class="max-w-4xl mx-auto prose observe-animation">
+        <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-r-lg mb-8">
+          <p class="text-gray-800 font-semibold mb-2">
+            <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+            Agreement to Terms
+          </p>
+          <p class="text-gray-700 text-sm">
+            By accessing or using Spentiva's services, you agree to be bound by these Terms and Conditions. Please read them carefully before using our platform.
+          </p>
+        </div>
+
+        <h2><i class="fas fa-handshake text-blue-600 mr-2"></i>1. Acceptance of Terms</h2>
+        <p>
+          These Terms and Conditions ("Terms") govern your access to and use of Spentiva's expense tracking platform, including our website, mobile applications, WhatsApp integration, and related services (collectively, the "Services"). By creating an account or using our Services, you agree to these Terms.
+        </p>
+        <p>
+          If you do not agree to these Terms, you must not access or use our Services.
+        </p>
+
+        <h2><i class="fas fa-user-plus text-blue-600 mr-2"></i>2. Eligibility</h2>
+        <p>To use Spentiva, you must:</p>
+        <ul>
+          <li>Be at least 18 years of age</li>
+          <li>Have the legal capacity to enter into binding agreements</li>
+          <li>Provide accurate and complete registration information</li>
+          <li>Maintain the security of your account credentials</li>
+          <li>Comply with all applicable laws and regulations</li>
+        </ul>
+
+        <h2><i class="fas fa-user-circle text-blue-600 mr-2"></i>3. Account Registration</h2>
+        
+        <h3>3.1 Account Creation</h3>
+        <ul>
+          <li>You must register for an account to use most Services</li>
+          <li>Provide accurate, current, and complete information</li>
+          <li>Verify your phone number through OTP authentication</li>
+          <li>Choose between personal or business account types</li>
+        </ul>
+
+        <h3>3.2 Account Security</h3>
+        <ul>
+          <li>You are responsible for maintaining account confidentiality</li>
+          <li>Do not share your login credentials with others</li>
+          <li>Notify us immediately of unauthorized access</li>
+          <li>We are not liable for losses due to unauthorized use</li>
+        </ul>
+
+        <h3>3.3 Account Termination</h3>
+        <ul>
+          <li>You may close your account at any time</li>
+          <li>We may suspend or terminate accounts for Terms violations</li>
+          <li>Upon termination, you lose access to all account data</li>
+          <li>We will retain data as required by law or policy</li>
+        </ul>
+
+        <h2><i class="fas fa-credit-card text-blue-600 mr-2"></i>4. Subscription and Billing</h2>
+        
+        <h3>4.1 Plans and Pricing</h3>
+        <ul>
+          <li><strong>Free Plan:</strong> Limited features, available indefinitely</li>
+          <li><strong>Pro Plan:</strong> $9.99/month, advanced features included</li>
+          <li><strong>Business Plan:</strong> $29.99/month, team collaboration features</li>
+        </ul>
+
+        <h3>4.2 Payment Terms</h3>
+        <ul>
+          <li>Subscription fees are billed in advance</li>
+          <li>Charges occur on the same day each billing period</li>
+          <li>All fees are in USD unless otherwise stated</li>
+          <li>Taxes may apply based on your location</li>
+        </ul>
+
+        <h3>4.3 Refunds and Cancellations</h3>
+        <ul>
+          <li>30-day money-back guarantee on first purchase</li>
+          <li>Cancel anytime; access continues until period end</li>
+          <li>No refunds for partial months</li>
+          <li>Contact support for refund requests</li>
+        </ul>
+
+        <h2><i class="fas fa-check-square text-blue-600 mr-2"></i>5. Acceptable Use</h2>
+        
+        <p>You agree NOT to:</p>
+        <ul>
+          <li>Violate any laws or regulations</li>
+          <li>Infringe on intellectual property rights</li>
+          <li>Transmit malicious code or viruses</li>
+          <li>Attempt unauthorized access to our systems</li>
+          <li>Use automated systems to scrape or extract data</li>
+          <li>Impersonate others or provide false information</li>
+          <li>Interfere with other users' use of Services</li>
+          <li>Reverse engineer or decompile our software</li>
+        </ul>
+
+        <h2><i class="fas fa-copyright text-blue-600 mr-2"></i>6. Intellectual Property</h2>
+        
+        <h3>6.1 Our Rights</h3>
+        <p>
+          All content, features, and functionality of Spentiva are owned by Exyconn and protected by copyright, trademark, and other intellectual property laws. This includes:
+        </p>
+        <ul>
+          <li>Software code and algorithms</li>
+          <li>AI models and training data</li>
+          <li>User interface designs</li>
+          <li>Logos, branding, and trademarks</li>
+          <li>Documentation and content</li>
+        </ul>
+
+        <h3>6.2 Your Rights</h3>
+        <p>
+          You retain ownership of your expense data and content. By using our Services, you grant us a license to:
+        </p>
+        <ul>
+          <li>Store and process your data</li>
+          <li>Use data to improve AI models (anonymized)</li>
+          <li>Display your data back to you through our Services</li>
+          <li>Create backups and ensure service availability</li>
+        </ul>
+
+        <h2><i class="fas fa-shield-alt text-blue-600 mr-2"></i>7. Data Privacy and Security</h2>
+        <p>
+          Your privacy is important to us. Our collection and use of personal information is governed by our <a href="/privacy-policy">Privacy Policy</a>, which is incorporated into these Terms by reference.
+        </p>
+        <p>We implement:</p>
+        <ul>
+          <li>Bank-level encryption (AES-256)</li>
+          <li>Secure data transmission (TLS 1.3)</li>
+          <li>Regular security audits</li>
+          <li>Compliance with data protection regulations</li>
+        </ul>
+
+        <h2><i class="fas fa-exclamation-triangle text-blue-600 mr-2"></i>8. Disclaimers</h2>
+        
+        <h3>8.1 Service Availability</h3>
+        <p>
+          We strive for 99.9% uptime but do not guarantee uninterrupted service. Services may be unavailable due to:
+        </p>
+        <ul>
+          <li>Scheduled maintenance</li>
+          <li>Technical issues or outages</li>
+          <li>Third-party service disruptions</li>
+          <li>Force majeure events</li>
+        </ul>
+
+        <h3>8.2 Accuracy of Information</h3>
+        <p>
+          While our AI strives for accuracy, we do not guarantee:
+        </p>
+        <ul>
+          <li>100% accurate expense categorization</li>
+          <li>Perfect natural language understanding</li>
+          <li>Error-free financial insights</li>
+        </ul>
+        <p>You are responsible for verifying all data and decisions.</p>
+
+        <h3>8.3 Financial Advice</h3>
+        <p>
+          Spentiva provides expense tracking tools and insights but does NOT provide:
+        </p>
+        <ul>
+          <li>Professional financial advice</li>
+          <li>Tax preparation or legal counsel</li>
+          <li>Investment recommendations</li>
+        </ul>
+        <p>Consult qualified professionals for financial decisions.</p>
+
+        <h2><i class="fas fa-balance-scale text-blue-600 mr-2"></i>9. Limitation of Liability</h2>
+        <p>
+          TO THE MAXIMUM EXTENT PERMITTED BY LAW:
+        </p>
+        <ul>
+          <li>We are not liable for indirect, incidental, or consequential damages</li>
+          <li>Our total liability is limited to fees paid in the past 12 months</li>
+          <li>We are not responsible for third-party service failures</li>
+          <li>You use our Services at your own risk</li>
+        </ul>
+
+        <h2><i class="fas fa-user-shield text-blue-600 mr-2"></i>10. Indemnification</h2>
+        <p>
+          You agree to indemnify and hold harmless Spentiva and Exyconn from claims arising from:
+        </p>
+        <ul>
+          <li>Your use of our Services</li>
+          <li>Your violation of these Terms</li>
+          <li>Your violation of third-party rights</li>
+          <li>Content you submit through our Services</li>
+        </ul>
+
+        <h2><i class="fas fa-gavel text-blue-600 mr-2"></i>11. Dispute Resolution</h2>
+        
+        <h3>11.1 Governing Law</h3>
+        <p>
+          These Terms are governed by the laws of [Your Jurisdiction], without regard to conflict of law principles.
+        </p>
+
+        <h3>11.2 Arbitration</h3>
+        <p>
+          Any disputes will be resolved through binding arbitration rather than in court, except you may assert claims in small claims court.
+        </p>
+
+        <h2><i class="fas fa-sync-alt text-blue-600 mr-2"></i>12. Changes to Terms</h2>
+        <p>
+          We may modify these Terms at any time. We will notify you of material changes via:
+        </p>
+        <ul>
+          <li>Email to your registered address</li>
+          <li>In-app notification</li>
+          <li>Website banner</li>
+        </ul>
+        <p>
+          Continued use after changes constitutes acceptance. If you disagree, you must stop using our Services.
+        </p>
+
+        <h2><i class="fas fa-file-alt text-blue-600 mr-2"></i>13. Miscellaneous</h2>
+        
+        <h3>13.1 Entire Agreement</h3>
+        <p>These Terms constitute the entire agreement between you and Spentiva.</p>
+
+        <h3>13.2 Severability</h3>
+        <p>If any provision is found invalid, the remaining provisions remain in effect.</p>
+
+        <h3>13.3 No Waiver</h3>
+        <p>Our failure to enforce any right does not waive that right.</p>
+
+        <h3>13.4 Assignment</h3>
+        <p>You may not assign these Terms. We may assign them without notice.</p>
+
+        <h2><i class="fas fa-envelope text-blue-600 mr-2"></i>14. Contact Information</h2>
+        
+        <p>For questions about these Terms, contact us:</p>
+        <div class="bg-gray-50 p-6 rounded-lg">
+          <p><strong>Spentiva by Exyconn</strong></p>
+          <p><i class="fas fa-envelope mr-2"></i>Email: <a href="mailto:legal@spentiva.com">legal@spentiva.com</a></p>
+          <p><i class="fas fa-map-marker-alt mr-2"></i>Address: 123 Business Street, Tech City, TC 12345</p>
+          <p><i class="fas fa-phone mr-2"></i>Phone: +1 (555) 123-4567</p>
+        </div>
+
+        <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-8 rounded-2xl mt-12">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">
+            <i class="fas fa-thumbs-up text-blue-600 mr-2"></i>
+            Thank You for Choosing Spentiva
+          </h3>
+          <p class="text-gray-700">
+            We appreciate your trust in our platform. These Terms are designed to create a fair and transparent relationship. If you have any questions or concerns, our support team is always here to help.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>

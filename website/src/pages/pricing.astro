@@ -1,0 +1,277 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const pricingPlans = [
+  {
+    name: 'Free',
+    price: '0',
+    period: 'forever',
+    description: 'Perfect for individuals getting started with expense tracking',
+    features: [
+      { text: '1 Expense Tracker', included: true },
+      { text: 'Up to 100 expenses/month', included: true },
+      { text: 'Basic AI categorization', included: true },
+      { text: 'WhatsApp integration', included: true },
+      { text: 'Monthly reports', included: true },
+      { text: 'Email support', included: true },
+      { text: 'Advanced analytics', included: false },
+      { text: 'Multiple trackers', included: false },
+      { text: 'Priority support', included: false }
+    ],
+    cta: 'Get Started',
+    ctaLink: 'https://app.spentiva.com/signup',
+    popular: false
+  },
+  {
+    name: 'Pro',
+    price: '9.99',
+    period: 'month',
+    description: 'For power users who need advanced features and insights',
+    features: [
+      { text: 'Up to 5 Expense Trackers', included: true },
+      { text: 'Unlimited expenses', included: true },
+      { text: 'Advanced AI insights', included: true },
+      { text: 'WhatsApp + Web + Mobile', included: true },
+      { text: 'Custom categories', included: true },
+      { text: 'Export to Excel/PDF', included: true },
+      { text: 'Advanced analytics', included: true },
+      { text: 'Receipt scanning', included: true },
+      { text: 'Priority email support', included: true }
+    ],
+    cta: 'Start Pro Trial',
+    ctaLink: 'https://app.spentiva.com/signup?plan=pro',
+    popular: true
+  },
+  {
+    name: 'Business',
+    price: '29.99',
+    period: 'month',
+    description: 'Ideal for teams and businesses managing company expenses',
+    features: [
+      { text: 'Unlimited Expense Trackers', included: true },
+      { text: 'Unlimited expenses', included: true },
+      { text: 'AI-powered insights', included: true },
+      { text: 'Multi-platform access', included: true },
+      { text: 'Team collaboration', included: true },
+      { text: 'Custom integrations', included: true },
+      { text: 'Advanced reporting', included: true },
+      { text: 'Role-based permissions', included: true },
+      { text: '24/7 Priority support', included: true }
+    ],
+    cta: 'Contact Sales',
+    ctaLink: '/contact?plan=business',
+    popular: false
+  }
+];
+
+const faqs = [
+  {
+    question: 'Can I switch plans anytime?',
+    answer: 'Yes! You can upgrade, downgrade, or cancel your plan at any time. Changes will be reflected in your next billing cycle.'
+  },
+  {
+    question: 'What payment methods do you accept?',
+    answer: 'We accept all major credit cards (Visa, Mastercard, American Express), debit cards, and popular digital wallets like PayPal and Google Pay.'
+  },
+  {
+    question: 'Is there a free trial for paid plans?',
+    answer: 'Yes! Both Pro and Business plans come with a 14-day free trial. No credit card required to start your trial.'
+  },
+  {
+    question: 'What happens to my data if I cancel?',
+    answer: 'Your data remains accessible for 30 days after cancellation. You can export all your data before or during this period.'
+  },
+  {
+    question: 'Do you offer discounts for annual billing?',
+    answer: 'Yes! Save 20% when you choose annual billing for Pro or Business plans. Contact our sales team for custom enterprise pricing.'
+  },
+  {
+    question: 'Can I get a refund?',
+    answer: 'We offer a 30-day money-back guarantee on all paid plans. If you\'re not satisfied, contact us for a full refund.'
+  }
+];
+---
+
+<BaseLayout title="Pricing - Spentiva by Exyconn" description="Choose the perfect plan for your expense tracking needs. Start free, upgrade anytime. Transparent pricing with no hidden fees.">
+  <Header />
+  
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 text-white">
+    <div class="container-custom section-padding">
+      <div class="max-w-4xl mx-auto text-center observe-animation">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+          Simple, Transparent Pricing
+        </h1>
+        <p class="text-xl text-blue-100 mb-8">
+          Choose the plan that's right for you. Start free, upgrade anytime.
+        </p>
+        <div class="inline-flex items-center bg-white/10 backdrop-blur-sm rounded-full px-6 py-3">
+          <i class="fas fa-check-circle text-green-300 mr-2"></i>
+          <span>14-day free trial • No credit card required • Cancel anytime</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Cards Section -->
+  <section class="section-padding bg-gray-50">
+    <div class="container-custom">
+      <div class="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        {pricingPlans.map((plan, index) => (
+          <div class={`relative card observe-animation ${plan.popular ? 'ring-4 ring-blue-600 transform lg:scale-105' : ''}`} style={`animation-delay: ${index * 0.1}s`}>
+            {plan.popular && (
+              <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <span class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg">
+                  <i class="fas fa-star mr-1"></i>
+                  Most Popular
+                </span>
+              </div>
+            )}
+            
+            <div class="text-center mb-6">
+              <h3 class="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+              <div class="flex items-baseline justify-center mb-2">
+                <span class="text-5xl font-bold text-gray-900">${plan.price}</span>
+                <span class="text-gray-600 ml-2">/{plan.period}</span>
+              </div>
+              <p class="text-gray-600">{plan.description}</p>
+            </div>
+
+            <ul class="space-y-4 mb-8">
+              {plan.features.map((feature) => (
+                <li class="flex items-start">
+                  <i class={`fas ${feature.included ? 'fa-check-circle text-green-500' : 'fa-times-circle text-gray-300'} mt-1 mr-3`}></i>
+                  <span class={feature.included ? 'text-gray-700' : 'text-gray-400'}>{feature.text}</span>
+                </li>
+              ))}
+            </ul>
+
+            <a 
+              href={plan.ctaLink}
+              class={`btn w-full text-center ${plan.popular ? 'btn-primary' : 'btn-secondary'}`}
+            >
+              {plan.cta}
+            </a>
+          </div>
+        ))}
+      </div>
+
+      <!-- Additional Info -->
+      <div class="mt-16 text-center observe-animation">
+        <p class="text-gray-600 mb-4">
+          <i class="fas fa-building mr-2"></i>
+          Need a custom enterprise solution?
+        </p>
+        <a href="/contact" class="text-blue-600 font-semibold hover:text-blue-800">
+          Contact our sales team <i class="fas fa-arrow-right ml-1"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison Table Section -->
+  <section class="section-padding bg-white">
+    <div class="container-custom">
+      <div class="text-center mb-16 observe-animation">
+        <h2 class="section-title">Compare All Features</h2>
+        <p class="section-subtitle">
+          See what's included in each plan
+        </p>
+      </div>
+
+      <div class="overflow-x-auto observe-animation">
+        <table class="w-full max-w-5xl mx-auto">
+          <thead>
+            <tr class="border-b-2 border-gray-200">
+              <th class="text-left py-4 px-6 font-bold text-gray-900">Feature</th>
+              <th class="text-center py-4 px-6 font-bold text-gray-900">Free</th>
+              <th class="text-center py-4 px-6 font-bold text-gray-900 bg-blue-50">Pro</th>
+              <th class="text-center py-4 px-6 font-bold text-gray-900">Business</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr>
+              <td class="py-4 px-6 text-gray-700">Number of Trackers</td>
+              <td class="text-center py-4 px-6">1</td>
+              <td class="text-center py-4 px-6 bg-blue-50">5</td>
+              <td class="text-center py-4 px-6">Unlimited</td>
+            </tr>
+            <tr>
+              <td class="py-4 px-6 text-gray-700">Expenses per Month</td>
+              <td class="text-center py-4 px-6">100</td>
+              <td class="text-center py-4 px-6 bg-blue-50">Unlimited</td>
+              <td class="text-center py-4 px-6">Unlimited</td>
+            </tr>
+            <tr>
+              <td class="py-4 px-6 text-gray-700">AI Categorization</td>
+              <td class="text-center py-4 px-6"><i class="fas fa-check text-green-500"></i></td>
+              <td class="text-center py-4 px-6 bg-blue-50"><i class="fas fa-check text-green-500"></i></td>
+              <td class="text-center py-4 px-6"><i class="fas fa-check text-green-500"></i></td>
+            </tr>
+            <tr>
+              <td class="py-4 px-6 text-gray-700">Advanced Analytics</td>
+              <td class="text-center py-4 px-6"><i class="fas fa-times text-gray-300"></i></td>
+              <td class="text-center py-4 px-6 bg-blue-50"><i class="fas fa-check text-green-500"></i></td>
+              <td class="text-center py-4 px-6"><i class="fas fa-check text-green-500"></i></td>
+            </tr>
+            <tr>
+              <td class="py-4 px-6 text-gray-700">Team Collaboration</td>
+              <td class="text-center py-4 px-6"><i class="fas fa-times text-gray-300"></i></td>
+              <td class="text-center py-4 px-6 bg-blue-50"><i class="fas fa-times text-gray-300"></i></td>
+              <td class="text-center py-4 px-6"><i class="fas fa-check text-green-500"></i></td>
+            </tr>
+            <tr>
+              <td class="py-4 px-6 text-gray-700">Priority Support</td>
+              <td class="text-center py-4 px-6"><i class="fas fa-times text-gray-300"></i></td>
+              <td class="text-center py-4 px-6 bg-blue-50"><i class="fas fa-check text-green-500"></i></td>
+              <td class="text-center py-4 px-6"><i class="fas fa-check text-green-500"></i></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="section-padding bg-gray-50">
+    <div class="container-custom">
+      <div class="text-center mb-16 observe-animation">
+        <h2 class="section-title">Pricing FAQs</h2>
+        <p class="section-subtitle">
+          Common questions about our pricing plans
+        </p>
+      </div>
+      <div class="max-w-3xl mx-auto space-y-4">
+        {faqs.map((faq, index) => (
+          <div class="bg-white rounded-xl shadow-md p-6 observe-animation" style={`animation-delay: ${index * 0.05}s`}>
+            <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-start">
+              <i class="fas fa-question-circle text-blue-600 mr-3 mt-1"></i>
+              {faq.question}
+            </h3>
+            <p class="text-gray-600 ml-8">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section-padding bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+    <div class="container-custom text-center observe-animation">
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">
+        Ready to Get Started?
+      </h2>
+      <p class="text-xl mb-8 text-blue-100 max-w-2xl mx-auto">
+        Join thousands of users managing their expenses smarter with Spentiva.
+      </p>
+      <a href="https://app.spentiva.com/signup" class="btn btn-secondary">
+        <i class="fas fa-rocket mr-2"></i>
+        Start Your Free Trial
+      </a>
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>

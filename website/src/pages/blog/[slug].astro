@@ -1,0 +1,330 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+// This is a sample blog post. In a real application, this would come from a CMS or database
+const post = {
+  title: '10 Tips for Better Expense Tracking in 2025',
+  excerpt: 'Master your personal finances with these proven expense tracking strategies that actually work.',
+  image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200',
+  author: 'Sarah Johnson',
+  authorImage: 'https://i.pravatar.cc/150?img=1',
+  authorBio: 'Personal Finance Expert and Content Writer at Spentiva',
+  date: '2025-01-15',
+  category: 'Tips & Tricks',
+  readTime: '5 min read'
+};
+
+const relatedPosts = [
+  {
+    slug: 'ai-powered-expense-categorization-explained',
+    title: 'How AI-Powered Expense Categorization Works',
+    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400',
+    category: 'Technology'
+  },
+  {
+    slug: 'budget-planning-strategies-2025',
+    title: 'Budget Planning Strategies for 2025',
+    image: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=400',
+    category: 'Finance'
+  },
+  {
+    slug: 'small-business-expense-management-guide',
+    title: 'Complete Guide to Small Business Expense Management',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400',
+    category: 'Business'
+  }
+];
+---
+
+<BaseLayout title={`${post.title} - Spentiva Blog`} description={post.excerpt} image={post.image}>
+  <Header />
+  
+  <!-- Hero Section -->
+  <section class="relative bg-gray-900 text-white">
+    <div class="absolute inset-0">
+      <img src={post.image} alt={post.title} class="w-full h-full object-cover opacity-30" />
+      <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent"></div>
+    </div>
+    
+    <div class="relative container-custom py-20 md:py-32">
+      <div class="max-w-4xl mx-auto">
+        <div class="mb-6">
+          <span class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold">
+            {post.category}
+          </span>
+        </div>
+        
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 observe-animation">
+          {post.title}
+        </h1>
+        
+        <div class="flex items-center space-x-6 text-gray-300 observe-animation">
+          <div class="flex items-center space-x-3">
+            <img src={post.authorImage} alt={post.author} class="w-12 h-12 rounded-full border-2 border-white" />
+            <div>
+              <p class="font-semibold text-white">{post.author}</p>
+              <p class="text-sm">{post.authorBio}</p>
+            </div>
+          </div>
+          <div class="hidden md:block w-px h-12 bg-gray-600"></div>
+          <div class="hidden md:flex items-center space-x-4 text-sm">
+            <span><i class="far fa-calendar mr-1"></i>{new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+            <span><i class="far fa-clock mr-1"></i>{post.readTime}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Article Content -->
+  <article class="section-padding bg-white">
+    <div class="container-custom">
+      <div class="max-w-4xl mx-auto">
+        <div class="prose observe-animation">
+          <p class="text-xl text-gray-700 leading-relaxed mb-8">
+            Effective expense tracking is the foundation of financial success. Whether you're managing personal finances or running a business, these 10 proven strategies will help you take control of your spending and achieve your financial goals.
+          </p>
+
+          <h2><i class="fas fa-check-circle text-blue-600 mr-2"></i>1. Track Every Expense, No Matter How Small</h2>
+          <p>
+            The golden rule of expense tracking is simple: record everything. That $3 coffee, the $5 parking fee, or the $2 app subscription – they all add up. Small expenses often fly under the radar, but they can significantly impact your budget over time.
+          </p>
+          <p>
+            With tools like Spentiva's WhatsApp integration, tracking every expense becomes effortless. Simply send a quick message, and your expense is logged instantly.
+          </p>
+
+          <h2><i class="fas fa-tags text-blue-600 mr-2"></i>2. Use Smart Categories</h2>
+          <p>
+            Categorizing your expenses helps you understand where your money goes. Common categories include:
+          </p>
+          <ul>
+            <li>Housing (rent, mortgage, utilities)</li>
+            <li>Transportation (fuel, public transit, parking)</li>
+            <li>Food & Dining (groceries, restaurants)</li>
+            <li>Entertainment (movies, subscriptions, hobbies)</li>
+            <li>Healthcare (insurance, medications, doctor visits)</li>
+            <li>Personal Care (haircuts, gym, clothing)</li>
+          </ul>
+          <p>
+            Spentiva's AI automatically categorizes your expenses, saving you time and ensuring consistency.
+          </p>
+
+          <h2><i class="fas fa-calendar-check text-blue-600 mr-2"></i>3. Review Your Expenses Weekly</h2>
+          <p>
+            Set aside 15 minutes each week to review your spending. This regular check-in helps you:
+          </p>
+          <ul>
+            <li>Catch errors or duplicate charges</li>
+            <li>Identify spending patterns</li>
+            <li>Make timely adjustments to stay on budget</li>
+            <li>Maintain awareness of your financial situation</li>
+          </ul>
+
+          <blockquote>
+            "The habit of regular expense reviews transformed my finances. I discovered I was spending $200/month on subscriptions I barely used!" - Maria S., Spentiva User
+          </blockquote>
+
+          <h2><i class="fas fa-bullseye text-blue-600 mr-2"></i>4. Set Realistic Budget Goals</h2>
+          <p>
+            Your budget should be challenging but achievable. Start by analyzing your past spending to understand your baseline, then identify areas where you can reasonably cut back.
+          </p>
+          <p>
+            Use the 50/30/20 rule as a guideline:
+          </p>
+          <ul>
+            <li>50% for needs (housing, food, utilities)</li>
+            <li>30% for wants (entertainment, dining out)</li>
+            <li>20% for savings and debt repayment</li>
+          </ul>
+
+          <h2><i class="fas fa-mobile-alt text-blue-600 mr-2"></i>5. Track Expenses in Real-Time</h2>
+          <p>
+            Don't wait until the end of the day or week to log your expenses. Record them immediately after each transaction. This ensures accuracy and prevents forgotten expenses.
+          </p>
+          <p>
+            Modern expense tracking tools make real-time tracking seamless. With Spentiva, you can log expenses via WhatsApp in seconds, even while you're on the go.
+          </p>
+
+          <h2><i class="fas fa-credit-card text-blue-600 mr-2"></i>6. Use One Method for All Expenses</h2>
+          <p>
+            Consistency is key. Whether you prefer digital tools, spreadsheets, or mobile apps, stick to one primary method. Having multiple systems creates confusion and makes it harder to see the big picture.
+          </p>
+
+          <h2><i class="fas fa-chart-line text-blue-600 mr-2"></i>7. Monitor Trends and Patterns</h2>
+          <p>
+            Look beyond individual transactions to identify spending trends:
+          </p>
+          <ul>
+            <li>Which categories consistently exceed your budget?</li>
+            <li>Are there seasonal patterns in your spending?</li>
+            <li>Do certain days of the week trigger more spending?</li>
+            <li>How does your spending compare month-over-month?</li>
+          </ul>
+          <p>
+            Spentiva's analytics dashboard makes trend analysis easy with visual charts and AI-powered insights.
+          </p>
+
+          <h2><i class="fas fa-receipt text-blue-600 mr-2"></i>8. Save and Organize Receipts</h2>
+          <p>
+            Keep digital copies of important receipts, especially for:
+          </p>
+          <ul>
+            <li>Tax-deductible expenses</li>
+            <li>Warranty or return purposes</li>
+            <li>Business expenses requiring documentation</li>
+            <li>Large purchases</li>
+          </ul>
+
+          <h2><i class="fas fa-sync-alt text-blue-600 mr-2"></i>9. Automate Where Possible</h2>
+          <p>
+            Leverage technology to automate your expense tracking:
+          </p>
+          <ul>
+            <li>Set up automatic categorization with AI</li>
+            <li>Enable bank account synchronization</li>
+            <li>Use recurring expense templates</li>
+            <li>Schedule automatic reports</li>
+          </ul>
+          <p>
+            Automation reduces manual work and ensures you never miss tracking an expense.
+          </p>
+
+          <h2><i class="fas fa-trophy text-blue-600 mr-2"></i>10. Celebrate Small Wins</h2>
+          <p>
+            Financial progress takes time. Celebrate when you:
+          </p>
+          <ul>
+            <li>Stay under budget for a category</li>
+            <li>Successfully track expenses for a full month</li>
+            <li>Identify and eliminate unnecessary spending</li>
+            <li>Reach a savings milestone</li>
+          </ul>
+          <p>
+            Positive reinforcement helps build lasting financial habits.
+          </p>
+
+          <h2><i class="fas fa-rocket text-blue-600 mr-2"></i>Getting Started Today</h2>
+          <p>
+            You don't need to implement all these strategies at once. Start with the basics:
+          </p>
+          <ol>
+            <li>Choose a reliable expense tracking tool (we recommend Spentiva!)</li>
+            <li>Set up your categories</li>
+            <li>Begin tracking every expense</li>
+            <li>Review your spending weekly</li>
+            <li>Adjust and refine your approach</li>
+          </ol>
+
+          <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 my-8">
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">
+              <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+              Pro Tip: Start Simple
+            </h3>
+            <p class="text-gray-700 mb-4">
+              Don't overwhelm yourself trying to track everything perfectly from day one. Start with your major expense categories and gradually add more detail as the habit becomes natural.
+            </p>
+            <p class="text-gray-700">
+              Remember: The best expense tracking system is the one you'll actually use consistently.
+            </p>
+          </div>
+
+          <h2>Conclusion</h2>
+          <p>
+            Effective expense tracking is a skill that improves with practice. By implementing these 10 strategies, you'll gain better control over your finances, identify opportunities to save, and work towards your financial goals with confidence.
+          </p>
+          <p>
+            Ready to transform your expense tracking? Try Spentiva free for 14 days and experience the difference AI-powered tracking can make.
+          </p>
+        </div>
+
+        <!-- Author Bio -->
+        <div class="mt-12 p-8 bg-gray-50 rounded-2xl observe-animation">
+          <div class="flex items-start space-x-6">
+            <img src={post.authorImage} alt={post.author} class="w-20 h-20 rounded-full flex-shrink-0" />
+            <div>
+              <h3 class="text-xl font-bold text-gray-900 mb-2">About {post.author}</h3>
+              <p class="text-gray-600 mb-4">{post.authorBio}</p>
+              <div class="flex space-x-3">
+                <a href="#" class="text-blue-600 hover:text-blue-800">
+                  <i class="fab fa-twitter text-xl"></i>
+                </a>
+                <a href="#" class="text-blue-600 hover:text-blue-800">
+                  <i class="fab fa-linkedin text-xl"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Share Buttons -->
+        <div class="mt-12 flex items-center justify-center space-x-4 observe-animation">
+          <span class="text-gray-600 font-semibold">Share this article:</span>
+          <a href="#" class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition-colors">
+            <i class="fab fa-facebook"></i>
+          </a>
+          <a href="#" class="w-12 h-12 bg-blue-400 rounded-full flex items-center justify-center text-white hover:bg-blue-500 transition-colors">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="w-12 h-12 bg-blue-700 rounded-full flex items-center justify-center text-white hover:bg-blue-800 transition-colors">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a href="#" class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white hover:bg-green-700 transition-colors">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Related Posts -->
+  <section class="section-padding bg-gray-50">
+    <div class="container-custom">
+      <h2 class="text-3xl font-bold text-gray-900 mb-12 text-center observe-animation">
+        Related Articles
+      </h2>
+      
+      <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        {relatedPosts.map((relatedPost, index) => (
+          <a href={`/blog/${relatedPost.slug}`} class="card group cursor-pointer observe-animation" style={`animation-delay: ${index * 0.1}s`}>
+            <div class="relative overflow-hidden rounded-xl mb-4">
+              <img 
+                src={relatedPost.image} 
+                alt={relatedPost.title}
+                class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div class="absolute top-4 left-4">
+                <span class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  {relatedPost.category}
+                </span>
+              </div>
+            </div>
+            
+            <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+              {relatedPost.title}
+            </h3>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section-padding bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+    <div class="container-custom text-center observe-animation">
+      <h2 class="text-4xl font-bold mb-6">
+        Ready to Track Your Expenses Smarter?
+      </h2>
+      <p class="text-xl mb-8 text-blue-100 max-w-2xl mx-auto">
+        Join thousands of users managing their finances with Spentiva's AI-powered platform.
+      </p>
+      <a href="https://app.spentiva.com/signup" class="btn btn-secondary">
+        <i class="fas fa-rocket mr-2"></i>
+        Start Free Trial
+      </a>
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>

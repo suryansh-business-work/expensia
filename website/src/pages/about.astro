@@ -1,0 +1,235 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const team = [
+  {
+    name: 'John Doe',
+    role: 'CEO & Founder',
+    image: 'https://i.pravatar.cc/300?img=12',
+    bio: 'Visionary leader with 15+ years in fintech and AI.',
+    social: {
+      linkedin: '#',
+      twitter: '#'
+    }
+  },
+  {
+    name: 'Jane Smith',
+    role: 'CTO',
+    image: 'https://i.pravatar.cc/300?img=5',
+    bio: 'Tech expert specializing in AI and machine learning.',
+    social: {
+      linkedin: '#',
+      twitter: '#'
+    }
+  },
+  {
+    name: 'Mike Johnson',
+    role: 'Head of Product',
+    image: 'https://i.pravatar.cc/300?img=13',
+    bio: 'Product strategist focused on user experience.',
+    social: {
+      linkedin: '#',
+      twitter: '#'
+    }
+  },
+  {
+    name: 'Sarah Williams',
+    role: 'Head of Design',
+    image: 'https://i.pravatar.cc/300?img=9',
+    bio: 'Creative designer crafting intuitive interfaces.',
+    social: {
+      linkedin: '#',
+      twitter: '#'
+    }
+  }
+];
+
+const values = [
+  {
+    icon: 'fas fa-lightbulb',
+    title: 'Innovation',
+    description: 'We constantly push boundaries to deliver cutting-edge solutions.'
+  },
+  {
+    icon: 'fas fa-shield-alt',
+    title: 'Security',
+    description: 'Your financial data security is our top priority.'
+  },
+  {
+    icon: 'fas fa-users',
+    title: 'User-Centric',
+    description: 'Every feature is designed with our users in mind.'
+  },
+  {
+    icon: 'fas fa-heart',
+    title: 'Transparency',
+    description: 'We believe in honest communication and fair practices.'
+  }
+];
+
+const milestones = [
+  { year: '2021', title: 'Company Founded', description: 'Spentiva was born from a vision to simplify expense tracking' },
+  { year: '2022', title: 'AI Integration', description: 'Launched revolutionary AI-powered expense categorization' },
+  { year: '2023', title: '10K Users', description: 'Reached 10,000+ active users managing their finances' },
+  { year: '2024', title: 'WhatsApp Launch', description: 'Introduced seamless WhatsApp integration feature' },
+  { year: '2025', title: 'Global Expansion', description: 'Expanding services to 50+ countries worldwide' }
+];
+---
+
+<BaseLayout title="About Us - Spentiva by Exyconn" description="Learn about Spentiva's mission to revolutionize expense tracking with AI-powered insights and innovative solutions.">
+  <Header />
+  
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 text-white">
+    <div class="container-custom section-padding">
+      <div class="max-w-4xl mx-auto text-center observe-animation">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+          About Spentiva
+        </h1>
+        <p class="text-xl text-blue-100">
+          We're on a mission to make financial management accessible, intelligent, and effortless for everyone.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story Section -->
+  <section class="section-padding bg-white">
+    <div class="container-custom">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="observe-animation">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
+          <p class="text-gray-700 mb-4 leading-relaxed">
+            Spentiva was founded in 2021 by a team of financial technology enthusiasts who were frustrated with the complexity of existing expense tracking solutions. We believed there had to be a better way.
+          </p>
+          <p class="text-gray-700 mb-4 leading-relaxed">
+            Our journey began with a simple idea: what if managing expenses could be as easy as sending a text message? This vision led us to create an AI-powered platform that combines cutting-edge technology with intuitive design.
+          </p>
+          <p class="text-gray-700 leading-relaxed">
+            Today, Spentiva serves thousands of users worldwide, from individuals managing personal budgets to businesses tracking company expenses. We're proud to be at the forefront of financial technology innovation.
+          </p>
+        </div>
+        <div class="observe-animation">
+          <div class="relative">
+            <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-2xl blur-2xl opacity-30"></div>
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800" alt="Team collaboration" class="relative rounded-2xl shadow-2xl w-full h-auto" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values Section -->
+  <section class="section-padding bg-gray-50">
+    <div class="container-custom">
+      <div class="text-center mb-16 observe-animation">
+        <h2 class="section-title">Our Core Values</h2>
+        <p class="section-subtitle">
+          The principles that guide everything we do
+        </p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {values.map((value, index) => (
+          <div class="text-center observe-animation" style={`animation-delay: ${index * 0.1}s`}>
+            <div class="w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
+              <i class={`${value.icon} text-white text-3xl`}></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
+            <p class="text-gray-600">{value.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline Section -->
+  <section class="section-padding bg-white">
+    <div class="container-custom">
+      <div class="text-center mb-16 observe-animation">
+        <h2 class="section-title">Our Journey</h2>
+        <p class="section-subtitle">
+          Key milestones in our growth story
+        </p>
+      </div>
+      <div class="max-w-4xl mx-auto">
+        <div class="relative">
+          <!-- Timeline line -->
+          <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-blue-600 to-purple-600"></div>
+          
+          <div class="space-y-12">
+            {milestones.map((milestone, index) => (
+              <div class={`relative flex items-center ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} observe-animation`} style={`animation-delay: ${index * 0.1}s`}>
+                <div class={`w-full md:w-5/12 ${index % 2 === 0 ? 'md:text-right md:pr-12' : 'md:text-left md:pl-12'}`}>
+                  <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-shadow">
+                    <span class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                      {milestone.year}
+                    </span>
+                    <h3 class="text-xl font-bold text-gray-900 mt-2 mb-2">{milestone.title}</h3>
+                    <p class="text-gray-600">{milestone.description}</p>
+                  </div>
+                </div>
+                
+                <!-- Timeline dot -->
+                <div class="hidden md:flex absolute left-1/2 transform -translate-x-1/2 w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full border-4 border-white shadow-lg z-10 items-center justify-center">
+                  <div class="w-3 h-3 bg-white rounded-full"></div>
+                </div>
+                
+                <div class="hidden md:block w-5/12"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section class="section-padding bg-gray-50">
+    <div class="container-custom">
+      <div class="text-center mb-16 observe-animation">
+        <h2 class="section-title">Meet Our Team</h2>
+        <p class="section-subtitle">
+          The talented people behind Spentiva
+        </p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {team.map((member, index) => (
+          <div class="card text-center observe-animation" style={`animation-delay: ${index * 0.1}s`}>
+            <img src={member.image} alt={member.name} class="w-32 h-32 rounded-full mx-auto mb-4 object-cover" />
+            <h3 class="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
+            <p class="text-blue-600 font-semibold mb-3">{member.role}</p>
+            <p class="text-gray-600 mb-4 text-sm">{member.bio}</p>
+            <div class="flex justify-center space-x-3">
+              <a href={member.social.linkedin} class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition-colors">
+                <i class="fab fa-linkedin"></i>
+              </a>
+              <a href={member.social.twitter} class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition-colors">
+                <i class="fab fa-twitter"></i>
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section-padding bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+    <div class="container-custom text-center observe-animation">
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">
+        Join Us on This Journey
+      </h2>
+      <p class="text-xl mb-8 text-blue-100 max-w-2xl mx-auto">
+        Be part of the financial revolution. Start tracking your expenses smarter today.
+      </p>
+      <a href="https://app.spentiva.com/signup" class="btn btn-secondary">
+        <i class="fas fa-rocket mr-2"></i>
+        Get Started Now
+      </a>
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>
